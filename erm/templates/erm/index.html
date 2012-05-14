@@ -1,1 +1,21 @@
-Hello from ERM!
+<h1>ERM</h1>
+
+<table>
+    <tr>
+        <td>Username:</td>
+        <td>{{ user.username }}</td>
+    </tr>
+
+    <tr>
+        <td>Bank:</td>
+        <td>{{ user.get_profile.bank.name }}</td>
+    </tr>
+</table>
+<p>These are the risks currently assigned to your bank:</p>
+<ul>
+{% for bankrisk in user.get_profile.bank.bankrisk_set.all %}
+<li><a href="/erm/risk/{{ bankrisk.risk.id }}"/>{{ bankrisk.risk.title }}</a></li>
+{% endfor %}
+</ul>
+
+<a href="/erm/logout">Logout</a>
