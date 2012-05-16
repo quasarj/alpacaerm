@@ -22,6 +22,9 @@ class BankRisk(models.Model):
     def __unicode__(self):
         return "{}: {}".format(self.bank.name, self.risk.title)
 
+    class Meta:
+        unique_together = (("bank", "risk"),)
+
 # a RiskProfile is a set of risks that can be assigned to a bank
 # all at once
 class RiskProfile(models.Model):
