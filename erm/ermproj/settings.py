@@ -126,7 +126,6 @@ INSTALLED_APPS = (
     'south',
     'polls',
     'erm',
-    'southtut',
 )
 
 # Define a custom UserProfile model
