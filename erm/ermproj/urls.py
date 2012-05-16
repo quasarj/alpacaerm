@@ -12,12 +12,13 @@ urlpatterns = patterns('',
     # Todo: See Django tutorial Part 3 for information on
     #       decoupling the URLConfs.
 
-    url(r'^polls/$', 'polls.views.index'),
-    url(r'^polls/(?P<poll_id>\d+)/$', 'polls.views.detail'),
-    url(r'^polls/(?P<poll_id>\d+)/results/$', 'polls.views.results'),
-    url(r'^polls/(?P<poll_id>\d+)/vote/$', 'polls.views.vote'),
+#    url(r'^polls/$', 'polls.views.index'),
+#    url(r'^polls/(?P<poll_id>\d+)/$', 'polls.views.detail'),
+#    url(r'^polls/(?P<poll_id>\d+)/results/$', 'polls.views.results'),
+#    url(r'^polls/(?P<poll_id>\d+)/vote/$', 'polls.views.vote'),
 
 
+    url(r'^$', 'erm.views.index'),
     url(r'^erm/$', 'erm.views.index'),
     url(r'^erm/login/$', 'erm.views.login_page'),
     url(r'^erm/login_process/$', 'erm.views.login_process'),

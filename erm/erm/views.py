@@ -19,9 +19,11 @@ def index(request):
 def risk(request, risk_id):
     if not request.user.is_authenticated():
         return login_page(request)
-
     
-    return render_to_response('erm/risk.html')
+    risk = get_object_or_404(Risk, pk=risk_id)
+
+    return render_to_response('erm/risk.html',
+                              {'risk': risk})
 
 
 def logout_view(request):

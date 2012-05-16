@@ -6,11 +6,15 @@
 </head>
 
 <body>
+    <div id="logo">
+        <img alt="logo" src="/static/logo.png" />
+    </div>
     <div id="nav">
         {% block nav %}
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/admin/">Admin</a></li>
+            <li><a href="/erm/logout">Logout</a></li>
         </ul>
         {% endblock %}
     </div>
