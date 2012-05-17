@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
 
-from erm.models import Risk
+from erm.models import BankRisk
 
 
 def index(request):
@@ -16,14 +16,14 @@ def index(request):
         return login_page(request)
 
 
-def risk(request, risk_id):
+def bankrisk_view(request, bankrisk_id):
     if not request.user.is_authenticated():
         return login_page(request)
     
-    risk = get_object_or_404(Risk, pk=risk_id)
+    bankrisk = get_object_or_404(BankRisk, pk=bankrisk_id)
 
-    return render_to_response('risk.html',
-                              {'risk': risk})
+    return render_to_response('bankrisk.html',
+                              {'bankrisk': bankrisk})
 
 
 def logout_view(request):

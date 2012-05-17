@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Risk Detail{% endblock %}
+
+{% block content %}
+
+<h3>{{ bankrisk }}</h3>
+<p>
+    This risk ({{ bankrisk.risk.title}}) is 
+    belongs to {{ bankrisk.bank.name }}.
+</p>
+<p>
+    There is currently nothing here.
+</p>
+{% endblock %}

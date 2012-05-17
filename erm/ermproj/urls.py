@@ -23,7 +23,7 @@ urlpatterns = patterns('',
     url(r'^erm/login/$', 'erm.views.login_page'),
     url(r'^erm/login_process/$', 'erm.views.login_process'),
     url(r'^erm/logout/$', 'erm.views.logout_view'),
-    url(r'^erm/risk/(?P<risk_id>\d+)/$', 'erm.views.risk'),
+    url(r'^erm/risk/(?P<bankrisk_id>\d+)/$', 'erm.views.bankrisk_view'),
 
 
     # Uncomment the admin/doc line below to enable admin documentation:
