@@ -9,7 +9,7 @@ from erm.models import Risk
 
 def index(request):
     if request.user.is_authenticated():
-        return render_to_response('erm/index.html', {
+        return render_to_response('index.html', {
             'user': request.user,
             })
     else:
@@ -22,7 +22,7 @@ def risk(request, risk_id):
     
     risk = get_object_or_404(Risk, pk=risk_id)
 
-    return render_to_response('erm/risk.html',
+    return render_to_response('risk.html',
                               {'risk': risk})
 
 
@@ -33,7 +33,7 @@ def logout_view(request):
 
 def login_page(request):
     # display the login page
-    return render_to_response('erm/login.html', 
+    return render_to_response('login.html', 
             context_instance=RequestContext(request))
 
 def login_process(request):
@@ -53,7 +53,7 @@ def login_process(request):
     else:
 
         # if the login is incorrect
-        return render_to_response('erm/login.html', {
+        return render_to_response('login.html', {
             'error_message': "Login incorrect.",
             }, context_instance=RequestContext(request))
 
