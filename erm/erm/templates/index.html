@@ -3,17 +3,24 @@
 {% block title %}ERM Index{% endblock %}
 
 {% block content %}
-<h1>ERM</h1>
-
+<h1>ERM Index Page</h1>
+<h3>Currently this is just testing information</h3>
 <table>
     <tr>
         <td>Username:</td>
         <td>{{ user.username }}</td>
     </tr>
-
     <tr>
         <td>Bank:</td>
         <td>{{ user.get_profile.bank.name }}</td>
+    </tr>
+    <tr>
+        <td>Access Level:</td>
+        {% if user.get_profile.level == 0 %}
+        <td>Read Only</td>
+        {% else %}
+        <td>Full Access</td>
+        {% endif %}
     </tr>
 </table>
 <p>These are the risks currently assigned to your bank:</p>

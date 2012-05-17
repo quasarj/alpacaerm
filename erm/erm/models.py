@@ -37,6 +37,8 @@ class RiskProfile(models.Model):
 class UserProfile(models.Model):
     # link to the actual user
     user = models.OneToOneField(User)
+    level = models.SmallIntegerField(null=False, 
+                                     help_text="0 for read-only, 1 for full access")
 
     # extend with new data
     bank = models.ForeignKey(Bank)
