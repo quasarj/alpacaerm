@@ -1,0 +1,9 @@
+.errorlist {
+    color: red;
+    font-weight: bold;
+}
+
+.success {
+    color: blue;
+    font-weight: bold;
+}
