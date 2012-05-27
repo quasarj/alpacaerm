@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Search results{% endblock %}
+
+{% block content %}
+<h1>Search results</h1>
+<p>Results from search {{ method }}:</p>
+
+<ul>
+    {% for r in risks %}
+    <li><a href="/erm/risk/{{ r.id }}/">{{ r.name }}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

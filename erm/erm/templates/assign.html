@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Assign Risks from Profile{% endblock %}
+
+{% block content %}
+
+{% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
+{% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
+
+<p>Available profiles:</p>
+
+<ul>
+{% for p in profiles %}
+<li>
+    <strong>{{ p.name }}</strong>
+    <ul>
+        {% for risk in p.risks.all %}
+        <li>{{ risk }}</li>
+        {% endfor %}
+    </ul> 
+</li>
+{% endfor %}
+</ul>
+
+<p>
+This action will copy all of the risks from the selected 
+profile into your bank. The copied risks will have
+default values.
+</p>
+<p>
+This cannot be reversed!
+</p>
+
+<form action="/erm/assign/" method="post">{% csrf_token %}
+    <p>
+    <label for="id_profile">Select profile:</label>
+    <select name="profile" id="id_profile">
+        <option value="">------</option>
+        {% for p in profiles %}
+        <option value="{{ p.id }}">{{ p.name }}</option>
+        {% endfor %}
+    </select>
+    </p>
+    <p>
+    <input type="submit" value="Apply Profile" />
+    </p>
+</form>
+{% endblock %}

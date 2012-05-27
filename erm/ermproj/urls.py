@@ -24,6 +24,12 @@ urlpatterns = patterns('',
     url(r'^erm/login_process/$', 'erm.views.login_process'),
     url(r'^erm/logout/$', 'erm.views.logout_view'),
     url(r'^erm/risk/(?P<bankrisk_id>\d+)/$', 'erm.views.bankrisk_view'),
+    url(r'^erm/assign/$', 'erm.views.assign_view'),
+
+    url(r'^erm/search/$', 'erm.views.search_view'),
+    url(r'^erm/search/source/$', 'erm.views.search_bysource_view'),
+    url(r'^erm/search/type/$', 'erm.views.search_bytype_view'),
+
 
 
     # Uncomment the admin/doc line below to enable admin documentation:

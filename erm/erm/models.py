@@ -8,21 +8,34 @@ class Bank(models.Model):
     def __unicode__(self):
         return self.name
 
-
-class Risk(models.Model):
-    title = models.CharField(max_length=200)
+class RiskType(models.Model):
+    name = models.CharField(max_length=200)
 
     def __unicode__(self):
-        return self.title
+        return self.name
 
-class BankRisk(models.Model):
-    bank = models.ForeignKey(Bank)
-    risk = models.ForeignKey(Risk)
+
+class RiskSource(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __unicode__(self):
+        return self.name
+
+
+class AbstractRisk(models.Model):
+
+    class Meta:
+        abstract = True
+
+    name = models.CharField(max_length=200)
+
+    riskType = models.ForeignKey(RiskType, null=True)
+    riskSource = models.ForeignKey(RiskSource, null=True)
 
     # fields from the Detail table in Access
-    threat = models.CharField(max_length=200, null=True)
-    riskText = models.CharField(max_length=200, null=True)
-    mitigations = models.CharField(max_length=200, null=True)
+    threat = models.CharField(max_length=200, null=True, blank=True)
+    riskText = models.CharField(max_length=200, null=True, blank=True)
+    mitigations = models.CharField(max_length=200, null=True, blank=True)
     customers = models.FloatField(default=0)
     impact = models.FloatField(default=0)
     controls = models.FloatField(default=0)
@@ -52,12 +65,12 @@ class BankRisk(models.Model):
     humanResourceRiskWeight = models.FloatField(default=0)
     compositeRisk = models.FloatField(default=0)
     riskRating = models.FloatField(default=0)
-    reviewDate = models.DateField(null=True)
+    reviewDate = models.DateField(null=True, blank=True)
     bsaRisk = models.BooleanField()
     regulatoryRisk = models.BooleanField()
     cispRisk = models.BooleanField()
     auditRisk = models.BooleanField()
-    complianceRisk = models.BooleanField()
+    complianceRiskb = models.BooleanField()
     redFlagRisk = models.BooleanField()
     outsourced = models.BooleanField()
     # RiskManagerDet
@@ -68,22 +81,31 @@ class BankRisk(models.Model):
     # Policy2Det
     # Policy3Det
     # Policy4Det
-    frequencyDet = models.CharField(max_length=200, null=True)
+    frequencyDet = models.CharField(max_length=200, null=True, blank=True)
     priorRating = models.FloatField(default=0)
     intpriorrating = models.FloatField(default=0)
-    comments = models.CharField(max_length=900, null=True)
-    trend = models.CharField(max_length=200, null=True)
+    comments = models.CharField(max_length=900, null=True, blank=True)
+    trend = models.CharField(max_length=200, null=True, blank=True)
     # LastReviewer
     # PriorRatingCalc
     # RiskTypeDet
     # Required
     calInherentRiskRating = models.FloatField(default=0)
 
-    def __unicode__(self):
-        return "{}: {}".format(self.bank.name, self.risk.title)
 
-    class Meta:
-        unique_together = (("bank", "risk"),)
+class Risk(AbstractRisk):
+
+    def __unicode__(self):
+        return self.name
+
+class BankRisk(AbstractRisk):
+    bank = models.ForeignKey(Bank)
+
+    def __unicode__(self):
+        return "{}: {}".format(self.bank.name, self.name)
+
+#    class Meta:
+#        unique_together = (("bank", "risk"),)
 
 # a RiskProfile is a set of risks that can be assigned to a bank
 # all at once

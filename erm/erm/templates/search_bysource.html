@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Search by Source{% endblock %}
+
+{% block content %}
+<h1>Search by Source</h1>
+
+
+<p>Select as many Sources as you want. Results will be 
+Risks that have any of the selected as their Source</p>
+
+<form action="/erm/search/source/" method="post">{% csrf_token %}
+    <ul>
+        {% for s in sources %}
+        <li><input type="checkbox" name="source" value="{{ s.id }}" />{{ s }}</li>
+        {% endfor %}
+    </ul>
+    <input type="submit" value="Search"/>
+</form>
+
+{% endblock %}

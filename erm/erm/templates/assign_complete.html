@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Assign Risks from Profile{% endblock %}
+
+{% block content %}
+
+{% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
+{% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
+
+Assignment complete!
+
+{% endblock %}

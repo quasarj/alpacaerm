@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Search by Type{% endblock %}
+
+{% block content %}
+<h1>Search by Type</h1>
+
+<p>Select as many Types as you want. Results will be 
+Risks that have any of the selected as their Type</p>
+
+<form action="/erm/search/type/" method="post">{% csrf_token %}
+    <ul>
+        {% for s in types %}
+        <li><input type="checkbox" name="type" value="{{ s.id }}" />{{ s }}</li>
+        {% endfor %}
+    </ul>
+    <input type="submit" value="Search"/>
+</form>
+
+{% endblock %}

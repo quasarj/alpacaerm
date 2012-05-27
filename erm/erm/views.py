@@ -4,7 +4,8 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
 
-from erm.models import BankRisk, BankRiskForm
+#from erm.models import BankRisk, BankRiskForm, RiskProfile
+from erm.models import *
 
 
 def index(request):
@@ -78,4 +79,87 @@ def login_process(request):
         return render_to_response('login.html', {
             'error_message': "Login incorrect.",
             }, context_instance=RequestContext(request))
+
+
+
+def assign_view(request):
+    error_message = None
+
+    # handle form post
+    if request.POST:
+        if request.POST['profile'] == "":
+            error_message = "No profile selected!"
+        else:
+            profile = RiskProfile.objects.get(pk=request.POST['profile'])
+            bank = request.user.get_profile().bank
+            for risk in profile.risks.all():
+                b = BankRisk()
+                b.bank = bank
+
+                # ugly hack to clone the Risk to a BankRisk
+                for attr in risk.__dict__:
+                    if attr != '_state' and attr != 'id':
+                        setattr(b, attr, getattr(risk, attr))
+
+                b.save()
+
+
+            return render_to_response('assign_complete.html')
+
+
+    # display the assignment form
+    all_profiles = RiskProfile.objects.all()
+
+    return render_to_response('assign.html',
+            {
+                'profiles': all_profiles,
+                'error_message': error_message,
+            },
+            context_instance=RequestContext(request))
+
+
+def search_view(request):
+    return render_to_response('search.html')   
+
+def search_bysource_view(request):
+    bank = request.user.get_profile().bank
+
+    if request.POST:
+
+        source_ids = request.POST.getlist('source')
+        risks = BankRisk.objects.filter(bank=bank).filter(riskSource_id__in=source_ids)
+
+        return render_to_response('search_results.html',
+                { 'risks': risks,
+                  'method': "by Source" },
+        )
+
+    # get all the Types used by this bank
+    sources = RiskSource.objects.filter(bankrisk__bank=bank).distinct()
+
+    return render_to_response('search_bysource.html',
+            { 'sources': sources }, 
+            context_instance=RequestContext(request),
+    )   
+
+def search_bytype_view(request):
+    bank = request.user.get_profile().bank
+
+    if request.POST:
+
+        type_ids = request.POST.getlist('type')
+        risks = BankRisk.objects.filter(bank=bank).filter(riskType_id__in=type_ids)
+
+        return render_to_response('search_results.html',
+                { 'risks': risks,
+                  'method': "by Type" },
+        )
+
+    # get all the Types used by this bank
+    types = RiskType.objects.filter(bankrisk__bank=bank).distinct()
+
+    return render_to_response('search_bytype.html',
+            { 'types': types }, 
+            context_instance=RequestContext(request),
+    )   
 
