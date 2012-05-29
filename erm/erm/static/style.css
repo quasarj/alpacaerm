@@ -4,6 +4,10 @@
 }
 
 .success {
-    color: blue;
+    /* color: blue; 
     font-weight: bold;
+    */
+    display: block;
+    border: 1px dashed blue;
+    padding: 5px;
 }

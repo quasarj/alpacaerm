@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Risk Detail{% endblock %}
+{% block title %}Add new Risk{% endblock %}
 
 {% block content %}
 
@@ -11,7 +11,7 @@
     });
 </script>
 
-<h3>{{ bankrisk }}</h3>
+<h3>Add new Risk</h3>
 {% if user.get_profile.level <= 0 %}
 <p>
 You do not have permission to modify this Risk.
@@ -23,9 +23,14 @@ You do not have permission to modify this Risk.
 </p>
 {% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
 {% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
+{% if success_id %}
+<p class="success">
+<a href="/erm/risk/{{ success_id }}/">{{ success_name }}</a> added successfully. Add another blow.
+</p>
+{% endif %}
 
 {% if user.get_profile.level > 0 %}
-<form action="/erm/risk/{{ bankrisk.id }}/" method="post">{% csrf_token %}
+<form action="/erm/add/" method="post">{% csrf_token %}
 {% endif %}
     <table>
     {{ form }}

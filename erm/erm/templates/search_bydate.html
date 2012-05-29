@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Search by Date{% endblock %}
+
+{% block content %}
+<h1>Search by Reviewed Date</h1>
+
+<p>
+Pick a date range.
+</p>
+
+<script>
+
+    $(function() {
+        $("#id_from_date").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_to_date").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+    });
+    
+</script>
+
+{% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
+{% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
+
+<form action="/erm/search/date/" method="post">{% csrf_token %}
+    <table>
+        <tr>
+            <td><label for="id_from_date">From (including):</label></td>
+            <td><input type="input" name="from_date" id="id_from_date"/></td>
+        </tr>
+        <tr>
+            <td><label for="id_to_date">To (including):</label></td>
+            <td><input type="input" name="to_date" id="id_to_date"/></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Search"/></td>
+        </tr>
+</table>
+</form>
+
+{% endblock %}

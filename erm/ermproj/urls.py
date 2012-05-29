@@ -25,10 +25,12 @@ urlpatterns = patterns('',
     url(r'^erm/logout/$', 'erm.views.logout_view'),
     url(r'^erm/risk/(?P<bankrisk_id>\d+)/$', 'erm.views.bankrisk_view'),
     url(r'^erm/assign/$', 'erm.views.assign_view'),
+    url(r'^erm/add/$', 'erm.views.add_view'),
 
     url(r'^erm/search/$', 'erm.views.search_view'),
     url(r'^erm/search/source/$', 'erm.views.search_bysource_view'),
     url(r'^erm/search/type/$', 'erm.views.search_bytype_view'),
+    url(r'^erm/search/date/$', 'erm.views.search_bydate_view'),
 
 
 

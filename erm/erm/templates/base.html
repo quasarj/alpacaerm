@@ -3,6 +3,10 @@
 <head>
     <link rel="stylesheet" href="/static/style.css" />
     <title>{% block title %}Alpaca ERM{% endblock %}</title>
+    <link type="text/css" href="/static/css/ui-lightness/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
+    <script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui-1.8.20.custom.min.js"></script>
+
 </head>
 
 <body>
@@ -13,8 +17,11 @@
         {% block nav %}
         <ul>
             <li><a href="/">Home</a></li>
+            {% if user.get_profile.level > 0 %}
             <li><a href="/admin/">Admin</a></li>
             <li><a href="/erm/assign/">Assign Risks from Profile</a></li>
+            <li><a href="/erm/add/">Add new Risk</a></li>
+            {% endif %}
             <li><a href="/erm/search/">Search</a></li>
             <li><a href="/erm/logout">Logout</a></li>
         </ul>

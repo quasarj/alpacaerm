@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, Http404
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 
 #from erm.models import BankRisk, BankRiskForm, RiskProfile
 from erm.models import *
-
+import datetime
 
 def index(request):
     if request.user.is_authenticated():
@@ -84,6 +84,12 @@ def login_process(request):
 
 def assign_view(request):
     error_message = None
+    profile = request.user.get_profile()
+
+    # ignore requests from users 
+    # who don't have access
+    if profile.level < 1:
+        raise Http404 
 
     # handle form post
     if request.POST:
@@ -162,4 +168,90 @@ def search_bytype_view(request):
             { 'types': types }, 
             context_instance=RequestContext(request),
     )   
+
+def search_bydate_view(request):
+    date_format = '%Y-%m-%d'
+
+
+    error_message = None
+
+    bank = request.user.get_profile().bank
+
+    if request.POST:
+        try:
+
+            from_d = datetime.datetime.strptime(request.POST['from_date'], date_format).date()
+            to_d = datetime.datetime.strptime(request.POST['to_date'], date_format).date()
+        except ValueError:
+            error_message = "Incorrect date format entered!"
+
+        if not error_message:
+            # risks = BankRisk.objects.filter(bank=bank).filter(riskType_id__in=type_ids)
+            risks = BankRisk.objects.filter(
+                    bank=bank,
+                    reviewDate__gte=from_d,
+                    reviewDate__lte=to_d
+            )
+
+            return render_to_response('search_results.html',
+                    { 'risks': risks,
+                      'method': "by Date ({} to {})".format(from_d, to_d) },
+            )
+
+    # get all the Types used by this bank
+    # types = RiskType.objects.filter(bankrisk__bank=bank).distinct()
+
+    return render_to_response('search_bydate.html',
+            { 'error_message': error_message }, 
+            context_instance=RequestContext(request),
+    )   
+
+
+
+def add_view(request):
+    error_message = None
+    success_message = None
+    success_id = None
+    success_name = None
+
+    profile = request.user.get_profile()
+
+    # ignore requests from users 
+    # who don't have access
+    if profile.level < 1:
+        raise Http404 
+
+    bank = request.user.get_profile().bank
+
+
+    if request.method == 'POST':
+        # so some posty stuff
+        form = BankRiskForm(request.POST)
+        if form.is_valid():
+            # do some processing (like saving it)
+            new_risk = form.save(commit=False)
+            new_risk.bank = bank
+            new_risk.save()
+#            return HttpResponseRedirect(
+#                reverse('erm.views.bankrisk_view',
+#                        kwargs={'bankrisk_id': new_risk.id }))
+            # success_message = "Data saved successfully."
+            success_id = new_risk.id
+            success_name = new_risk.name
+            form = BankRiskForm()  # create a new blank form for the next one.
+        else:
+            # form is not valid, display an error
+           error_message = "There were errors in your submission."
+    else:
+        # create a blank form
+        form = BankRiskForm()
+
+    return render_to_response('add_risk.html', {
+        'form': form,
+        'success_id': success_id,
+        'success_name': success_name,
+        'error_message': error_message,
+        'success_message': success_message,
+    }, context_instance=RequestContext(request))
+
 
