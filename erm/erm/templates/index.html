@@ -3,8 +3,6 @@
 {% block title %}ERM Index{% endblock %}
 
 {% block content %}
-<h1>ERM Index Page</h1>
-<h3>Currently this is just testing information</h3>
 <table>
     <tr>
         <td>Username:</td>
@@ -23,11 +21,20 @@
         {% endif %}
     </tr>
 </table>
-<p>These are the risks currently assigned to your bank:</p>
+
+<p>
+Based on your user access, you have these options available to you:
+</p>
 <ul>
-{% for bankrisk in user.get_profile.bank.bankrisk_set.all %}
-<li><a href="/erm/risk/{{ bankrisk.id }}" target="_new"/>{{ bankrisk.name }}</a></li>
-{% endfor %}
+    <li><a href="/erm/search/source/">Search by Source</a></li>
+    <li><a href="/erm/search/type/">Search by Type</a></li>
+    <li><a href="/erm/search/date/">Search by Last Review Date</a></li>
+    <li><a href="/erm/all/">View All Risks</a></li>
+    {% if user.get_profile.level > 0 %}
+    <li><a href="/erm/add/">Add new Risk</a></li>
+    <li><a href="/erm/assign/">Assign Risks from Profile</a></li>
+    {% endif %}
 </ul>
+
 
 {% endblock %}

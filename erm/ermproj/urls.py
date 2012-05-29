@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     url(r'^erm/risk/(?P<bankrisk_id>\d+)/$', 'erm.views.bankrisk_view'),
     url(r'^erm/assign/$', 'erm.views.assign_view'),
     url(r'^erm/add/$', 'erm.views.add_view'),
+    url(r'^erm/all/$', 'erm.views.all_view'),
 
     url(r'^erm/search/$', 'erm.views.search_view'),
     url(r'^erm/search/source/$', 'erm.views.search_bysource_view'),

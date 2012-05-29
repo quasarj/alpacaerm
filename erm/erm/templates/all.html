@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Search results{% endblock %}
+{% block title %}All Risks{% endblock %}
 
 {% block content %}
-<h1>Search results</h1>
-<p><a href="/erm/search/source/">Search again (by Source)</a></p>
-<p>Results from search {{ method }}:</p>
+<h3>All Risks</h3>
+
+<p>These are all the risks currently assigned to your bank:</p>
 <table class = "prettytable">
     <tr>
         <th>Name</th>
@@ -14,7 +14,7 @@
         <th>Risk Source</th>
     </tr>
 
-    {% for bankrisk in risks %}
+    {% for bankrisk in user.get_profile.bank.bankrisk_set.all %}
     <tr>
         <td><a href="/erm/risk/{{ bankrisk.id }}" target="_new"/>{{ bankrisk.name }}</a></td>
         <td>{{ bankrisk.reviewDate }}</td>

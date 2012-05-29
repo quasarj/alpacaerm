@@ -11,3 +11,18 @@
     border: 1px dashed blue;
     padding: 5px;
 }
+
+.prettytable {
+    border-collapse: collapse;
+}
+.prettytable, .prettytable th {
+
+    border: 1px solid gray;
+}
+.prettytable th {
+    background-color: #eeeeee;
+}
+.prettytable th, .prettytable td {
+    padding-right: 15px;
+    padding-left: 15px;
+}

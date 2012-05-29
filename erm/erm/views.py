@@ -17,6 +17,15 @@ def index(request):
         return login_page(request)
 
 
+def all_view(request):
+    if not request.user.is_authenticated():
+        return login_page(request)
+
+    return render_to_response('all.html',
+        context_instance=RequestContext(request),
+    )
+
+
 def bankrisk_view(request, bankrisk_id):
     if not request.user.is_authenticated():
         return login_page(request)
@@ -136,8 +145,9 @@ def search_bysource_view(request):
         risks = BankRisk.objects.filter(bank=bank).filter(riskSource_id__in=source_ids)
 
         return render_to_response('search_results.html',
-                { 'risks': risks,
-                  'method': "by Source" },
+            { 'risks': risks,
+              'method': "by Source" },
+            context_instance=RequestContext(request),
         )
 
     # get all the Types used by this bank
@@ -157,8 +167,9 @@ def search_bytype_view(request):
         risks = BankRisk.objects.filter(bank=bank).filter(riskType_id__in=type_ids)
 
         return render_to_response('search_results.html',
-                { 'risks': risks,
-                  'method': "by Type" },
+            { 'risks': risks,
+              'method': "by Type" },
+            context_instance=RequestContext(request),
         )
 
     # get all the Types used by this bank
