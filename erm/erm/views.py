@@ -134,7 +134,8 @@ def assign_view(request):
 
 
 def search_view(request):
-    return render_to_response('search.html')   
+    return render_to_response('search.html',
+            context_instance=RequestContext(request))
 
 def search_bysource_view(request):
     bank = request.user.get_profile().bank
