@@ -3,17 +3,17 @@
 {% block title %}ERM Index{% endblock %}
 
 {% block content %}
-<table>
+<table class="prettytable">
     <tr>
-        <td>Username:</td>
+        <th>Username:</th>
         <td>{{ user.username }}</td>
     </tr>
     <tr>
-        <td>Bank:</td>
+        <th>Bank:</th>
         <td>{{ user.get_profile.bank.name }}</td>
     </tr>
     <tr>
-        <td>Access Level:</td>
+        <th>Access Level:</th>
         {% if user.get_profile.level == 0 %}
         <td>Read Only</td>
         {% else %}
@@ -25,7 +25,7 @@
 <p>
 Based on your user access, you have these options available to you:
 </p>
-<ul>
+<ul class="buttonlist">
     <li><a href="/erm/search/source/">Search by Source</a></li>
     <li><a href="/erm/search/type/">Search by Type</a></li>
     <li><a href="/erm/search/date/">Search by Last Review Date</a></li>

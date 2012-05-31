@@ -15,6 +15,9 @@ article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
 body {
 	line-height:1;
 }
+/* ol, ul {
+	list-style: none;
+} */
 blockquote,q {
 	quotes:none;
 }
@@ -54,7 +57,14 @@ a, a:visited, a:hover {
 #logo {
     text-align: center;
 }
+#logo p {
+    color: white;
+    font-size: 30px;
+    display: inline;
+    margin-left: 20px;
+    padding-bottom: 50px;
 
+}
 #container {
     /*background: #cccccc;*/
     background: #FFF7EE;
@@ -62,7 +72,7 @@ a, a:visited, a:hover {
     padding: 15px;
     border: 1px solid black;
     margin-bottom: 50px;
-
+    margin-top: 20px;
 
     /* rounded borders */
 	/*-webkit-box-shadow:inset 0 0 15px #e8e8e8;
@@ -77,6 +87,8 @@ a, a:visited, a:hover {
 #nav ul {
     background: #0E1D25;
     text-align: center;
+    margin-top: 0;
+    padding-top: 0;
 }
 #nav li {
     display: inline;
@@ -95,8 +107,37 @@ a, a:visited, a:hover {
     color: gray;
 }
 
+.buttonlist {
+}
+.buttonlist ul, .buttonlist ol, .buttonlist li {
 
+    list-style: none;
 
+	margin:0;
+	padding:0;
+	border:0;
+	font-size:100%;
+	font:inherit;
+	vertical-align: baseline;
+}
+.buttonlist li {
+
+    width: 300px;
+
+    border: 1px dashed gray;
+    margin-top: 4px;
+    margin-bottom: 4px;
+
+    padding: 4px;
+    padding-left: 10px;
+
+}
+.buttonlist a {
+    text-decoration: none;
+}
+.buttonlist li:hover {
+    background: #E4D5C3;
+}
 
 .errorlist {
     color: red;
