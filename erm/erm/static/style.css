@@ -40,6 +40,11 @@ a, a:visited, a:hover {
     color: blue;
 }
 
+h3 {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
 
 .center {
 	height:auto;
@@ -166,4 +171,9 @@ a, a:visited, a:hover {
 .prettytable th, .prettytable td {
     padding-right: 15px;
     padding-left: 15px;
+}
+
+.risktable th {
+    text-align: left;
+    vertical-align: top;
 }
