@@ -219,6 +219,49 @@ def search_bydate_view(request):
     )   
 
 
+def search_byname_view(request):
+
+    error_message = None
+
+    bank = request.user.get_profile().bank
+
+    if request.POST:
+        name_terms = request.POST['namecontains']
+
+        if len(name_terms.strip()) < 1:
+            error_message = "No search terms entered!"
+        else:
+            if " AND " in name_terms:
+                # split on any AND's and strip any remaining whitespace
+                name_contains = [a.strip() for a in name_terms.split(' AND ')]
+
+                risks = BankRisk.objects.filter(bank=bank)
+                for i in name_contains:
+                    risks = risks.filter(
+                            name__contains=i,
+                    )
+            else:
+
+                # split on any OR's and strip any remaining whitespace
+                name_contains = [a.strip() for a in name_terms.split(' OR ')]
+
+                risks = []
+                for i in name_contains:
+                    risks.extend(BankRisk.objects.filter(
+                            bank=bank,
+                            name__contains=i,
+                    ))
+
+            return render_to_response('search_results.html',
+                    { 'risks': risks,
+                      'method': "by Name",
+                      'search_again': "name", },
+            )
+
+    return render_to_response('search_byname.html',
+            { 'error_message': error_message }, 
+            context_instance=RequestContext(request),
+    )   
 
 def add_view(request):
     error_message = None

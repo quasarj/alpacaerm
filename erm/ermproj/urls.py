@@ -32,6 +32,7 @@ urlpatterns = patterns('',
     url(r'^erm/search/source/$', 'erm.views.search_bysource_view'),
     url(r'^erm/search/type/$', 'erm.views.search_bytype_view'),
     url(r'^erm/search/date/$', 'erm.views.search_bydate_view'),
+    url(r'^erm/search/name/$', 'erm.views.search_byname_view'),
 
 
 
