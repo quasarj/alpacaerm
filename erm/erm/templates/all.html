@@ -6,22 +6,5 @@
 <h3>All Risks</h3>
 
 <p>These are all the risks currently assigned to your bank:</p>
-<table class = "prettytable">
-    <tr>
-        <th>Name</th>
-        <th>Last Reviewed Date</th>
-        <th>Risk Type</th>
-        <th>Risk Source</th>
-    </tr>
-
-    {% for bankrisk in user.get_profile.bank.bankrisk_set.all %}
-    <tr>
-        <td><a href="/erm/risk/{{ bankrisk.id }}" target="_new"/>{{ bankrisk.name }}</a></td>
-        <td>{{ bankrisk.reviewDate }}</td>
-        <td>{{ bankrisk.riskType }}</td>
-        <td>{{ bankrisk.riskSource }}</td>
-    </tr>
-    {% endfor %}
-</table>
-
+{% include "_bankrisk_list.html" %}
 {% endblock %}

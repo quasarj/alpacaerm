@@ -20,8 +20,10 @@ def index(request):
 def all_view(request):
     if not request.user.is_authenticated():
         return login_page(request)
+    risks = request.user.get_profile().bank.bankrisk_set.all()
 
     return render_to_response('all.html',
+        { 'risks': risks, },
         context_instance=RequestContext(request),
     )
 
@@ -35,9 +37,20 @@ def bankrisk_view(request, bankrisk_id):
 
     bankrisk = get_object_or_404(BankRisk, pk=bankrisk_id)
     if request.method == 'POST':
+        # get a history object started in case this checks out
+        # Note: when the form is created below with both the
+        # post data and the instance, it updates the instance
+        # to reflect the post data changes immediately!
+
+        hist = BankRiskHistory()
+        hist.load(bankrisk)
+
         # so some posty stuff
         form = BankRiskForm(request.POST, instance=bankrisk)
         if form.is_valid():
+            # save the history now that we know the update is real 
+            hist.save()
+
             # do some processing (like saving it)
             form.save()
 #            return HttpResponseRedirect(

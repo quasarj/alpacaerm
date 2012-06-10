@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms import ModelForm
+from django.utils import timezone
 
 class Bank(models.Model):
     name = models.CharField(max_length=200)
@@ -115,8 +116,49 @@ class BankRisk(AbstractRisk):
     def __unicode__(self):
         return "{}: {}".format(self.bank.name, self.name)
 
-#    class Meta:
-#        unique_together = (("bank", "risk"),)
+    def trending(self):
+        """get the trending status of this risk
+        based on the last history item"""
+
+        # dummy implementation at this point
+        hists = self.bankriskhistory_set.all()
+        if len(hists) > 0:
+            last_rating = hists[hists.count() - 1].riskRating
+            rating = self.riskRating
+
+            if rating > last_rating:
+                return "High"
+            elif rating < last_rating:
+                return "Low"
+
+        # return flat if it isn't anything else, or if there was an error
+        return "Flat"
+
+class BankRiskHistory(AbstractRisk):
+    bankRisk = models.ForeignKey(BankRisk)
+    saved_time = models.DateTimeField()
+
+    def load(self, bankrisk=None):
+        """load data from a bankrisk"""
+
+        if bankrisk:
+            # attempt to copy the BankRisk data
+
+            # ugly hack to copy from one model to another
+            for attr in bankrisk.__dict__:
+                if attr != '_state' and attr != 'id':
+                    setattr(self, attr, getattr(bankrisk, attr))
+
+            # TODO: ManyToMany relationships will not be copied 
+            #       by the above code. Need to manually copy
+            #       RiskManagers, RiskType and RiskSource.
+
+            self.bankRisk = bankrisk
+            self.saved_time = timezone.now()
+
+
+    def __unicode__(self):
+        return "{}: {}".format(self.bankRisk.id, self.saved_time)
 
 # a RiskProfile is a set of risks that can be assigned to a bank
 # all at once

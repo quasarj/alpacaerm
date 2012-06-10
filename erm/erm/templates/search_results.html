@@ -6,22 +6,5 @@
 <h1>Search results</h1>
 <p>Results from search {{ method }}:</p>
 <p><a href="/erm/search/{{ search_again }}">Search again</a></p>
-<table class = "prettytable">
-    <tr>
-        <th>Name</th>
-        <th>Last Reviewed Date</th>
-        <th>Risk Type</th>
-        <th>Risk Source</th>
-    </tr>
-
-    {% for bankrisk in risks %}
-    <tr>
-        <td><a href="/erm/risk/{{ bankrisk.id }}" target="_new"/>{{ bankrisk.name }}</a></td>
-        <td>{{ bankrisk.reviewDate }}</td>
-        <td>{{ bankrisk.riskType }}</td>
-        <td>{{ bankrisk.riskSource }}</td>
-    </tr>
-    {% endfor %}
-</table>
-
+{% include "_bankrisk_list.html" %}
 {% endblock %}

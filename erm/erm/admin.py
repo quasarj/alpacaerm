@@ -9,6 +9,7 @@ admin.site.register(RiskProfile)
 admin.site.register(RiskType)
 admin.site.register(RiskSource)
 admin.site.register(RiskManager)
+admin.site.register(BankRiskHistory)
 
 
 class UserProfileAdmin(admin.ModelAdmin):
