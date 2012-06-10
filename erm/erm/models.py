@@ -21,6 +21,12 @@ class RiskSource(models.Model):
     def __unicode__(self):
         return self.name
 
+class RiskManager(models.Model):
+    name = models.CharField(max_length=200)
+
+    def __unicode__(self):
+        return self.name
+
 
 class AbstractRisk(models.Model):
 
@@ -33,6 +39,8 @@ class AbstractRisk(models.Model):
 
     riskType = models.ForeignKey(RiskType, null=True)
     riskSource = models.ForeignKey(RiskSource, null=True)
+
+    riskManagers = models.ManyToManyField(RiskManager, null=True)
 
     # fields from the Detail table in Access
     riskText = models.CharField(max_length=2000, null=True, blank=True)

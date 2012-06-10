@@ -1,4 +1,4 @@
-from erm.models import Bank, Risk, BankRisk, RiskProfile, UserProfile, RiskType, RiskSource
+from erm.models import *
 
 from django.contrib import admin
 
@@ -8,6 +8,7 @@ admin.site.register(BankRisk)
 admin.site.register(RiskProfile)
 admin.site.register(RiskType)
 admin.site.register(RiskSource)
+admin.site.register(RiskManager)
 
 
 class UserProfileAdmin(admin.ModelAdmin):
