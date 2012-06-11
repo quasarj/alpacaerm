@@ -6,22 +6,23 @@ sys.path.append(".")
 import ermproj.wsgi
 
 # begin
-from erm.models import RiskManager
+from erm.models import RiskSource
 
 def load():
-    print "Loading RiskManagers"
+    print "Loading RiskSources"
 
-    with open("dataload/data/RiskManagers.txt") as infile:
+    with open("dataload/data/RiskSources.txt") as infile:
         for line in infile:
-            r = RiskManager()
+            r = RiskSource()
             r.name = line.strip()
             r.save()
             print "Added ", r.name
 
 def clear():
-    for r in RiskManager.objects.all():
+    for r in RiskSource.objects.all():
         print "Deleted ", r.name
         r.delete()
+
 
 if __name__ == "__main__":
     clear()

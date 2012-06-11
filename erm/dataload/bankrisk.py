@@ -15,28 +15,180 @@ import csv
 import ermproj.wsgi
 
 # begin
-from erm.models import Risk
+from erm.models import *
 
 def load():
     print "Loading RiskManagers"
 
-    with open('dataload/Detail.txt', 'rb') as f:
+    with open('dataload/data/Detail.txt', 'rb') as f:
         reader = csv.reader(f)
         reader.next()  # skip the first line
         i = 0
         for row in reader:
             i += 1
-            detailId, riskSourceDet, txtDetComp, buManagerDet, \
-                    osVendorDet, txtLocation, threat, risk = row[:8]
-            print detailId
+
+            # from the source table
+            fields = [
+                'detailId',
+                'riskSourceDet',
+                'txtDetComp',
+                'buManagerDet',
+                'osVendorDet',
+                'txtLocation',
+                'threat',
+                'risk',
+                'mitigations',
+                'response',
+                'customers',
+                'impact',
+                'controls',
+                'controlsWeight',
+                'policyRate',
+                'policyWeight',
+                'inherentRisk',
+                'vendorRisk',
+                'vendorRiskWeight',
+                'marketRisk',
+                'marketRiskWeight',
+                'operationRisk',
+                'operationRiskWeight',
+                'complianceRisk',
+                'complianceRiskWeight',
+                'strategicRisk',
+                'strategicRiskWeight',
+                'reputationRisk',
+                'reputationRiskWeight',
+                'creditRisk',
+                'creditRiskWeight',
+                'fiduciaryRisk',
+                'fiduciaryRiskWeight',
+                'regulatoryLegalRisk',
+                'regulatoryLegalRiskWeight',
+                'humanResourceRisk',
+                'humanResourceRiskWeight',
+                'compositeRisk',
+                'riskRating',
+                'reviewDate',
+                'bsaRisk',
+                'regulatoryRisk',
+                'cispRisk',
+                'auditRisk',
+                'complianceRiskCk',
+                'redFlagRisk',
+                'outsourced',
+                'riskManagerDet',
+                'riskManager2Det',
+                'riskManager3Det',
+                'riskManager4Det',
+                'policyDet',
+                'policy2Det',
+                'policy3Det',
+                'policy4Det',
+                'frequencyDet',
+                'priorRating',
+                'intPriorRating',
+                'comments',
+                'trend',
+                'lastReviewer',
+                'priorRatingCalc',
+                'riskTypeDet',
+                'required',
+                'calInherentRiskRating',
+                'txtAuditReviewFreq',
+                'nbrVendorIrr',
+                'dteLastAudit',
+                'dteNextAudit',
+                'memAuditComments',
+            ]
             
-            r = Risk()
-            r.name = risk
-            r.threat = threat
-            r.save()
+            #build a nifty dict from fields+row
+            cols = {}
+            for k,f in enumerate(fields):
+                cols[f] = row[k]
 
 
-            #break
+            #if cols['detailId'] == '535':
+            if 1:
+                print cols['detailId']
+
+                # get the RiskSource
+                source = RiskSource.objects.get(name=cols['riskSourceDet'])
+                risk_type = RiskType.objects.get(name=cols['riskTypeDet']) 
+
+                r = Risk()
+                r.name = cols['risk']
+                r.riskType = risk_type
+                r.riskSource = source
+                
+                r.riskText = cols['risk']
+                r.location = cols['txtLocation'] 
+                r.threat = cols['threat']
+                r.response = cols['response']
+                r.mitigations = cols['mitigations']
+                r.comments = cols['comments']
+                r.customers = cols['customers']
+                r.impact = cols['impact']
+                r.controls = cols['controls']
+                r.controlsWeight = cols['controlsWeight']
+                r.policyRate = cols['policyRate']
+                r.policyWeight = cols['policyWeight']
+                r.inherentRisk = cols['inherentRisk']
+                r.vendorRisk = cols['vendorRisk']
+                r.vendorRiskWeight = cols['vendorRiskWeight']
+                r.marketRisk = cols['marketRisk']
+                r.marketRiskWeight = cols['marketRiskWeight']
+                r.operationalRisk = cols['operationRisk']
+                r.operationalRiskWeight = cols['operationRiskWeight']
+                r.complianceRisk = cols['complianceRisk']
+                r.complianceRiskWeight = cols['complianceRiskWeight']
+                r.strategicRisk = cols['strategicRisk']
+                r.strategicRiskWeight = cols['strategicRiskWeight']
+                r.reputationRisk = cols['reputationRisk']
+                r.reputationRiskWeight = cols['reputationRiskWeight']
+                r.creditRisk = cols['creditRisk']
+                r.creditRiskWeight = cols['creditRiskWeight']
+                r.fiduciaryRisk = cols['fiduciaryRisk']
+                r.fiduciaryRiskWeight = cols['fiduciaryRiskWeight']
+                r.regulatoryLegalRisk = cols['regulatoryLegalRisk']
+                r.regulatoryLegalRiskWeight = cols['regulatoryLegalRiskWeight']
+                r.humanResourceRisk = cols['humanResourceRisk']
+                r.humanResourceRiskWeight = cols['humanResourceRiskWeight']
+                r.compositeRisk = cols['compositeRisk']
+                r.riskRating = cols['riskRating']
+                r.bsaRisk = cols['bsaRisk']
+                r.regulatoryRisk = cols['regulatoryRisk']
+                r.cispRisk = cols['cispRisk']
+                r.auditRisk = cols['auditRisk']
+                r.complianceRiskb = cols['complianceRiskCk']
+                r.redFlagRisk = cols['redFlagRisk']
+                r.outsourced = cols['outsourced']
+                r.frequencyDet = cols['frequencyDet']
+                r.priorRating = cols['priorRating']
+                r.intpriorrating = cols['intPriorRating']
+                r.trend = cols['trend']
+                r.calInherentRiskRating = cols['calInherentRiskRating']
+
+
+                r.save()
+
+                #print cols
+                #break
+
+
+def clear():
+    # clear everything related to Risks
+    print "Deleting all Risks"
+    Risk.objects.all().delete()
+
+    print "Deleting all BankRisks"
+    BankRisk.objects.all().delete()
+
+    print "Deleting all BankRiskHistories"
+    BankRiskHistory.objects.all().delete()
 
 if __name__ == "__main__":
+    clear()
     load()
+
+
+
