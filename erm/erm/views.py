@@ -239,7 +239,20 @@ def search_byname_view(request):
     bank = request.user.get_profile().bank
 
     if request.POST:
-        name_terms = request.POST['namecontains']
+        #name_terms = request.POST['namecontains']
+        # TODO: I am a terrible person. 
+        name_terms = request.POST['term1']
+        if request.POST['term2'] != "":
+            name_terms += " " + request.POST['search_type'].upper() + " " + \
+                    request.POST['term2']
+        if request.POST['term3'] != "":
+            name_terms += " " + request.POST['search_type'].upper() + " " + \
+                    request.POST['term3']
+        if request.POST['term4'] != "":
+            name_terms += " " + request.POST['search_type'].upper() + " " + \
+                    request.POST['term4']
+
+        print name_terms
 
         if len(name_terms.strip()) < 1:
             error_message = "No search terms entered!"
