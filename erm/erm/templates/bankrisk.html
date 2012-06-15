@@ -18,6 +18,15 @@ You do not have permission to modify this Risk.
 </p>
 {% endif %}
 
+
+<p>Current: {{ bankrisk.id }}</p>
+{% if next_risk %}
+<p><a href="/erm/risk/{{ next_risk.id }}/">Next</a></p>
+{% endif %}
+{% if prev_risk %}
+<p><a href="/erm/risk/{{ prev_risk.id }}/">Previous</a></p>
+{% endif %}
+
 {% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
 {% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
 

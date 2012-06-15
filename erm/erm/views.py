@@ -22,6 +22,9 @@ def all_view(request):
         return login_page(request)
     risks = request.user.get_profile().bank.bankrisk_set.all()
 
+    # clear old search results
+    if request.session.get('search_results', False):
+        del request.session['search_results']
     return render_to_response('all.html',
         { 'risks': risks, },
         context_instance=RequestContext(request),
@@ -63,11 +66,34 @@ def bankrisk_view(request, bankrisk_id):
     else:
         form = BankRiskForm(instance=bankrisk)
 
+
+    # check for search results
+    search_results = request.session.get('search_results', False)
+
+    next_risk = None
+    prev_risk = None
+
+    if search_results:
+        # figure out which is next and which is previous
+        pos = None
+        for k,r in enumerate(search_results):
+            if r.id == bankrisk.id:
+                pos = k
+                break
+
+        if not pos is None:
+            if pos < len(search_results):
+                next_risk = search_results[pos+1]
+            if pos > 0:
+                prev_risk = search_results[pos-1]
+
     return render_to_response('bankrisk.html', {
         'form': form,
         'bankrisk': bankrisk,
         'error_message': error_message,
         'success_message': success_message,
+        'next_risk': next_risk,
+        'prev_risk': prev_risk,
     }, context_instance=RequestContext(request))
             
 
@@ -158,6 +184,7 @@ def search_bysource_view(request):
         source_ids = request.POST.getlist('source')
         risks = BankRisk.objects.filter(bank=bank).filter(riskSource_id__in=source_ids)
 
+        request.session['search_results'] = risks
         return render_to_response('search_results.html',
             { 'risks': risks,
               'method': "by Source" },
@@ -278,6 +305,8 @@ def search_byname_view(request):
                             name__contains=i,
                     ))
 
+            # set the search results session var
+            request.session['search_results'] = risks
             return render_to_response('search_results.html',
                     { 'risks': risks,
                       'method': "by Name",
