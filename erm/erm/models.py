@@ -38,8 +38,8 @@ class AbstractRisk(models.Model):
 
     reviewDate = models.DateField(null=True, blank=True)
 
-    riskType = models.ForeignKey(RiskType, null=True)
-    riskSource = models.ForeignKey(RiskSource, null=True)
+    riskTypes = models.ManyToManyField(RiskType, null=True)
+    riskSources = models.ManyToManyField(RiskSource, null=True)
 
     riskManagers = models.ManyToManyField(RiskManager, null=True)
 
@@ -77,8 +77,8 @@ class AbstractRisk(models.Model):
     regulatoryLegalRiskWeight = models.FloatField(default=0)
     humanResourceRisk = models.FloatField(default=0)
     humanResourceRiskWeight = models.FloatField(default=0)
-    compositeRisk = models.FloatField(default=0)
-    riskRating = models.FloatField(default=0)
+    # compositeRisk = models.FloatField(default=0)
+    # riskRating = models.FloatField(default=0)
     bsaRisk = models.BooleanField()
     regulatoryRisk = models.BooleanField()
     cispRisk = models.BooleanField()
@@ -95,14 +95,14 @@ class AbstractRisk(models.Model):
     # Policy3Det
     # Policy4Det
     frequencyDet = models.CharField(max_length=2000, null=True, blank=True)
-    priorRating = models.FloatField(default=0)
-    intpriorrating = models.FloatField(default=0)
-    trend = models.CharField(max_length=2000, null=True, blank=True)
+    # priorRating = models.FloatField(default=0)
+    # intpriorrating = models.FloatField(default=0)
+    # trend = models.CharField(max_length=2000, null=True, blank=True)
     # LastReviewer
     # PriorRatingCalc
     # RiskTypeDet
     # Required
-    calInherentRiskRating = models.FloatField(default=0)
+    # calInherentRiskRating = models.FloatField(default=0)
 
 
 class Risk(AbstractRisk):
@@ -116,6 +116,11 @@ class BankRisk(AbstractRisk):
     def __unicode__(self):
         return "{}: {}".format(self.bank.name, self.name)
 
+    def riskRating(self):
+        """calculate the rating of this risk"""
+        # TODO: write this
+        return 1.0
+
     def trending(self):
         """get the trending status of this risk
         based on the last history item"""
@@ -123,8 +128,8 @@ class BankRisk(AbstractRisk):
         # dummy implementation at this point
         hists = self.bankriskhistory_set.all()
         if len(hists) > 0:
-            last_rating = hists[hists.count() - 1].riskRating
-            rating = self.riskRating
+            last_rating = hists[hists.count() - 1].riskRating()
+            rating = self.riskRating()
 
             if rating > last_rating:
                 return "High"
@@ -149,13 +154,24 @@ class BankRiskHistory(AbstractRisk):
                 if attr != '_state' and attr != 'id':
                     setattr(self, attr, getattr(bankrisk, attr))
 
-            # TODO: ManyToMany relationships will not be copied 
-            #       by the above code. Need to manually copy
-            #       RiskManagers, RiskType and RiskSource.
-
             self.bankRisk = bankrisk
             self.saved_time = timezone.now()
 
+            # the above trick doesn't work for 
+            # many-to-many relationships, so do them
+            # manually here.
+            # Also, the object must be saved before
+            # m2m relaitonships can be added
+            self.save()
+
+            for rm in bankrisk.riskManagers.all():
+                self.riskManagers.add(rm)
+
+            for rt in bankrisk.riskTypes.all():
+                self.riskTypes.add(rt)
+
+            for rs in bankrisk.riskSources.all():
+                self.riskSources.add(rs)
 
     def __unicode__(self):
         return "{}: {}".format(self.bankRisk.id, self.saved_time)
@@ -208,8 +224,8 @@ class BankRiskForm(ModelForm):
         
         labels = {
             'reviewDate': 'Last Review Date',
-            'riskType': 'Risk Type',
-            'riskSource': 'Risk Source',
+            'riskTypes': 'Risk Types',
+            'riskSources': 'Risk Sources',
             'riskText': 'Systems or Assets at Risk',
             'location': 'Location of Systems or Assets',
             'threat': 'Detail of Source of Threat or Vulnerability',
@@ -243,8 +259,8 @@ class BankRiskForm(ModelForm):
             'regulatoryLegalRiskWeight': 'Regulatory Legal Risk Weight',
             'humanResourceRisk': 'Human Resource Risk',
             'humanResourceRiskWeight': 'Human Resource Risk Weight',
-            'compositeRisk': 'Composite Risk Weight',
-            'riskRating': 'Risk Rating',
+            # 'compositeRisk': 'Composite Risk Weight',
+            # 'riskRating': 'Risk Rating',
 
             'outsourced': 'Outsourced Service',
             'auditRisk': 'Audit Risk Management',
@@ -254,6 +270,8 @@ class BankRiskForm(ModelForm):
             'redFlagRisk': 'Red Flag Risk Management',
             'regulatoryRisk': 'Regulatory Risk Management',
 
+
+            'frequencyDet': 'Frequency',
         }
 
         # assign to the real fields
@@ -273,8 +291,8 @@ class BankRiskForm(ModelForm):
                 'response': Textarea(attrs={'cols': 80, 'rows': 10}),
                 'mitigations': Textarea(attrs={'cols': 80, 'rows': 10}),
                 'comments': Textarea(attrs={'cols': 80, 'rows': 10}),
-                'frequencyDet': Textarea(attrs={'cols': 80, 'rows': 10}),
-                'trend': Textarea(attrs={'cols': 80, 'rows': 10}),
+                # 'frequencyDet': Textarea(attrs={'cols': 80, 'rows': 10}),
+                # 'trend': Textarea(attrs={'cols': 80, 'rows': 10}),
 
 
                 # weights
@@ -305,8 +323,8 @@ class BankRiskForm(ModelForm):
                 'regulatoryLegalRiskWeight': forms.TextInput(attrs=WEIGHT_ATTRS),
                 'humanResourceRisk': forms.TextInput(attrs=RISK_ATTRS),
                 'humanResourceRiskWeight': forms.TextInput(attrs=WEIGHT_ATTRS),
-                'compositeRisk': forms.TextInput(attrs=RISK_ATTRS),
-                'riskRating': forms.TextInput(attrs=RISK_ATTRS),
+                # 'compositeRisk': forms.TextInput(attrs=RISK_ATTRS),
+                # 'riskRating': forms.TextInput(attrs=RISK_ATTRS),
 
                 # checkboxes
                 'outsourced': forms.CheckboxInput(attrs=CHECKBOX_ATTRS), 

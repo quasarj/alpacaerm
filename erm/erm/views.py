@@ -8,10 +8,11 @@ from django.contrib.auth import authenticate, login, logout
 from erm.models import *
 import datetime
 
+
 def index(request):
     if request.user.is_authenticated():
-        return render_to_response('index.html', {
-            'user': request.user,
+        return render_to_response('index.html',
+            { 'user': request.user,
             })
     else:
         return login_page(request)
@@ -41,6 +42,9 @@ def bankrisk_view(request, bankrisk_id):
     bankrisk = get_object_or_404(BankRisk, pk=bankrisk_id)
     if request.method == 'POST':
         # get a history object started in case this checks out
+        # hist.load() now saves immediately, so it must be later
+        # deleted if it is not needed. This was necessary because
+        # of how many-to-many relationships work.
         # Note: when the form is created below with both the
         # post data and the instance, it updates the instance
         # to reflect the post data changes immediately!
@@ -52,7 +56,7 @@ def bankrisk_view(request, bankrisk_id):
         form = BankRiskForm(request.POST, instance=bankrisk)
         if form.is_valid():
             # save the history now that we know the update is real 
-            hist.save()
+            #hist.save() # this is now auto-saved when load is called
 
             # do some processing (like saving it)
             form.save()
@@ -62,7 +66,10 @@ def bankrisk_view(request, bankrisk_id):
             success_message = "Data saved successfully."
         else:
             # form is not valid, display an error
-           error_message = "There were errors in your submission."
+            error_message = "There were errors in your submission."
+
+            # delete the now-bogus history object
+            hist.delete()
     else:
         form = BankRiskForm(instance=bankrisk)
 
@@ -157,6 +164,15 @@ def assign_view(request):
 
                 b.save()
 
+                # now add the m2m stuff
+                for rm in risk.riskManagers.all():
+                    b.riskManagers.add(rm)
+
+                for rt in risk.riskTypes.all():
+                    b.riskTypes.add(rt)
+
+                for rs in risk.riskSources.all():
+                    b.riskSources.add(rs)
 
             return render_to_response('assign_complete.html')
 
@@ -182,7 +198,7 @@ def search_bysource_view(request):
     if request.POST:
 
         source_ids = request.POST.getlist('source')
-        risks = BankRisk.objects.filter(bank=bank).filter(riskSource_id__in=source_ids)
+        risks = BankRisk.objects.filter(bank=bank).filter(riskSources__id__in=source_ids)
 
         request.session['search_results'] = risks
         return render_to_response('search_results.html',
@@ -205,7 +221,7 @@ def search_bytype_view(request):
     if request.POST:
 
         type_ids = request.POST.getlist('type')
-        risks = BankRisk.objects.filter(bank=bank).filter(riskType_id__in=type_ids)
+        risks = BankRisk.objects.filter(bank=bank).filter(riskTypes__id__in=type_ids)
 
         return render_to_response('search_results.html',
             { 'risks': risks,

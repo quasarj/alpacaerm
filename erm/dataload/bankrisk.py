@@ -117,8 +117,9 @@ def load():
 
                 r = Risk()
                 r.name = cols['risk']
-                r.riskType = risk_type
-                r.riskSource = source
+                # these must be done after the save
+                #r.riskType = risk_type
+                #r.riskSource = source
                 
                 r.riskText = cols['risk']
                 r.location = cols['txtLocation'] 
@@ -153,23 +154,41 @@ def load():
                 r.regulatoryLegalRiskWeight = cols['regulatoryLegalRiskWeight']
                 r.humanResourceRisk = cols['humanResourceRisk']
                 r.humanResourceRiskWeight = cols['humanResourceRiskWeight']
-                r.compositeRisk = cols['compositeRisk']
-                r.riskRating = cols['riskRating']
-                r.bsaRisk = cols['bsaRisk']
-                r.regulatoryRisk = cols['regulatoryRisk']
-                r.cispRisk = cols['cispRisk']
-                r.auditRisk = cols['auditRisk']
-                r.complianceRiskb = cols['complianceRiskCk']
-                r.redFlagRisk = cols['redFlagRisk']
-                r.outsourced = cols['outsourced']
+                # r.compositeRisk = cols['compositeRisk']
+                # r.riskRating = cols['riskRating']
+
+                if cols['bsaRisk'] == "1":
+                    r.bsaRisk = True
+
+                if cols['regulatoryRisk'] == "1":
+                    r.regulatoryRisk = True
+
+                if cols['cispRisk'] == "1":
+                    r.cispRisk = True
+
+                if cols['auditRisk'] == "1":
+                    r.auditRisk = True
+
+                if cols['complianceRiskCk'] == "1":
+                    r.complianceRiskb = True
+
+                if cols['redFlagRisk'] == "1":
+                    r.redFlagRisk = True
+
+                if cols['outsourced'] == "1":
+                    r.outsourced = True
+
                 r.frequencyDet = cols['frequencyDet']
-                r.priorRating = cols['priorRating']
-                r.intpriorrating = cols['intPriorRating']
-                r.trend = cols['trend']
-                r.calInherentRiskRating = cols['calInherentRiskRating']
+                # r.priorRating = cols['priorRating']
+                # r.intpriorrating = cols['intPriorRating']
+                # r.trend = cols['trend']
+                # r.calInherentRiskRating = cols['calInherentRiskRating']
 
 
                 r.save()
+
+                r.riskTypes.add(risk_type)
+                r.riskSources.add(source)
 
                 #print cols
                 #break
