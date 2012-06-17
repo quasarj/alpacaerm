@@ -3,11 +3,95 @@
 
 {% block content %}
 
-<script>
-    $(function() {
+<script type="text/javascript">
+
+    function updateRisks() {
+        //show them all first
+        $(".risk_risk").parent().parent().show();
+        $(".risk_weight").parent().parent().show();
+
+
+        //get an array of all selected risk types
+        var typevals = [];
+        $("#id_riskTypes :selected").each(function(i, selected) { 
+            typevals[i] = $(selected).val();
+        });
+
+        // 1 = Credit Risk, -1 means not present
+        if ($.inArray("1", typevals) == -1) {
+            // two parents up = the tr
+            $("#id_creditRisk").parent().parent().hide();
+            $("#id_creditRiskWeight").parent().parent().hide();
+
+        }
+
+        if ($.inArray("2", typevals) == -1) {
+            $("#id_marketRisk").parent().parent().hide();
+            $("#id_marketRiskWeight").parent().parent().hide();
+        }
+
+        // missing Liquidity Risk
+
+        if ($.inArray("4", typevals) == -1) {
+            $("#id_operationalRisk").parent().parent().hide();
+            $("#id_operationalRiskWeight").parent().parent().hide();
+        }
+
+        if ($.inArray("5", typevals) == -1) {
+            $("#id_regulatoryLegalRisk").parent().parent().hide();
+            $("#id_regulatoryLegalRiskWeight").parent().parent().hide();
+        }
+
+        if ($.inArray("6", typevals) == -1) {
+            $("#id_reputationalRisk").parent().parent().hide();
+            $("#id_reputationalRiskWeight").parent().parent().hide();
+        }
+
+        if ($.inArray("7", typevals) == -1) {
+            $("#id_humanResourceRisk").parent().parent().hide();
+            $("#id_humanResourceRiskWeight").parent().parent().hide();
+        }
+
+        //missing Audit / Exam Finding (8)
+        
+        if ($.inArray("9", typevals) == -1) {
+            $("#id_strategicRisk").parent().parent().hide();
+            $("#id_strategicRiskWeight").parent().parent().hide();
+        }
+
+        //missing Interest Rate Risk (10)
+
+        if ($.inArray("11", typevals) == -1) {
+            $("#id_complianceRisk").parent().parent().hide();
+            $("#id_complianceRiskWeight").parent().parent().hide();
+        }
+
+        if ($.inArray("12", typevals) == -1) {
+            $("#id_fiduciaryRisk").parent().parent().hide();
+            $("#id_fiduciaryRiskWeight").parent().parent().hide();
+        }
+
+        if ($.inArray("13", typevals) == -1) {
+            $("#id_vendorRisk").parent().parent().hide();
+            $("#id_vendorRiskWeight").parent().parent().hide();
+        }
+
+
+    }
+
+
+    $(function() { // things to do when the page loads
         $("#id_reviewDate").datepicker({
             dateFormat: "yy-mm-dd"    
         });
+
+        //bind update to onblur
+        $("#id_riskTypes").blur(function() {
+            updateRisks();
+        });
+
+        updateRisks();
+
     });
 </script>
 
