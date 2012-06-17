@@ -24,8 +24,9 @@ def all_view(request):
     risks = request.user.get_profile().bank.bankrisk_set.all()
 
     # clear old search results
-    if request.session.get('search_results', False):
-        del request.session['search_results']
+#    if request.session.get('search_results', False):
+#        del request.session['search_results']
+    request.session['search_results'] = risks
     return render_to_response('all.html',
         { 'risks': risks, },
         context_instance=RequestContext(request),
