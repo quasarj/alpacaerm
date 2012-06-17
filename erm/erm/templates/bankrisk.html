@@ -18,20 +18,22 @@ You do not have permission to modify this Risk.
 </p>
 {% endif %}
 
-
-<p>Current: {{ bankrisk.id }}</p>
-{% if next_risk %}
-<p><a href="/erm/risk/{{ next_risk.id }}/">Next</a></p>
-{% endif %}
+<p>
 {% if prev_risk %}
-<p><a href="/erm/risk/{{ prev_risk.id }}/">Previous</a></p>
+<a href="/erm/risk/{{ prev_risk.id }}/">&lt; {{ prev_risk|truncatechars:35 }}</a>
 {% endif %}
+{% if next_risk %}
+{% if prev_risk %} | {% endif %}
+<a href="/erm/risk/{{ next_risk.id }}/">{{ next_risk|truncatechars:35 }} &gt;</a>
+{% endif %}
+</p>
 
 {% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
 {% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
 
 {% if user.get_profile.level > 0 %}
 <form action="/erm/risk/{{ bankrisk.id }}/" method="post">{% csrf_token %}
+    <input type="submit" value="Save" />
 {% endif %}
     <table class="risktable">
     {{ form }}

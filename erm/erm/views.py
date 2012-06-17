@@ -87,9 +87,10 @@ def bankrisk_view(request, bankrisk_id):
             if r.id == bankrisk.id:
                 pos = k
                 break
-
+        print "pos: {}, len: {}, next: {}".format(
+                pos, len(search_results), pos+1)
         if not pos is None:
-            if pos < len(search_results):
+            if pos < (len(search_results) - 1):
                 next_risk = search_results[pos+1]
             if pos > 0:
                 prev_risk = search_results[pos-1]

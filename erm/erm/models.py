@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.utils import timezone
 
+
+BIGTEXT_LEN=5000
+
 class Bank(models.Model):
     name = models.CharField(max_length=200)
 
@@ -44,12 +47,12 @@ class AbstractRisk(models.Model):
     riskManagers = models.ManyToManyField(RiskManager, null=True)
 
     # fields from the Detail table in Access
-    riskText = models.CharField(max_length=2000, null=True, blank=True)
+    riskText = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True)
     location = models.CharField(max_length=200, null=True, blank=True)
-    threat = models.CharField(max_length=2000, null=True, blank=True)
-    response = models.CharField(max_length=2000, null=True, blank=True)
-    mitigations = models.CharField(max_length=2000, null=True, blank=True)
-    comments = models.CharField(max_length=2000, null=True, blank=True)
+    threat = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True)
+    response = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True)
+    mitigations = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True)
+    comments = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True)
     customers = models.FloatField(default=0)
     impact = models.FloatField(default=0)
     controls = models.FloatField(default=0)
@@ -94,7 +97,7 @@ class AbstractRisk(models.Model):
     # Policy2Det
     # Policy3Det
     # Policy4Det
-    frequencyDet = models.CharField(max_length=2000, null=True, blank=True)
+    frequencyDet = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True)
     # priorRating = models.FloatField(default=0)
     # intpriorrating = models.FloatField(default=0)
     # trend = models.CharField(max_length=2000, null=True, blank=True)
@@ -103,6 +106,12 @@ class AbstractRisk(models.Model):
     # RiskTypeDet
     # Required
     # calInherentRiskRating = models.FloatField(default=0)
+
+
+    def riskRating(self):
+        """calculate the rating of this risk"""
+        # TODO: write this
+        return 1.0
 
 
 class Risk(AbstractRisk):
@@ -116,10 +125,6 @@ class BankRisk(AbstractRisk):
     def __unicode__(self):
         return "{}: {}".format(self.bank.name, self.name)
 
-    def riskRating(self):
-        """calculate the rating of this risk"""
-        # TODO: write this
-        return 1.0
 
     def trending(self):
         """get the trending status of this risk

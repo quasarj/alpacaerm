@@ -1,14 +1,14 @@
 <table class = "prettytable">
     <tr>
         <th>Name</th>
-        <th>Last Reviewed Date</th>
+        <th style="width: 100px;">Last Reviewed Date</th>
         <th>Ownership</th>
         <th>Trending</th>
     </tr>
 
     {% for bankrisk in risks %}
     <tr>
-        <td><a href="/erm/risk/{{ bankrisk.id }}" target="_new"/>{{ bankrisk.name }}</a></td>
+        <td><a href="/erm/risk/{{ bankrisk.id }}" />{{ bankrisk.name }}</a></td>
         <td>{{ bankrisk.reviewDate }}</td>
         <td>
             {% for m in bankrisk.riskManagers.all %} 
