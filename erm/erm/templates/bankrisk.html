@@ -20,11 +20,11 @@ You do not have permission to modify this Risk.
 
 <p>
 {% if prev_risk %}
-<a href="/erm/risk/{{ prev_risk.id }}/">&lt; {{ prev_risk|truncatechars:35 }}</a>
+<a href="/erm/risk/{{ prev_risk.id }}/">&lt; {{ prev_risk.name|truncatechars:35 }}</a>
 {% endif %}
 {% if next_risk %}
 {% if prev_risk %} | {% endif %}
-<a href="/erm/risk/{{ next_risk.id }}/">{{ next_risk|truncatechars:35 }} &gt;</a>
+<a href="/erm/risk/{{ next_risk.id }}/">{{ next_risk.name|truncatechars:35 }} &gt;</a>
 {% endif %}
 </p>
 
