@@ -106,12 +106,68 @@ class AbstractRisk(models.Model):
     # RiskTypeDet
     # Required
     # calInherentRiskRating = models.FloatField(default=0)
+    
+    def compositeRisk(self):
+        """calculate the composite risk"""
+        # NOTE: This needs to decide which risks to actually
+        # use based on the RiskType field!
 
+        # risks to use from original calc (legacy app)
+        vendor = self.vendorRisk * self.vendorRiskWeight
+        market = self.marketRisk * self.marketRiskWeight
+        operational = self.operationalRisk * self.operationalRiskWeight
+        compliance = self.complianceRisk * self.complianceRiskWeight
+        strategic = self.strategicRisk * self.strategicRiskWeight
+        reputation = self.reputationRisk * self.reputationRiskWeight
+        credit = self.creditRisk * self.creditRiskWeight
+        fiduciary = self.fiduciaryRisk * self.fiduciaryRiskWeight
+        regulatory = self.regulatoryLegalRisk * self.regulatoryLegalRiskWeight
+        humanResource = self.humanResourceRisk * self.humanResourceRiskWeight
+
+        total = (   vendor +
+                    market +
+                    operational +
+                    compliance +
+                    strategic +
+                    reputation +
+                    credit +
+                    fiduciary +
+                    regulatory +
+                    humanResource   )
+
+        weights = (
+            self.vendorRiskWeight +
+            self.marketRiskWeight +
+            self.operationalRiskWeight +
+            self.complianceRiskWeight +
+            self.strategicRiskWeight +
+            self.reputationRiskWeight +
+            self.creditRiskWeight +
+            self.fiduciaryRiskWeight +
+            self.regulatoryLegalRiskWeight +
+            self.humanResourceRiskWeight
+        )
+
+        return total / weights
 
     def riskRating(self):
         """calculate the rating of this risk"""
         # TODO: write this
-        return 1.0
+
+
+        calc = (
+            self.customers +
+            self.impact +
+            self.inherentRisk + 
+            self.compositeRisk()
+        ) / 4.0
+
+        calc *= ((
+            (self.controls * self.controlsWeight) +
+            (self.policyRate * self.policyWeight)
+        ) / (self.controlsWeight + self.policyWeight))
+
+        return calc
 
 
 class Risk(AbstractRisk):
@@ -207,7 +263,7 @@ class UserProfile(models.Model):
 # Forms
 from django.forms import Textarea
 from django import forms
-
+from django.contrib.admin.widgets import FilteredSelectMultiple
 
 CHECKBOX_ATTRS = {'class': 'risk_checkbox'}
 RISK_ATTRS = {'class': 'risk_risk', 'size': 4}
@@ -339,6 +395,8 @@ class BankRiskForm(ModelForm):
                 'complianceRiskb': forms.CheckboxInput(attrs=CHECKBOX_ATTRS), 
                 'redFlagRisk': forms.CheckboxInput(attrs=CHECKBOX_ATTRS), 
                 'regulatoryRisk': forms.CheckboxInput(attrs=CHECKBOX_ATTRS), 
+
+                # 'riskTypes': FilteredSelectMultiple("verbose name", is_stacked=False), 
 
         }
 
