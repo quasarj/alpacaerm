@@ -12,7 +12,9 @@ import datetime
 def index(request):
     if request.user.is_authenticated():
         return render_to_response('index.html',
-            { 'user': request.user,
+            { 
+                'user': request.user,
+                'module': 'home',
             })
     else:
         return login_page(request)
