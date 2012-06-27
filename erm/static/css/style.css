@@ -61,7 +61,8 @@ h3 {
 }
 
 #nav ul {
-    background: #0E1D25;
+    /* background: #0E1D25; */
+    background: url('/static/img/left_bar.png') no-repeat;
     text-align: center;
     margin-top: 0;
     padding-top: 0;
