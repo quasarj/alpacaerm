@@ -11,15 +11,14 @@
 </head>
 
 <body>
-    <div id="wrapper">
-    <div class="center">
-    <div id="header">
+    <div id="wrapper" class="container_12">
+    <div id="header" class="grid_12">
         <div id="logo">
             <a href="/"><img alt="logo" src="/static/logo.png" /></a>
         </div>
     </div>
 
-    <div id="nav">
+    <div id="nav" class="grid_12">
         {% block nav %}
         <ul>
             <li><a {% if module == 'home' %}class="nav_selected" {% endif %}href="/">Home</a></li>
@@ -30,7 +29,7 @@
         </ul>
         {% endblock %}
     </div>
-    <div id="subnav">
+    <div id="subnav" class="grid_12">
         {% block subnav %}
         <ul>
             <li><a href="/erm/search/">Search</a></li>
@@ -44,12 +43,14 @@
         {% endblock %}
     </div>
 
-    <div id="container">
-    <div id="content">
-        {% block content %}{% endblock %}
-    </div>
-    </div>
-    </div>
-    </div>
+    <div id="container" class="grid_12">
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div> <!-- content -->
+    </div> <!-- container -->
+    <div id="footer" class="grid_12">
+        <p>Copyright 2012, Alpaca Software</p>
+    </div> <!-- footer -->
+    </div> <!-- wrapper -->
 </body>
 </html>
