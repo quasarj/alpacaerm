@@ -16,4 +16,6 @@ urlpatterns = patterns('erm.views',
     url(r'^search/type/$', 'search_bytype_view'),
     url(r'^search/date/$', 'search_bydate_view'),
     url(r'^search/name/$', 'search_byname_view'),
+
+    url(r'^report/$', 'report_view'),
 )

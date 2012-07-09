@@ -384,3 +384,173 @@ def add_view(request):
     }, context_instance=RequestContext(request))
 
 
+def report_view(request):
+    """
+    generate the executive report
+    """
+
+    bank = request.user.get_profile().bank
+
+    # Section 1: Summary of Risk Assessment Ratings
+    risks = bank.bankrisk_set.all()
+    
+    sources = RiskSource.objects.all()
+
+    sone = {}
+    for s in sources:
+        temp = {}
+        high = 0
+        moderate = 0
+        increasing = 0
+        decreasing = 0
+
+        # total number
+        sub_risks = risks.filter(riskSources=s)
+        temp["count"] = len(sub_risks)
+
+        # loop over these to get the count that are high
+        for r in sub_risks:
+            if r.riskRating() > 2.5:
+                high += 1
+            else:
+                moderate += 1
+
+            tr = r.trending()
+            if tr == "High":
+                increasing += 1
+            elif tr == "Low":
+                decreasing += 1
+
+
+        temp["high"] = high
+        temp["moderate"] = moderate
+        temp["increasing"] = increasing
+        temp["decreasing"] = decreasing
+
+
+        sone[s.name] = temp
+
+    # Section 2: Summary of Risk Scoring by Risk Source
+    stwo = {}
+    for s in sources:
+        temp = {}
+        customer = 0
+        organization = 0
+        inherent = 0
+        composite = 0
+        outsourced = 0
+
+        # total number
+        sub_risks = risks.filter(riskSources=s)
+        temp["count"] = len(sub_risks)
+
+        # loop over these to get the counts
+        for r in sub_risks:
+            if r.customers > 2.5:
+                customer += 1
+
+            # TODO: honestly this should be
+            # organization not impact (at the model level)
+            if r.impact > 2.5:
+                organization += 1
+
+            if r.inherentRisk > 2.5:
+                inherent += 1
+
+            if r.compositeRisk() > 2.5:
+                composite += 1
+
+            if r.outsourced == True:
+                outsourced += 1
+
+        temp["customer"] = customer
+        temp["organization"] = organization
+        temp["inherent"] = inherent
+        temp["composite"] = composite
+        temp["outsourced"] = outsourced
+
+        stwo[s.name] = temp
+
+    # Section 3: Distribution of Risks by Risk Type
+    # Same as Section 1 only by Type instead of Source
+    sthree = {}
+    types = RiskType.objects.all()
+    for t in types:
+        temp = {}
+        high = 0
+        moderate = 0
+        increasing = 0
+        decreasing = 0
+
+        # total number
+        sub_risks = risks.filter(riskTypes=t)
+        temp["count"] = len(sub_risks)
+
+        # loop over these to get the counts
+        for r in sub_risks:
+            if r.riskRating() > 2.5:
+                high += 1
+            else:
+                moderate += 1
+
+            tr = r.trending()
+            if tr == "High":
+                increasing += 1
+            elif tr == "Low":
+                decreasing += 1
+
+
+        temp["high"] = high
+        temp["moderate"] = moderate
+        temp["increasing"] = increasing
+        temp["decreasing"] = decreasing
+
+
+        sthree[t.name] = temp
+
+
+    # Section 4: Risk Classification by Business Unit
+    # Same as Section 1 only by RiskManager instead of Source
+    sfour = {}
+    managers = RiskManager.objects.all()
+    for m in managers:
+        temp = {}
+        high = 0
+        moderate = 0
+        increasing = 0
+        decreasing = 0
+
+        # total number
+        sub_risks = risks.filter(riskManagers=m)
+        temp["count"] = len(sub_risks)
+
+        # loop over these to get the counts
+        for r in sub_risks:
+            if r.riskRating() > 2.5:
+                high += 1
+            else:
+                moderate += 1
+
+            tr = r.trending()
+            if tr == "High":
+                increasing += 1
+            elif tr == "Low":
+                decreasing += 1
+
+
+        temp["high"] = high
+        temp["moderate"] = moderate
+        temp["increasing"] = increasing
+        temp["decreasing"] = decreasing
+
+
+        sfour[m.name] = temp
+
+    return render_to_response('erm/report.html',
+            {
+                "sone":     sone,
+                "stwo":     stwo,
+                "sthree":   sthree,
+                "sfour":    sfour,
+            })
+

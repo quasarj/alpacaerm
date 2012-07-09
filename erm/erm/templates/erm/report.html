@@ -1,0 +1,117 @@
+{% load report_extras %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Alpaca ERM: Executive Report</title>
+        <link rel="stylesheet" href="/static/css/report.css" />
+    </head>
+
+    <body>
+        <h1>Executive Report</h1>
+
+        <h3>Summary of Risk Assessment Ratings</h3>
+        <table>
+            <tr>
+                <th>Source of Risk</th>
+                <th>Total Assessments</th>
+                <th>High</th>
+                <th>Increasing</th>
+                <th>Moderate</th>
+                <th>Decreasing</th>
+            </tr>
+            {% for line,data in sone.items %}
+            {% if data.count > 0 %}
+            <tr>
+                <td>{{ line }}</td>
+                <td>{{ data.count }}</td>
+                <td>{{ data.high|nozero }}</td>
+                <td>{{ data.increasing|nozero }}</td>
+                <td>{{ data.moderate|nozero }}</td>
+                <td>{{ data.decreasing|nozero }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+
+        </table>
+
+
+        <h3>Summary of Risk Scoring by Risk Source</h3>
+        <table>
+            <tr>
+                <th>Source of Risk</th>
+                <th>High Customer Impact</th>
+                <th>High Organizational Impact</th>
+                <th>High Inherent Risk</th>
+                <th>High Composite Management Risk</th>
+                <th>Outsourced Services</th>
+            </tr>
+            {% for line,data in stwo.items %}
+            {% if data.count > 0 %}
+            <tr>
+                <td>{{ line }}</td>
+                <td>{{ data.customer|nozero }}</td>
+                <td>{{ data.organization|nozero }}</td>
+                <td>{{ data.inherent|nozero }}</td>
+                <td>{{ data.composite|nozero }}</td>
+                <td>{{ data.outsourced|nozero }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+
+        </table>
+
+        <h3>Distribution of Risks by Risk Type</h3>
+        <table>
+            <tr>
+                <th>Type of Risk</th>
+                <th>Total Assessments</th>
+                <th>High</th>
+                <th>Increasing</th>
+                <th>Moderate</th>
+                <th>Decreasing</th>
+            </tr>
+            {% for line,data in sthree.items %}
+            {% if data.count > 0 %}
+            <tr>
+                <td>{{ line }}</td>
+                <td>{{ data.count }}</td>
+                <td>{{ data.high|nozero }}</td>
+                <td>{{ data.increasing|nozero }}</td>
+                <td>{{ data.moderate|nozero }}</td>
+                <td>{{ data.decreasing|nozero }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+
+        </table>
+
+        <h3>Risk Classification by Business Unit</h3>
+        <table>
+            <tr>
+                <th>Risk Manager</th>
+                <th>Total Assessments</th>
+                <th>High</th>
+                <th>Increasing</th>
+                <th>Moderate</th>
+                <th>Decreasing</th>
+            </tr>
+            {% for line,data in sfour.items %}
+            {% if data.count > 0 %}
+            <tr>
+                <td>{{ line }}</td>
+                <td>{{ data.count }}</td>
+                <td>{{ data.high|nozero }}</td>
+                <td>{{ data.increasing|nozero }}</td>
+                <td>{{ data.moderate|nozero }}</td>
+                <td>{{ data.decreasing|nozero }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+
+        </table>
+
+    <div id="footer"></div>
+
+    </body>
+
+</html>
