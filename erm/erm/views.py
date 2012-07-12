@@ -115,6 +115,9 @@ def logout_view(request):
 def login_page(request):
     # display the login page
     return render_to_response('login.html', 
+            { 
+                'module': 'login',
+            },
             context_instance=RequestContext(request))
 
 def login_process(request):

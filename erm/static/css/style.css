@@ -6,11 +6,11 @@
 -----------------------------------------------------------------------------*/
 body {
     line-height:1.5;
-    background: #E4D5C3;
+    background: url("/static/img/header-home-bg.png") #ffffff repeat-x; 
 }
 
 a, a:visited, a:hover {
-    color: blue;
+    color: #076a75;
 }
 
 h3 {
@@ -23,7 +23,7 @@ h3 {
 -----------------------------------------------------------------------------*/
 
 #header {
-    background-color: #30200C;
+    /* background-color: #30200C; */
     text-align: center;
 }
 
@@ -35,11 +35,16 @@ h3 {
 /* `footer
 -----------------------------------------------------------------------------*/
 #footer {
+    clear: both;
     color: #fff;
-    background-color: #30200C;
+    /* background-color: #30200C; */
+    background: url("/static/img/header-home-bg.png") repeat-x; 
     text-align: center;
     padding-top: 15px;
     font-size: 75%;
+
+    height: 300px;
+    width: 100%;
 }
 
 
@@ -111,7 +116,7 @@ h3 {
 /* `container, content
 -----------------------------------------------------------------------------*/
 #container {
-    background-color: #FFF7EE;
+    /* background-color: #FFF7EE; */
 }
 
 #content {
@@ -186,5 +191,5 @@ h3 {
     display: block;
 }
 .buttonlist li:hover {
-    background: #E4D5C3;
+    background: #d5fbff;
 }

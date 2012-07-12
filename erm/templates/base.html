@@ -5,9 +5,11 @@
     <link rel="stylesheet" href="/static/css/style.css" />
     <link type="text/css" href="/static/css/ui-lightness/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
     <link type="text/css" href="/static/formalize/css/formalize.css" rel="stylesheet" />
+    <link href="/static/css/MenuStyles.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery-ui-1.8.20.custom.min.js"></script>
     <script type="text/javascript" src="/static/formalize/js/jquery.formalize.min.js"></script>
+    {% block style %}{% endblock %}
 </head>
 
 <body>
@@ -17,40 +19,40 @@
             <a href="/"><img alt="logo" src="/static/logo.png" /></a>
         </div>
     </div>
-
-    <div id="nav" class="grid_12">
+    {% if module != 'login' %}
+    <div id='cssmenu' class="grid_12">
         {% block nav %}
         <ul>
-            <li><a {% if module == 'home' %}class="nav_selected" {% endif %}href="/">Home</a></li>
-            <li><a {% if module == 'erm' %}class="nav_selected" {% endif %}href="/erm">Risk Assessment</a></li>
-            <li><a {% if module == 'vendor' %}class="nav_selected" {% endif %}href="/vendor">Vendor Management</a></li>
-            <li><a {% if module == 'action' %}class="nav_selected" {% endif %}href="/action">Action Item Tracking</a></li>
-            <li><a href="/erm/logout">Logout</a></li>
+            <li class='{% if module == 'home' %}active{% endif %}'><a href="/"><span>Home</span></a></li>
+            <li class='has-sub {% if module == 'erm' %}active{% endif %}'><a href='/erm'><span>Risk Assessment</span></a>
+                <ul>
+                    <li><a href="{% url all %}">View All</a></li>
+                    <li><a href="{% url search %}">Search</a></li>
+                    {% if user.get_profile.level > 0 %}
+                    <li><a href="/admin/">Admin</a></li>
+                    <li><a href="{% url assign %}">Assign Risks from Profile</a></li>
+                    <li><a href="{% url add %}">Add new Risk</a></li>
+                    {% endif %}
+                    <li><a href="{% url report %}">Executive Report</a></li>
+                </ul>
+            </li>
+            <li class="{% if module == 'vendor' %}active{% endif %}"><a href='/vendor'><span>Vendor Management</span></a></li>
+            <li class="{% if module == 'action' %}active{% endif %}"><a href='/action'><span>Action Item Tracking</span></a></li>
+            <li><a href='{% url logout %}'><span>Logout</span></a></li>
         </ul>
         {% endblock %}
     </div>
-    <div id="subnav" class="grid_12">
-        {% block subnav %}
-        <ul>
-            <li><a href="/erm/search/">Search</a></li>
-            {% if user.get_profile.level > 0 %}
-            <li><a href="/admin/">Admin</a></li>
-            <li><a href="/erm/assign/">Assign Risks from Profile</a></li>
-            <li><a href="/erm/add/">Add new Risk</a></li>
-            {% endif %}
-            <li><a href="/erm/logout">Logout</a></li>
-        </ul>
-        {% endblock %}
-    </div>
+    {% endif %}
+
 
     <div id="container" class="grid_12">
         <div id="content">
             {% block content %}{% endblock %}
         </div> <!-- content -->
     </div> <!-- container -->
-    <div id="footer" class="grid_12">
+    </div> <!-- wrapper -->
+    <div id="footer" >
         <p>Copyright 2012, Alpaca Software</p>
     </div> <!-- footer -->
-    </div> <!-- wrapper -->
 </body>
 </html>
