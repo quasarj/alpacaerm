@@ -8,9 +8,14 @@ BIGTEXT_LEN=5000
 
 class Bank(models.Model):
     name = models.CharField(max_length=200)
-    # report_section_one = models.CharField(max_length=5000)
-    # report_section_two = models.CharField(max_length=5000)
-    # report_section_three = models.CharField(max_length=5000)
+    report_risk_ass_ratings_message = models.CharField(max_length=5000, default="No text")
+    report_risk_scoring_by_source_message = models.CharField(max_length=5000, default="No text")
+    report_vendor_ass_message = models.CharField(max_length=5000, default="No text")
+    report_dist_by_type_message = models.CharField(max_length=5000, default="No text")
+    report_class_by_bu_message = models.CharField(max_length=5000, default="No text")
+    report_action_items_summary_message = models.CharField(max_length=5000, default="No text")
+    report_summary_conclusions_message = models.CharField(max_length=5000, default="No text")
+    report_footer_message = models.CharField(max_length=5000, default="No text")
 
     def __unicode__(self):
         return self.name

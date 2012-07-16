@@ -8,6 +8,22 @@ body {
     padding: 20px;
 }
 
+h1 {
+  font-size: 40px;
+}
+
+h2 {
+  font-size: 30px;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 15px;
+}
+
 a, a:visited, a:hover {
     color: blue;
 }
@@ -32,3 +48,22 @@ td {
 #footer {
     height: 20px;
 }
+
+#header {
+    margin-bottom: 30px;
+}
+
+/* #wrapper { */
+/*     width: 600px; */
+/* } */
+
+.centered {
+    text-align: center;
+}
+
+.message {
+}
+
+
+
+

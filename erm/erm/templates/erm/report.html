@@ -7,12 +7,20 @@
     </head>
 
     <body>
-        <h1 class="centered">{{ user.get_profile.bank.name }}</h1>
-
-
+        <div id="wrapper" class="container_12">
+        <div id="header" class="centered grid_12">
+            <h1>{{ user.get_profile.bank.name }}</h1>
+            <h2>Enterprise Risk Management Executive Summary</h2>
+            <h4>{% now "m/d/Y" %}</h4>
+        </div>
 
 
         <h3>Summary of Risk Assessment Ratings</h3>
+        <div class="message">
+            {% autoescape off %}
+            {{ user.get_profile.bank.report_risk_ass_ratings_message }}
+            {% endautoescape %}
+        </div>
         <table>
             <tr>
                 <th>Source of Risk</th>
@@ -37,8 +45,12 @@
 
         </table>
 
-
         <h3>Summary of Risk Scoring by Risk Source</h3>
+        <div class="message">
+            {% autoescape off %}
+            {{ user.get_profile.bank.report_risk_scoring_by_source_message }}
+            {% endautoescape %}
+        </div>
         <table>
             <tr>
                 <th>Source of Risk</th>
@@ -64,6 +76,11 @@
         </table>
 
         <h3>Distribution of Risks by Risk Type</h3>
+        <div class="message">
+            {% autoescape off %}
+            {{ user.get_profile.bank.report_dist_by_type_message }}
+            {% endautoescape %}
+        </div>
         <table>
             <tr>
                 <th>Type of Risk</th>
@@ -89,6 +106,11 @@
         </table>
 
         <h3>Risk Classification by Business Unit</h3>
+        <div class="message">
+            {% autoescape off %}
+            {{ user.get_profile.bank.report_class_by_bu_message }}
+            {% endautoescape %}
+        </div>
         <table>
             <tr>
                 <th>Risk Manager</th>
@@ -113,8 +135,13 @@
 
         </table>
 
+        <div class="message">
+            {% autoescape off %}
+            {{ user.get_profile.bank.report_footer_message }}
+            {% endautoescape %}
+        </div>
     <div id="footer"></div>
-
+    </div> <!-- container -->
     </body>
 
 </html>
