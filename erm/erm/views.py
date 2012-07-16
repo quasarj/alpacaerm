@@ -10,9 +10,9 @@ from django.conf import settings
 #from erm.models import BankRisk, BankRiskForm, RiskProfile
 from erm.models import *
 import datetime
-import os
-import StringIO
-from xhtml2pdf import pisa
+# import os
+# import StringIO
+# from xhtml2pdf import pisa
 
 def index(request):
     if request.user.is_authenticated():
@@ -589,21 +589,22 @@ def report_view(request):
 
         sfour[m.name] = temp
 
-    # return render_to_response('erm/report.html',
-    html = render_to_string('erm/report.html',
+    return render_to_response('erm/report.html',
+    # html = render_to_string('erm/report.html',
             {
                 "sone":     sone,
                 "stwo":     stwo,
                 "sthree":   sthree,
                 "sfour":    sfour,
-            })
+            },
+            context_instance=RequestContext(request))
 
-    result = StringIO.StringIO()
-    pdf = pisa.pisaDocument(html, result, link_callback=fetch_resources)
+    # result = StringIO.StringIO()
+    # pdf = pisa.pisaDocument(html, result, link_callback=fetch_resources)
 
-    if pdf.err:
-        raise Http404
+    # if pdf.err:
+    #     raise Http404
 
-    return HttpResponse(result.getvalue(), mimetype='application/pdf')
+    # return HttpResponse(result.getvalue(), mimetype='application/pdf')
 
 
