@@ -8,6 +8,9 @@ BIGTEXT_LEN=5000
 
 class Bank(models.Model):
     name = models.CharField(max_length=200)
+    # report_section_one = models.CharField(max_length=5000)
+    # report_section_two = models.CharField(max_length=5000)
+    # report_section_three = models.CharField(max_length=5000)
 
     def __unicode__(self):
         return self.name
