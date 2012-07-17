@@ -38,11 +38,16 @@
 {
     border-radius: 5px 0 0 5px;
 }
+/* Hide the right border for the last link */
+#cssmenu > ul > li:last-child > a
+{
+    border-right: none;
+}
 /* Extra border for navigation links */#cssmenu > ul > li > a:after
 {
     content: '';
     position: absolute;
-    border-right: 1px solid;
+    /* border-right: 1px solid; */
     top: -1px;
     bottom: -1px;
     right: -2px;

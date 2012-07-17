@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 
 
 urlpatterns = patterns('erm.views',
-    url(r'^$', 'index', name='home'),
+    url(r'^$', 'index', name='erm'),
     url(r'^login/$', 'login_page', name='login'),
     url(r'^login_process/$', 'login_process', name='login_process'),
     url(r'^logout/$', 'logout_view', name='logout'),

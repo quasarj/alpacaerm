@@ -3,25 +3,6 @@
 {% block title %}ERM Index{% endblock %}
 
 {% block content %}
-<table class="prettytable">
-    <tr>
-        <th>Username:</th>
-        <td>{{ user.username }}</td>
-    </tr>
-    <tr>
-        <th>Bank:</th>
-        <td>{{ user.get_profile.bank.name }}</td>
-    </tr>
-    <tr>
-        <th>Access Level:</th>
-        {% if user.get_profile.level == 0 %}
-        <td>Read Only</td>
-        {% else %}
-        <td>Full Access</td>
-        {% endif %}
-    </tr>
-</table>
-
 <p>
 Based on your user access, you have these options available to you:
 </p>

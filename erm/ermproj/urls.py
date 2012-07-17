@@ -10,12 +10,13 @@ urlpatterns = patterns('',
     # that is seperate from each module/app.
     # Maybe it can be housed in the same app the
     # login stuff is in?
-    url(r'^$', 'erm.views.index'),
+    url(r'^$', 'ermproj.views.home', name="home"),
 
 
     url(r'^erm/', include('erm.urls')),
     url(r'^vendor/', include('vendor.urls')),
-    url(r'^action/', include('action.urls')),
+    url(r'^exception/', include('exception.urls')),
+    url(r'^audit/', include('audit.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

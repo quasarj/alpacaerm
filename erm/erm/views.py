@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 from django.conf import settings
 
@@ -16,11 +17,11 @@ import datetime
 
 def index(request):
     if request.user.is_authenticated():
-        return render_to_response('index.html',
+        return render_to_response('erm/index.html',
             { 
-                'user': request.user,
-                'module': 'home',
-            })
+                'module': 'erm',
+            },
+            context_instance=RequestContext(request))
     else:
         return login_page(request)
 
@@ -134,7 +135,7 @@ def login_process(request):
         if user.is_active:
             login(request, user)
             # redirect to success page
-            return HttpResponseRedirect(reverse('erm.views.index'))
+            return HttpResponseRedirect(reverse('ermproj.views.home'))
 
         else:
             # return an "account disabled" error message

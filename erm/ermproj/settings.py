@@ -127,7 +127,8 @@ INSTALLED_APPS = (
     'south',
     'erm',
     'vendor',
-    'action',
+    'exception',
+    'audit',
 )
 
 # Define a custom UserProfile model
