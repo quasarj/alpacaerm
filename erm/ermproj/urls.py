@@ -18,6 +18,10 @@ urlpatterns = patterns('',
     url(r'^exception/', include('exception.urls')),
     url(r'^audit/', include('audit.urls')),
 
+    # special url for logging in
+    # TODO: This should be it's own app, I think.
+    url(r'^accounts/login/$', 'erm.views.login_page', name="autologin"),
+
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

@@ -15,20 +15,16 @@ import datetime
 # import StringIO
 # from xhtml2pdf import pisa
 
+@login_required
 def index(request):
-    if request.user.is_authenticated():
-        return render_to_response('erm/index.html',
-            { 
-                'module': 'erm',
-            },
-            context_instance=RequestContext(request))
-    else:
-        return login_page(request)
+    return render_to_response('erm/index.html',
+        { 
+            'module': 'erm',
+        },
+        context_instance=RequestContext(request))
 
-
+@login_required
 def all_view(request):
-    if not request.user.is_authenticated():
-        return login_page(request)
     risks = request.user.get_profile().bank.bankrisk_set.all()
 
     # clear old search results
@@ -40,10 +36,8 @@ def all_view(request):
         context_instance=RequestContext(request),
     )
 
-
+@login_required
 def bankrisk_view(request, bankrisk_id):
-    if not request.user.is_authenticated():
-        return login_page(request)
 
     error_message = None
     success_message = None
@@ -148,7 +142,7 @@ def login_process(request):
             }, context_instance=RequestContext(request))
 
 
-
+@login_required
 def assign_view(request):
     error_message = None
     profile = request.user.get_profile()
@@ -199,11 +193,12 @@ def assign_view(request):
             },
             context_instance=RequestContext(request))
 
-
+@login_required
 def search_view(request):
     return render_to_response('search.html',
             context_instance=RequestContext(request))
 
+@login_required
 def search_bysource_view(request):
     bank = request.user.get_profile().bank
 
@@ -227,6 +222,7 @@ def search_bysource_view(request):
             context_instance=RequestContext(request),
     )   
 
+@login_required
 def search_bytype_view(request):
     bank = request.user.get_profile().bank
 
@@ -249,6 +245,7 @@ def search_bytype_view(request):
             context_instance=RequestContext(request),
     )   
 
+@login_required
 def search_bydate_view(request):
     date_format = '%Y-%m-%d'
 
@@ -286,7 +283,7 @@ def search_bydate_view(request):
             context_instance=RequestContext(request),
     )   
 
-
+@login_required
 def search_byname_view(request):
 
     error_message = None
@@ -346,6 +343,7 @@ def search_byname_view(request):
             context_instance=RequestContext(request),
     )   
 
+@login_required
 def add_view(request):
     error_message = None
     success_message = None
@@ -393,6 +391,7 @@ def add_view(request):
     }, context_instance=RequestContext(request))
 
 
+@login_required
 def fetch_resources(uri, rel):
     """
     Callback to allow xhtml2pdf/reportlab to retrieve Images,Stylesheets, etc.
@@ -428,6 +427,7 @@ def fetch_resources(uri, rel):
     return path
 
 
+@login_required
 def report_view(request):
     """
     generate the executive report
