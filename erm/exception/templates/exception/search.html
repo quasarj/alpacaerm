@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Exception Search Options{% endblock %}
+
+{% block content %}
+<h1>Exception Search Options</h1>
+
+<ul class="buttonlist">
+    <li><a href="{% url exception_search_date %}">Search by Date</a></li>
+    <li><a href="{% url exception_search_action %}">Search by Action Items</a></li>
+    <li><a href="{% url exception_search_agency %}">Search by Audit Agency</a></li>
+</ul>
+
+{% endblock %}

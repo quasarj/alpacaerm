@@ -6,6 +6,7 @@
     <link type="text/css" href="/static/css/ui-lightness/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
     <link type="text/css" href="/static/formalize/css/formalize.css" rel="stylesheet" />
     <link href="/static/css/MenuStyles.css" rel="stylesheet" type="text/css" />
+
     {% block script %}
     <script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery-ui-1.8.20.custom.min.js"></script>
@@ -60,7 +61,16 @@
                     <li><a href="{% url report %}">Print</a></li>
                 </ul>
             </li>
-            <li class="{% if module == 'exception' %}active{% endif %}"><a href='{% url exception %}'><span>Exception Tracking</span></a></li>
+            <li class="has-sub {% if module == 'exception' %}active{% endif %}"><a href='{% url exception %}'><span>Exception Tracking</span></a>
+                <ul>
+                    {% if user.get_profile.level > 0 %}
+                    <li><a href="{% url exception_add %}">New</a></li>
+                    {% endif %}
+                    <li><a href="{% url exception_open %}">View Open</a></li>
+                    <li><a href="{% url exception_closed %}">View Closed</a></li>
+                    <li><a href="{% url exception_search %}">Search</a></li>
+                </ul>
+            </li>
             <li class="{% if module == 'audit' %}active{% endif %}"><a href='{% url audit %}'><span>Audit Tracking</span></a></li>
             <li><a href='{% url logout %}'><span>Logout</span></a></li>
         </ul>

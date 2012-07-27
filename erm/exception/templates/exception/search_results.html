@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Search results{% endblock %}
+
+{% block content %}
+<h1>Search results</h1>
+<p>Results from search {{ method }}:</p>
+<p><a href="/erm/search/{{ search_again }}">Search again</a></p>
+{% include "_bankrisk_list.html" %}
+{% endblock %}

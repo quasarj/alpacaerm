@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Exception Detail{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="/static/js/jsi18n.js"></script>
+<script type="text/javascript" src="/static/admin/js/core.js"></script>
+<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+<script type="text/javascript" src="/static/admin/js/actions.js"></script>
+<script type="text/javascript" src="/static/admin/js/SelectBox.js"></script>
+<script type="text/javascript" src="/static/admin/js/SelectFilter2.js"></script>
+<script type="text/javascript" src="/static/admin/js/calendar.js"></script>
+<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+
+<script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery-ui-1.8.20.custom.min.js"></script>
+<script type="text/javascript" src="/static/formalize/js/jquery.formalize.min.js"></script>
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="/static/admin/css/widgets.css" />
+{% endblock %}
+
+
+{% block content %}
+
+<script type="text/javascript">
+    $(function() { // things to do when the page loads
+        $("#id_auditReviewDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_targetDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_completionDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+    });
+</script>
+<h1>Exception Detail</h1>
+<h2>{{ exception.actionItem }}</h2>
+<strong>Composite Risk Score: {{ exception.compositeRiskScore }}</strong>
+{% if user.get_profile.level <= 0 %}
+<p>
+You do not have permission to modify this Exception.
+</p>
+{% endif %}
+
+{# Search-related stuff, to allow the user to step forward and back #}
+<p>
+{% if prev_risk %}
+<a href="/erm/risk/{{ prev_risk.id }}/">&lt; {{ prev_risk.name|truncatechars:35 }}</a>
+{% endif %}
+{% if next_risk %}
+{% if prev_risk %} | {% endif %}
+<a href="/erm/risk/{{ next_risk.id }}/">{{ next_risk.name|truncatechars:35 }} &gt;</a>
+{% endif %}
+</p>
+
+{% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
+{% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
+
+{% if user.get_profile.level > 0 %}
+<form action="#" method="post">{% csrf_token %}
+    <input type="submit" value="Save" />
+{% endif %}
+    <table class="risktable">
+    {{ form }}
+    </table>
+
+{% if user.get_profile.level > 0 %}
+    <input type="submit" value="Save" />
+</form>
+{% endif %}
+{% endblock %}
