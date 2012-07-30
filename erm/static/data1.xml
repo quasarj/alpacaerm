@@ -1,0 +1,11 @@
+<graph caption='High Risks' 
+       xAxisName='Month' 
+       yAxisName='Units' 
+       labelDisplay='WRAP' 
+       decimalPrecision='0' 
+       formatNumberScale='0'>
+
+    <set name='January' value='462' link='/erm/risk/1/' color='AFD8F8'/>
+    <set name='Febuary' value='857' color='F6BD0F' link='/erm/risk/2/'/>
+    <set name='March' value='671' color='65168e' link='/erm/risk/3/'/>
+</graph>
