@@ -3,6 +3,7 @@
         <th>Action Item</th>
         <th style="width: 100px;">Target Date</th>
         <th>Composite Risk Score</th>
+        <th>Status</th>
     </tr>
 
     {% for e in exceptions %}
@@ -10,6 +11,7 @@
         <td><a href="{% url exception_item e.id %}" />{{ e.actionItem }}</a></td>
         <td>{{ e.targetDate }}</td>
         <td>{{ e.compositeRiskScore }}</td>
+        <td>{{ e.prettyStatus }}</td>
     </tr>
     {% endfor %}
 </table>

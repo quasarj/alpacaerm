@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Search by Date{% endblock %}
+{% block title %}Search by Action Items{% endblock %}
 
 {% block content %}
-<h1>Search by Name</h1>
+<h1>Search by Action Items</h1>
 
 <p>
     Select search type and enter up to four search terms. 
@@ -18,7 +18,7 @@
     });
 </script>
 
-<form action="/erm/search/name/" method="post">{% csrf_token %}
+<form action="#" method="post">{% csrf_token %}
     <table>
         <tr>
             <td>Search Type:</td>

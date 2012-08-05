@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Search by Audit Agency{% endblock %}
+
+{% block content %}
+<h1>Search by Audit Agency</h1>
+
+
+<p>Select as many Audit Agencies as you want. Results will be 
+Exceptions that have any of the selected as their Audit Agency.</p>
+
+<form action="" method="post">{% csrf_token %}
+    <ul>
+        {% for s in agencies %}
+        <li><input type="checkbox" name="source" value="{{ s.id }}" />{{ s }}</li>
+        {% endfor %}
+    </ul>
+    <input type="submit" value="Search"/>
+</form>
+
+{% endblock %}

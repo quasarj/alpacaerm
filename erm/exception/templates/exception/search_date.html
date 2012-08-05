@@ -3,11 +3,7 @@
 {% block title %}Search by Date{% endblock %}
 
 {% block content %}
-<h1>Search by Reviewed Date</h1>
-
-<p>
-Pick a date range.
-</p>
+<h1>Search by Date</h1>
 
 <script>
 
@@ -25,7 +21,17 @@ Pick a date range.
 {% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
 {% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
 
-<form action="/erm/search/date/" method="post">{% csrf_token %}
+<form action="" method="post">{% csrf_token %}
+    <label for="id_type">Which date: </label>
+    <select name="type" id="id_type">
+        <option value="review">Audit Review Date</option>
+        <option value="target" selected="selected">Target Date</option>
+        <option value="complete">Completion Date</option>
+    </select>
+    <p>
+        Pick a date range.
+    </p>
+
     <table>
         <tr>
             <td><label for="id_from_date">From (including):</label></td>

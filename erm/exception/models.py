@@ -77,6 +77,12 @@ class Exception(models.Model):
     def __unicode__(self):
         return "{}: {}".format(self.bank.name, self.actionItem)
 
+    def prettyStatus(self):
+        """Get the status in a pretty way!"""
+        status_dict = dict(STATUS_CHOICES)
+        return status_dict[self.status]
+
+
     def save(self):
         # save the calculated fields
         self.compositeRiskScore = (self.inherentRisk + self.exposureRisk) / 2
