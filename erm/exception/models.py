@@ -52,6 +52,10 @@ class Exception(models.Model):
     exposureRisk = models.SmallIntegerField(choices=EXPOSURE_RISK_CHOICES,
                                             verbose_name="Exposure Risk")
 
+    # This field will be calculated, and must be excluded from all forms
+    compositeRiskScore = models.FloatField(default=0,
+                                           verbose_name="Composite Risk Score")
+
     riskSources = models.ManyToManyField(RiskSource, null=True,
                                          verbose_name="Associated Risk Source")
     
@@ -70,10 +74,11 @@ class Exception(models.Model):
     comments = models.CharField(max_length=4000, null=True, blank=True)
 
 
-    def compositeRiskScore(self):
-        return (self.inherentRisk + self.exposureRisk) / 2
-
     def __unicode__(self):
         return "{}: {}".format(self.bank.name, self.actionItem)
 
+    def save(self):
+        # save the calculated fields
+        self.compositeRiskScore = (self.inherentRisk + self.exposureRisk) / 2
+        super(Exception, self).save()
 

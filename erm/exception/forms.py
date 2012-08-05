@@ -15,7 +15,7 @@ class ExceptionForm(ModelForm):
 
     class Meta:
         model = Exception
-        exclude = ('bank',)
+        exclude = ('bank', 'compositeRiskScore')
         widgets = {
             'actionItem': forms.TextInput(attrs={'size': 60}),
             'recommendation': Textarea(attrs={'cols': 80, 'rows': 10}),

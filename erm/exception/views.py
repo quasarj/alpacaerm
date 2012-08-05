@@ -98,7 +98,7 @@ def view_open(request):
     # get all open exceptions assigned to this bank
     bank = request.user.get_profile().bank
     exceptions = Exception.objects.filter(bank=bank, status='open').\
-        order_by('targetDate')
+        order_by('targetDate', '-compositeRiskScore')
 
     return rr('exception/open.html', 
               { 'module': 'exception',
