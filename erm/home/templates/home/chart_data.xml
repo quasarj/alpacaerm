@@ -1,0 +1,11 @@
+<graph caption='{{ caption }}' 
+       yAxisName='{{ yaxis }}' 
+       labelDisplay='Rotate' 
+       decimalPrecision='2' 
+       formatNumberScale='0'>
+
+    {% for line in data %}
+    <set name='{{ line.name }}' value='{{ line.value }}' 
+        link='{{ line.link }}' color='{{ line.color }}'/>
+    {% endfor %}
+</graph>

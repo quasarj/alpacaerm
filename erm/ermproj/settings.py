@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'reversion',
     #'chart_tools',
+    'home',
     'erm',
     'vendor',
     'exception',

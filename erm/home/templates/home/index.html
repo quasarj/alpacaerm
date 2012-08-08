@@ -7,22 +7,24 @@
 <script type="text/javascript">
     $(function() { // things to do when the page loads
         var chartfile = "/static/flash/FCF_Column3D.swf";
+        //var width = "700";
+        //var height = "700";
         var width = "300";
         var height = "250";
 
         var chart = new FusionCharts(chartfile,
             "ChartId", width, height);
-        chart.setDataURL("/static/data1.xml");		   
+        chart.setDataURL("{% url home_chartdata 1 %}");		   
         chart.render("chartdiv");
 
         var chart1 = new FusionCharts(chartfile,
             "ChartId", width, height);
-        chart1.setDataURL("/static/data2.xml");		   
+        chart1.setDataURL("{% url home_chartdata 2 %}");		   
         chart1.render("chartdiv2");
 
         var chart2 = new FusionCharts(chartfile,
             "ChartId", width, height);
-        chart2.setDataURL("/static/data3.xml");		   
+        chart2.setDataURL("{% url home_chartdata 3 %}");		   
         chart2.render("chartdiv3");
     });
 </script>

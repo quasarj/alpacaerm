@@ -6,11 +6,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 
-    # This needs to go to a special "home" page
-    # that is seperate from each module/app.
-    # Maybe it can be housed in the same app the
-    # login stuff is in?
-    url(r'^$', 'ermproj.views.home', name="home"),
+    url(r'^home/', include('home.urls')),
+    url(r'^$', 'home.views.index'),  # special redirect for base url
 
 
     url(r'^erm/', include('erm.urls')),
