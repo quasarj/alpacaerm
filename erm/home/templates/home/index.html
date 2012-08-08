@@ -6,11 +6,11 @@
 <script type="text/javascript" src="/static/js/FusionCharts.js"></script>
 <script type="text/javascript">
     $(function() { // things to do when the page loads
-        var chartfile = "/static/flash/FCF_Column3D.swf";
+        var chartfile = "/static/flash/FCF_Column2D.swf";
         //var width = "700";
         //var height = "700";
         var width = "300";
-        var height = "250";
+        var height = "300";
 
         var chart = new FusionCharts(chartfile,
             "ChartId", width, height);
@@ -39,9 +39,9 @@
 {% endblock %}
 
 {% block content %}
-<p>
-    This is the dashboard page. Below is a test of the bar chart code.
-</p>
+<h2>
+    Welcome to Alpace Enterprise Risk Management!
+</h2>
 
 <div id="chartdiv" class="chart" align="center"></div>
 <div id="chartdiv2" class="chart" align="center"></div>

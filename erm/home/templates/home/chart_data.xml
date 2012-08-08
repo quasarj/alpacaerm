@@ -1,8 +1,11 @@
 <graph caption='{{ caption }}' 
-       yAxisName='{{ yaxis }}' 
-       labelDisplay='Rotate' 
        decimalPrecision='2' 
-       formatNumberScale='0'>
+       formatNumberScale='0'
+       rotateNames='1'
+       {% if yAxisMinValue %}yAxisMinValue='{{ yAxisMinValue }}'{% endif %}
+       {% if yAxisMaxValue %}yAxisMaxValue='{{ yAxisMaxValue }}'{% endif %}
+       
+       >
 
     {% for line in data %}
     <set name='{{ line.name }}' value='{{ line.value }}' 

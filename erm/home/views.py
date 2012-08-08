@@ -10,6 +10,23 @@ def rr(template, variables, request):
     return render_to_response(template, 
                               variables, 
                               context_instance=RequestContext(request))
+
+chart_colors = [
+    "AFD8F8",
+    "F6BD0F",
+    "8BBA00",
+    "FF8E46",
+    "008E8E",
+    "D64646",
+    "8E468E",
+    "588526",
+    "B3AA00",
+    "008ED6",
+    "9D080D",
+    "A186BE",
+]
+
+
 @login_required
 def index(request):
     return rr('home/index.html', dict(module='home'), request)
@@ -31,12 +48,7 @@ def chart_data(request, chart_id):
 
 
 def chart_risks(request):
-
-    colors = [
-        'AFD8F8',
-        'F6BD0F',
-        '65168E',
-    ]
+    global chart_colors
 
     # user's bank
     bank = request.user.get_profile().bank
@@ -51,16 +63,22 @@ def chart_risks(request):
         print risk.compositeRisk()
         data.append(
             dict(
-                name=risk.name[:7],
+                name=risk.name[:15] + '<br/>' + \
+                    risk.name[15:30],
                 value=risk.customers,
                 link=reverse('risk', args=[risk.id]),
-                color=colors[i]
+                color=chart_colors[i]
             )
         )
 
+    # Get the minium value from the data
+    # This will be used below to calculate the yAxisMinValue
+    min_value = min([v['value'] for v in data])
+
     return dict(
         caption='Risks',
-        yaxis='Units',
+        yAxisMinValue=(min_value - .5),
+        yAxisMaxValue=5,
         data=data
     )
 
