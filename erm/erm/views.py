@@ -129,7 +129,7 @@ def login_process(request):
         if user.is_active:
             login(request, user)
             # redirect to success page
-            return HttpResponseRedirect(reverse('ermproj.views.home'))
+            return HttpResponseRedirect(reverse('home.views.index'))
 
         else:
             # return an "account disabled" error message
