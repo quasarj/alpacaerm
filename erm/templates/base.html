@@ -55,7 +55,15 @@
                     {% endif %}
                 </ul>
             </li>
-            <li class="{% if module == 'vendor' %}active{% endif %}"><a href='{% url vendor %}'><span>Vendor Management</span></a></li>
+            <li class="has-sub {% if module == 'vendor' %}active{% endif %}"><a href='{% url vendor %}'><span>Vendor Management</span></a>
+                <ul>
+                    {% if user.get_profile.level > 0 %}
+                    <li><a href="{% url vendor_add %}">New</a></li>
+                    {% endif %}
+                    <li><a href="{% url vendor_view %}">View All</a></li>
+                    <li><a href="{% url vendor_search %}">Search</a></li>
+                </ul>
+            </li>
             <li class='has-sub {% if module == 'report' %}active{% endif %}'><a href='#'><span>Executive Report</span></a>
                 <ul>
                     <li><a href="{% url report %}">View</a></li>
@@ -72,7 +80,7 @@
                     <li><a href="{% url exception_search %}">Search</a></li>
                 </ul>
             </li>
-            <li class="{% if module == 'audit' %}active{% endif %}"><a href='{% url audit %}'><span>Audit Tracking</span></a></li>
+            <li class="{% if module == 'audit' %}active{% endif %}"><a href='{% url audit %}'><span>Configuration</span></a></li>
             <li><a href='{% url logout %}'><span>Logout</span></a></li>
         </ul>
         {% endblock %}

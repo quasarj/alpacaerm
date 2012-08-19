@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Add new Exception{% endblock %}
+
+{% block content %}
+
+<script>
+    $(function() { // things to do when the page loads
+        $("#id_fStatementDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_sas70Date").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_lastEscrowReviewDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_nextRenewalDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_origContractDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_nextReviewDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_lastReviewDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+    });
+</script>
+
+<h1>Add new Vendor</h1>
+
+{% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
+{% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
+
+{% if success_id %}
+<p class="success">
+<a href="{% url vendor_item success_id %}">{{ success_name }}</a> added successfully. Add another blow.
+</p>
+{% endif %}
+
+{% if user.get_profile.level > 0 %}
+<form action="#" method="post">{% csrf_token %}
+{% endif %}
+    <table class="risktable">
+    {{ form }}
+    </table>
+
+{% if user.get_profile.level > 0 %}
+    <input type="submit" value="Save" />
+</form>
+{% endif %}
+{% endblock %}

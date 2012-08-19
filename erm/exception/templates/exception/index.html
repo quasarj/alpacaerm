@@ -4,6 +4,15 @@
 
 {% block content %}
 <p>
-    The Exception Tracking module has not been created yet.
+    This is the Exception Tracking module. Based on your user level, 
+    you can perform the following actions:
 </p>
+<ul>
+    {% if user.get_profile.level > 0 %}
+    <li><a href="{% url exception_add %}">New</a></li>
+    {% endif %}
+    <li><a href="{% url exception_open %}">View Open</a></li>
+    <li><a href="{% url exception_closed %}">View Closed</a></li>
+    <li><a href="{% url exception_search %}">Search</a></li>
+</ul>
 {% endblock %}

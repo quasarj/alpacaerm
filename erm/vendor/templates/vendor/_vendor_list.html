@@ -1,0 +1,17 @@
+<table class = "prettytable">
+    <tr>
+        <th>Vendor Name</th>
+        <th style="width: 100px;">Classification</th>
+        <th>Vendor Risk Rating</th>
+        <th>Next Review Date</th>
+    </tr>
+
+    {% for v in vendors %}
+    <tr>
+        <td><a href="{% url vendor_item v.id %}" />{{ v.name }}</a></td>
+        <td>{{ v.get_classification_display }}</td>
+        <td>{{ v.vendorRiskRating }}</td>
+        <td>{{ v.nextReviewDate }}</td>
+    </tr>
+    {% endfor %}
+</table>

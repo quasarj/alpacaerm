@@ -32,6 +32,8 @@ PERIOD_CHOICES = (
 class Vendor(models.Model):
     bank = models.ForeignKey(Bank)
 
+    # left side
+
     name = models.CharField(verbose_name="Vendor Name", max_length=SHORT)
     product = models.CharField(verbose_name="Products or Services Provided", 
                                max_length=LONG)
@@ -107,3 +109,73 @@ class Vendor(models.Model):
         verbose_name="Comments", 
         max_length=LONG)
 
+    # right side
+
+    exposure = models.FloatField(
+        default=0,
+        verbose_name="Exposure / Access to Customer Information")
+    sensitivity = models.FloatField(
+        default=0,
+        verbose_name="Sensitivity of Information")
+    infoVolume = models.FloatField(
+        default=0,
+        verbose_name="Volume of Information")
+    productInvestment = models.FloatField(
+        default=0,
+        verbose_name="Investment in Product")
+    operationalDependence = models.FloatField(
+        default=0,
+        verbose_name="Operational Dependence")
+    cusomterSupport = models.FloatField(
+        default=0,
+        verbose_name="Customer Support Response")
+    productSecurity = models.FloatField(
+        default=0,
+        verbose_name="Product Security")
+    nondisclosure = models.FloatField(
+        default=0,
+        verbose_name="Nondisclosure Agreements")
+    businessResumption = models.FloatField(
+        default=0,
+        verbose_name="Business Resumption Plan")
+    hiring = models.FloatField(
+        default=0,
+        verbose_name="Hiring Practices")
+    networkSecurity = models.FloatField(
+        default=0,
+        verbose_name="Network Security / Penetration Testing")
+    thirdPartyRelationship = models.FloatField(
+        default=0,
+        verbose_name="Thid Party Relationship")
+    financialStability = models.FloatField(
+        default=0,
+        verbose_name="Financial Stability")
+    sas70Value = models.FloatField(
+        default=0,
+        verbose_name="SAS 70")
+    independentMonitoring = models.FloatField(
+        default=0,
+        verbose_name="Independent Monitoring / Reporting")
+
+    # calculated fields
+
+    vendorRiskRating = models.FloatField(
+        default=0,
+        verbose_name="Vendor Risk Rating")
+    priorRiskRating = models.FloatField(
+        default=0,
+        verbose_name="Prior Risk Rating")
+    inherentRiskRating = models.FloatField(
+        default=0,
+        verbose_name="Inherent Risk Rating")
+
+    nextReviewDate = models.DateField(
+        null=True, blank=True, 
+        verbose_name="Next Review Date")
+    lastReviewDate = models.DateField(
+        null=True, blank=True, 
+        verbose_name="Last Review Date")
+
+
+    def __unicode__(self):
+        return "{}: {}".format(self.bank, self.name)

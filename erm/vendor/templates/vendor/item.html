@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Vendor Detail{% endblock %}
+
+{% block content %}
+
+<script type="text/javascript">
+    $(function() { // things to do when the page loads
+        $("#id_fStatementDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_sas70Date").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_lastEscrowReviewDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_nextRenewalDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_origContractDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_nextReviewDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+        $("#id_lastReviewDate").datepicker({
+            dateFormat: "yy-mm-dd"    
+        });
+    });
+</script>
+<h1>Vendor Detail</h1>
+<h2>{{ vendor.name }}</h2>
+<strong>Vendor Risk Rating: {{ vendor.vendorRiskRating }}</strong>
+<strong>Inherent Risk Rating: {{ vendor.inherentRiskRating }}</strong>
+{% if user.get_profile.level <= 0 %}
+<p>
+You do not have permission to modify this Vendor.
+</p>
+{% endif %}
+
+{# Search-related stuff, to allow the user to step forward and back #}
+<p>
+{% if prev_risk %}
+<a href="/erm/risk/{{ prev_risk.id }}/">&lt; {{ prev_risk.name|truncatechars:35 }}</a>
+{% endif %}
+{% if next_risk %}
+{% if prev_risk %} | {% endif %}
+<a href="/erm/risk/{{ next_risk.id }}/">{{ next_risk.name|truncatechars:35 }} &gt;</a>
+{% endif %}
+</p>
+
+{% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
+{% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
+
+{% if user.get_profile.level > 0 %}
+<form action="#" method="post">{% csrf_token %}
+    <input type="submit" value="Save" />
+{% endif %}
+    <table class="risktable">
+    {{ form }}
+    </table>
+
+{% if user.get_profile.level > 0 %}
+    <input type="submit" value="Save" />
+</form>
+{% endif %}
+{% endblock %}
