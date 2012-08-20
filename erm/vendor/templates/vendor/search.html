@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Vendor Management Search Options{% endblock %}
+
+{% block content %}
+<h1>Vendor Management Search Options</h1>
+
+{% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
+{% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
+
+<h4>Search by Vendor Name</h4>
+
+<script type="text/javascript">
+    $(function() {
+        $("#id_term1").focus();
+    });
+</script>
+
+<form action="{% url vendor_search_name %}" method="post">{% csrf_token %}
+    <table>
+        <tr>
+            <td>Search Type:</td>
+            <td>
+                <input type="radio" name="search_type" value="or" id="id_search_type_or" checked="checked" />
+                <label for="id_search_type_or"> OR</label>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="radio" name="search_type" value="and" id="id_search_type_and" />
+                <label for="id_search_type_and"> AND</label>
+            </td>
+        </tr>
+        <tr>
+            <td>Search terms:</td>
+            <td><input type="input" name="term1" id="id_term1" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="input" name="term2" id="id_term2" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="input" name="term3" id="id_term3" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="input" name="term4" id="id_term4" /></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Search"/></td>
+        </tr>
+</table>
+</form>
+<h4>Search by Classification</h4>
+
+<form action="{% url vendor_search_class %}" method="post">{% csrf_token %}
+    <ul>
+        {% for c in class_choices %}
+        <li><input type="checkbox" name="class" value="{{ c.0 }}" />{{ c.1 }}</li>
+        {% endfor %}
+    </ul>
+    <input type="submit" value="Search"/>
+</form>
+
+
+
+<h4>Search by Pending Items</h4>
+<p>Not yet implemented</p>
+{% endblock %}

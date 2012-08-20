@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     url(r'^erm/', include('erm.urls')),
     url(r'^vendor/', include('vendor.urls')),
     url(r'^exception/', include('exception.urls')),
-    url(r'^audit/', include('audit.urls')),
+    url(r'^config/', include('config.urls')),
 
     # special url for logging in
     # TODO: This should be it's own app, I think.

@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response, get_object_or_404, Http404
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 
-from vendor.models import Vendor
+from vendor.models import Vendor, CLASS_CHOICES
 from vendor.forms import VendorForm
 
 
@@ -101,9 +101,28 @@ def view_item(request, vendor_id):
               request)
 
 @login_required
-def search(request):
-    pass
+def search(request, error_message=None):
+    # does not handle POST, just generates the search page
+    # posts back to one of the three different search methods
 
+    bank = request.user.get_profile().bank
 
+    return rr('vendor/search.html', 
+              dict(module='vendor',
+                   class_choices=CLASS_CHOICES,
+                   error_message=error_message),
+              request)
+
+@login_required
+def search_name(request):
+    return search(request, error_message="This search method has not been implemented yet.")
+
+@login_required
+def search_class(request):
+    return search(request, error_message="This search method has not been implemented yet.")
+
+@login_required
+def search_pending(request):
+    return search(request, error_message="There was an error")
 
 

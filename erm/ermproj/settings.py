@@ -130,10 +130,10 @@ INSTALLED_APPS = (
     'reversion',
     #'chart_tools',
     'home',
+    'config',
     'erm',
     'vendor',
     'exception',
-    'audit',
 )
 
 # Define a custom UserProfile model

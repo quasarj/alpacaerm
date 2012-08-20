@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Administration{% endblock %}
+
+{% block content %}
+
+<ul>
+    <li><a href="{% url config_user %}">User Profile</a></li>
+    <li><a href="{% url config_erm %}">Configure Risk Assessment</a></li>
+    <li><a href="{% url config_dashboard %}">Configure Dashboard</a></li>
+</ul>
+
+{% endblock %}

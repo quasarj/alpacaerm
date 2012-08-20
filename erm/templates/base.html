@@ -44,43 +44,57 @@
     <div id='cssmenu' class="grid_12">
         {% block nav %}
         <ul>
-            <li class='{% if module == 'home' %}active{% endif %}'><a href="{% url home %}"><span>Home</span></a></li>
-            <li class='has-sub {% if module == 'erm' %}active{% endif %}'><a href='{% url erm %}'><span>Risk Assessment</span></a>
+            <li class='{% if module == 'home' %}active{% endif %}'>
+                <a href="{% url home %}"><span>Home</span></a>
+            </li>
+            <li class='has-sub {% if module == 'erm' %}active{% endif %}'>
+                <a href='{% url erm %}'><span>Risk Assessment</span></a>
                 <ul>
                     <li><a href="{% url all %}">View All</a></li>
                     <li><a href="{% url search %}">Search</a></li>
                     {% if user.get_profile.level > 0 %}
-                    <li><a href="{% url assign %}">Assign Risks from Profile</a></li>
-                    <li><a href="{% url add %}">Add new Risk</a></li>
+                    <!-- <li><a href="{% url assign %}">Assign Risks from Profile</a></li> -->
+                    <li><a href="{% url add %}">Create New</a></li>
                     {% endif %}
                 </ul>
             </li>
-            <li class="has-sub {% if module == 'vendor' %}active{% endif %}"><a href='{% url vendor %}'><span>Vendor Management</span></a>
+            <li class="has-sub {% if module == 'vendor' %}active{% endif %}">
+                <a href='{% url vendor %}'><span>Vendor Management</span></a>
                 <ul>
-                    {% if user.get_profile.level > 0 %}
-                    <li><a href="{% url vendor_add %}">New</a></li>
-                    {% endif %}
                     <li><a href="{% url vendor_view %}">View All</a></li>
                     <li><a href="{% url vendor_search %}">Search</a></li>
-                </ul>
-            </li>
-            <li class='has-sub {% if module == 'report' %}active{% endif %}'><a href='#'><span>Executive Report</span></a>
-                <ul>
-                    <li><a href="{% url report %}">View</a></li>
-                    <li><a href="{% url report %}">Print</a></li>
-                </ul>
-            </li>
-            <li class="has-sub {% if module == 'exception' %}active{% endif %}"><a href='{% url exception %}'><span>Exception Tracking</span></a>
-                <ul>
                     {% if user.get_profile.level > 0 %}
-                    <li><a href="{% url exception_add %}">New</a></li>
+                    <li><a href="{% url vendor_add %}">Create New</a></li>
                     {% endif %}
+                </ul>
+            </li>
+            <li class="has-sub {% if module == 'exception' %}active{% endif %}">
+                <a href='{% url exception %}'><span>Exception Tracking</span></a>
+                <ul>
                     <li><a href="{% url exception_open %}">View Open</a></li>
                     <li><a href="{% url exception_closed %}">View Closed</a></li>
                     <li><a href="{% url exception_search %}">Search</a></li>
+                    {% if user.get_profile.level > 0 %}
+                    <li><a href="{% url exception_add %}">Create New</a></li>
+                    {% endif %}
                 </ul>
             </li>
-            <li class="{% if module == 'audit' %}active{% endif %}"><a href='{% url audit %}'><span>Configuration</span></a></li>
+            <li class='has-sub {% if module == 'report' %}active{% endif %}'>
+                <a href='#'><span>Executive Report</span></a>
+                <ul>
+                    <li><a href="{% url report %}">View</a></li>
+                    <li><a href="{% url report %}">Print</a></li>
+                    <li><a href="#">Edit Text</a></li>
+                </ul>
+            </li>
+            <li class="has-sub {% if module == 'config' %}active{% endif %}">
+            <a href='{% url config %}'><span>Administration</span></a>
+                <ul>
+                    <li><a href="{% url config_user %}">User Profile</a></li>
+                    <li><a href="{% url config_erm %}">Configure Risk Assessment</a></li>
+                    <li><a href="{% url config_dashboard %}">Configure Dashboard</a></li>
+                </ul>
+            </li>
             <li><a href='{% url logout %}'><span>Logout</span></a></li>
         </ul>
         {% endblock %}
