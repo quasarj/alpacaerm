@@ -123,8 +123,17 @@ def view_closed(request):
 
 
 @login_required
-def search_main(request):
-    return rr('exception/search.html', None, request)
+def search_main(request, error_message=None):
+    bank = request.user.get_profile().bank
+
+    # get all the Audit Agencies
+    agencies = Agency.objects.filter(bank=bank)
+
+    return rr('exception/search.html', 
+              dict(module='exception',
+                   agencies=agencies,
+                   error_message=error_message), 
+              request)
 
 
 @login_required
@@ -143,7 +152,7 @@ def search_date(request):
             from_d = datetime.datetime.strptime(request.POST['from_date'], date_format).date()
             to_d = datetime.datetime.strptime(request.POST['to_date'], date_format).date()
         except ValueError:
-            error_message = "Incorrect date format entered!"
+            return search_main(request, "Incorrect date format entered!")
 
         if not error_message:
             if date_type == 'target':
@@ -174,17 +183,8 @@ def search_date(request):
                            method="by Date"),
                       request)
 
-            # return render_to_response('search_results.html',
-            #         { 'risks': risks,
-            #           'method': "by Date ({} to {})".format(from_d, to_d) },
-            # )
 
-    # get all the Types used by this bank
-    # types = RiskType.objects.filter(bankrisk__bank=bank).distinct()
-
-    return rr('exception/search_date.html', 
-              dict(error_message=error_message),
-              request)
+    return search_main(request, "Unknown error.")
 
 
 @login_required
@@ -207,7 +207,7 @@ def search_action(request):
         print search_terms
 
         if len(search_terms) < 1:
-            error_message = "No search terms entered!"
+            return search_main(request, "No search terms entered!")
         else:
             if search_type == 'AND':
 
@@ -234,9 +234,7 @@ def search_action(request):
                            search_again="action"),
                       request)
 
-    return rr('exception/search_action.html', 
-              dict(error_message=error_message),
-              request)
+    return search_main(request, "Unknown error.")
 
 
 @login_required
@@ -254,11 +252,6 @@ def search_agency(request):
                        method="by Audit Agency"),
                   request)
 
-    # get all the Audit Agencies
-    agencies = Agency.objects.filter(bank=bank)
 
-    return rr('exception/search_agency.html', 
-              dict(agencies=agencies),
-              request)
-
+    return search_main(request, "Unknown error.")
 
