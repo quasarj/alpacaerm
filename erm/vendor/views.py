@@ -115,11 +115,71 @@ def search(request, error_message=None):
 
 @login_required
 def search_name(request):
-    return search(request, error_message="This search method has not been implemented yet.")
+    error_message = "Unknown error."
+
+    bank = request.user.get_profile().bank
+
+    if request.POST:
+        search_type = request.POST['search_type'].upper()
+        search_terms = []
+
+        # append all search terms that aren't empty
+        for i in range(1, 5):
+            term = request.POST['term{}'.format(i)]
+            if term != '':
+                search_terms.append(term)
+
+        print search_terms
+
+        if len(search_terms) < 1:
+            error_message = "No search terms entered!"
+        else:
+            if search_type == 'AND':
+
+                vendors = Vendor.objects.filter(bank=bank)
+                for i in search_terms:
+                    vendors = vendors.filter(
+                            name__contains=i,
+                    )
+            else:
+                # TODO: this should be using Q objects
+
+                vendors = []
+                for i in search_terms:
+                    vendors.extend(Vendor.objects.filter(
+                            bank=bank,
+                            name__contains=i,
+                    ))
+
+            # set the search results session var
+            request.session['search_results'] = vendors
+            return rr('vendor/search_results.html',
+                      dict(vendors=vendors,
+                           method="by Name"),
+                      request)
+
+    return search(request, error_message=error_message)
 
 @login_required
 def search_class(request):
-    return search(request, error_message="This search method has not been implemented yet.")
+    error_message = "Unknown error."
+    bank = request.user.get_profile().bank
+
+    if request.POST:
+
+        class_ids = request.POST.getlist('class')
+        if len(class_ids) == 0:
+            return search(request, 
+                          error_message="You must select at least one!")
+        vendors = Vendor.objects.filter(bank=bank).filter(classification__in=class_ids)
+
+        request.session['search_results'] = vendors
+        return rr('vendor/search_results.html',
+                  dict(vendors=vendors,
+                       method="by Classification"),
+                  request)
+
+    return search(request, error_message=error_message)
 
 @login_required
 def search_pending(request):
