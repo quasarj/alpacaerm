@@ -1,6 +1,16 @@
 {% extends "base.html" %}
 {% block title %}Vendor Detail{% endblock %}
+{% block style %}
+<style type="text/css">
+    /*
+    #tr_comments textarea {
+        width: 100px;
+    }
+    */
 
+</style>
+
+{% endblock %}
 {% block content %}
 
 <script type="text/javascript">
@@ -30,8 +40,8 @@
 </script>
 <h1>Vendor Detail</h1>
 <h2>{{ vendor.name }}</h2>
-<strong>Vendor Risk Rating: {{ vendor.vendorRiskRating }}</strong>
-<strong>Inherent Risk Rating: {{ vendor.inherentRiskRating }}</strong>
+<p><strong>Vendor Risk Rating: {{ vendor.vendorRiskRating }}</strong></p>
+<p><strong>Inherent Risk Rating: {{ vendor.inherentRiskRating }}</strong></p>
 {% if user.get_profile.level <= 0 %}
 <p>
 You do not have permission to modify this Vendor.
@@ -56,9 +66,339 @@ You do not have permission to modify this Vendor.
 <form action="#" method="post">{% csrf_token %}
     <input type="submit" value="Save" />
 {% endif %}
-    <table class="risktable">
-    {{ form }}
-    </table>
+    <!-- <table class="risktable"> -->
+    <!-- {# form #} -->
+    <!-- </table> -->
+
+    <!-- manual form -->
+
+    <div id="manual_form">
+    {{ form.non_field_errors }}
+
+    <!-- risk ratings here -->
+    <table><tr>
+        <td id="left_side" style="border: 1px solid black;">
+        <table>
+            <tr id="tr_{{ form.name.html_name }}">
+                <td>
+                    {{ form.name.label_tag }}
+                    {{ form.name.errors }}
+                </td>
+                <td>{{ form.name }}</td>
+            </tr>
+            <tr id="tr_{{ form.product.html_name }}">
+                <td>
+                    {{ form.product.label_tag }}
+                    {{ form.product.errors }}
+                </td>
+                <td>{{ form.product }}</td>
+            </tr>
+            <tr id="tr_{{ form.classification.html_name }}">
+                <td> 
+                    {{ form.classification.label_tag }}
+                    {{ form.classification.errors }}
+                </td>
+                <td>{{ form.classification }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.incidentClause.html_name }}">
+                <td> 
+                    {{ form.incidentClause.label_tag }}
+                    {{ form.incidentClause.errors }}
+                </td>
+                <td>{{ form.incidentClause }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.customerInfo.html_name }}">
+                <td> 
+                    {{ form.customerInfo.label_tag }}
+                    {{ form.customerInfo.errors }}
+                </td>
+                <td>{{ form.customerInfo }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.glba501b.html_name }}">
+                <td> 
+                    {{ form.glba501b.label_tag }}
+                    {{ form.glba501b.errors }}
+                </td>
+                <td>{{ form.glba501b }}</td>
+            </tr>
+            <tr id="tr_{{ form.drTesting.html_name }}">
+                <td> 
+                    {{ form.drTesting.label_tag }}
+                    {{ form.drTesting.errors }}
+                </td>
+                <td>{{ form.drTesting }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.fStatement.html_name }}">
+                <td> 
+                    {{ form.fStatement.label_tag }}
+                    {{ form.fStatement.errors }}
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>{{ form.fStatement }}</td>
+                            <td>{{ form.fStatementDate.label_tag }}</td>
+                            <td>{{ form.fStatementDate }}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr id="tr_{{ form.sas70.html_name }}">
+                <td> 
+                    {{ form.sas70.label_tag }}
+                    {{ form.sas70.errors }}
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>{{ form.sas70 }}</td>
+                            <td>{{ form.sas70Type.label_tag }}</td>
+                            <td>{{ form.sas70Type }}</td>
+                            <td>{{ form.sas70Date.label_tag }}</td>
+                            <td>{{ form.sas70Date }}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr id="tr_{{ form.escrow.html_name }}">
+                <td> 
+                    {{ form.escrow.label_tag }}
+                    {{ form.escrow.errors }}
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>{{ form.escrow }}</td>
+                            <td>{{ form.lastEscrowReviewDate.label_tag }}</td>
+                            <td>{{ form.lastEscrowReviewDate }}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr id="tr_{{ form.escrowLocation.html_name }}">
+                <td> 
+                    {{ form.escrowLocation.label_tag }}
+                    {{ form.escrowLocation.errors }}
+                </td>
+                <td>{{ form.escrowLocation }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.thirdParty.html_name }}">
+                <td> 
+                    {{ form.thirdParty.label_tag }}
+                    {{ form.thirdParty.errors }}
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>{{ form.thirdParty }}</td>
+                            <td>{{ form.thirdPartyName.label_tag }}</td>
+                            <td>{{ form.thirdPartyName }}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr id="tr_{{ form.nextRenewalDate.html_name }}">
+                <td> 
+                    {{ form.nextRenewalDate.label_tag }}
+                    {{ form.nextRenewalDate.errors }}
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>{{ form.nextRenewalDate }}</td>
+                            <td>{{ form.termNotice.label_tag }}</td>
+                            <td>{{ form.termNotice }}</td>
+                            <td>{{ form.termNoticePeriod }}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr id="tr_{{ form.origContractDate.html_name }}">
+                <td> 
+                    {{ form.origContractDate.label_tag }}
+                    {{ form.origContractDate.errors }}
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>{{ form.origContractDate }}</td>
+                            <td>{{ form.origContractTerm.label_tag }}</td>
+                            <td>{{ form.origContractTerm }}</td>
+                            <td>{{ form.origContractTermPeriod }}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr id="tr_{{ form.autoRenew.html_name }}">
+                <td> 
+                    {{ form.autoRenew.label_tag }}
+                    {{ form.autoRenew.errors }}
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>{{ form.autoRenew }}</td>
+                            <td>{{ form.autoRenewTerm.label_tag }}</td>
+                            <td>{{ form.autoRenewTerm }}</td>
+                            <td>{{ form.autoRenewTermPeriod }}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr id="tr_{{ form.comments.html_name }}">
+                <td> 
+                    {{ form.comments.label_tag }}
+                    {{ form.comments.errors }}
+                </td>
+                <td>{{ form.comments }}</td>
+            </tr>
+
+        </table>
+
+    </td>
+    <td id="right_side" style="border: 1px solid black;">
+        <p>Vendor Inherent Risk Calculation</p> 
+        <table>
+
+            <tr id="tr_{{ form.exposure.html_name }}">
+                <td> 
+                    {{ form.exposure.label_tag }}
+                    {{ form.exposure.errors }}
+                </td>
+                <td class="riskvalue">{{ form.exposure }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.sensitivity.html_name }}">
+                <td> 
+                    {{ form.sensitivity.label_tag }}
+                    {{ form.sensitivity.errors }}
+                </td>
+                <td class="riskvalue">{{ form.sensitivity }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.infoVolume.html_name }}">
+                <td> 
+                    {{ form.infoVolume.label_tag }}
+                    {{ form.infoVolume.errors }}
+                </td>
+                <td class="riskvalue">{{ form.infoVolume }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.productInvestment.html_name }}">
+                <td> 
+                    {{ form.productInvestment.label_tag }}
+                    {{ form.productInvestment.errors }}
+                </td>
+                <td class="riskvalue">{{ form.productInvestment }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.operationalDependence.html_name }}">
+                <td> 
+                    {{ form.operationalDependence.label_tag }}
+                    {{ form.operationalDependence.errors }}
+                </td>
+                <td class="riskvalue">{{ form.operationalDependence }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.cusomterSupport.html_name }}">
+                <td> 
+                    {{ form.cusomterSupport.label_tag }}
+                    {{ form.cusomterSupport.errors }}
+                </td>
+                <td class="riskvalue">{{ form.cusomterSupport }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.productSecurity.html_name }}">
+                <td> 
+                    {{ form.productSecurity.label_tag }}
+                    {{ form.productSecurity.errors }}
+                </td>
+                <td class="riskvalue">{{ form.productSecurity }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.nondisclosure.html_name }}">
+                <td> 
+                    {{ form.nondisclosure.label_tag }}
+                    {{ form.nondisclosure.errors }}
+                </td>
+                <td class="riskvalue">{{ form.nondisclosure }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.businessResumption.html_name }}">
+                <td> 
+                    {{ form.businessResumption.label_tag }}
+                    {{ form.businessResumption.errors }}
+                </td>
+                <td class="riskvalue">{{ form.businessResumption }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.hiring.html_name }}">
+                <td> 
+                    {{ form.hiring.label_tag }}
+                    {{ form.hiring.errors }}
+                </td>
+                <td class="riskvalue">{{ form.hiring }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.networkSecurity.html_name }}">
+                <td> 
+                    {{ form.networkSecurity.label_tag }}
+                    {{ form.networkSecurity.errors }}
+                </td>
+                <td class="riskvalue">{{ form.networkSecurity }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.thirdPartyRelationship.html_name }}">
+                <td> 
+                    {{ form.thirdPartyRelationship.label_tag }}
+                    {{ form.thirdPartyRelationship.errors }}
+                </td>
+                <td class="riskvalue">{{ form.thirdPartyRelationship }}</td>
+            </tr>
+
+            <tr>
+                <td span="2"><p>Controls and Mitigations</p></td>
+            </tr>
+
+            <tr id="tr_{{ form.financialStability.html_name }}">
+                <td> 
+                    {{ form.financialStability.label_tag }}
+                    {{ form.financialStability.errors }}
+                </td>
+                <td class="riskvalue">{{ form.financialStability }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.sas70Value.html_name }}">
+                <td> 
+                    {{ form.sas70Value.label_tag }}
+                    {{ form.sas70Value.errors }}
+                </td>
+                <td class="riskvalue">{{ form.sas70Value }}</td>
+            </tr>
+
+            <tr id="tr_{{ form.independentMonitoring.html_name }}">
+                <td> 
+                    {{ form.independentMonitoring.label_tag }}
+                    {{ form.independentMonitoring.errors }}
+                </td>
+                <td class="riskvalue">{{ form.independentMonitoring }}</td>
+            </tr>
+        </table>
+    </td>
+    </tr></table>
+    </div>
 
 {% if user.get_profile.level > 0 %}
     <input type="submit" value="Save" />

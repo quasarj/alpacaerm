@@ -57,14 +57,14 @@ class Vendor(models.Model):
         null=True, blank=True, 
         verbose_name="Financial Statement Date")
     sas70 = models.BooleanField(
-        verbose_name="SAS 70")
+        verbose_name="SSAE 16")
     sas70Type = models.CharField(
-        verbose_name="SAS 70 Type",
+        verbose_name="SSAE 16 Type",
         max_length=SHORT,
         choices=SAS70_CHOICES)
     sas70Date = models.DateField(
         null=True, blank=True, 
-        verbose_name="SAS 70 Date")
+        verbose_name="SSAE 16 Date")
     escrow = models.BooleanField(
         verbose_name="Escrow Agreement")
     lastEscrowReviewDate = models.DateField(
@@ -152,7 +152,7 @@ class Vendor(models.Model):
         verbose_name="Financial Stability")
     sas70Value = models.FloatField(
         default=0,
-        verbose_name="SAS 70")
+        verbose_name="SSAE 16")
     independentMonitoring = models.FloatField(
         default=0,
         verbose_name="Independent Monitoring / Reporting")

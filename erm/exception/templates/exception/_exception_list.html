@@ -1,6 +1,7 @@
 <table class = "prettytable">
     <tr>
         <th>Action Item</th>
+        <th>Audit/Exam Agency</th>
         <th style="width: 100px;">Target Date</th>
         <th>Composite Risk Score</th>
         <th>Status</th>
@@ -9,6 +10,7 @@
     {% for e in exceptions %}
     <tr>
         <td><a href="{% url exception_item e.id %}" />{{ e.actionItem }}</a></td>
+        <td>{{ e.auditAgency }}</td>
         <td>{{ e.targetDate }}</td>
         <td>{{ e.compositeRiskScore }}</td>
         <td>{{ e.prettyStatus }}</td>
