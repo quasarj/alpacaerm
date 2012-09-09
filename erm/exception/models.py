@@ -41,7 +41,7 @@ class Exception(models.Model):
 
     actionItem = models.CharField(verbose_name="Action Items, Area of Concern, or Comment", max_length=2000)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-    auditAgency = models.ForeignKey(Agency, verbose_name="Audit Agency")
+    auditAgency = models.ForeignKey(Agency, verbose_name="Audit/Examination Agency")
     recommendation = models.CharField(max_length=2000)
     managementResponse = models.CharField(max_length=2000, verbose_name="Management Response")
     remediation = models.CharField(max_length=2000)
