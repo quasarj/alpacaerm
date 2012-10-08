@@ -10,10 +10,17 @@ from django.conf import settings
 
 #from erm.models import BankRisk, BankRiskForm, RiskProfile
 from erm.models import *
+from erm.forms import *
 import datetime
 # import os
 # import StringIO
 # from xhtml2pdf import pisa
+
+def rr(template, variables, request):
+    """convenience function to shorten render_to_response call"""
+    return render_to_response(template, 
+                              variables, 
+                              context_instance=RequestContext(request))
 
 @login_required
 def index(request):
@@ -607,5 +614,46 @@ def report_view(request):
     #     raise Http404
 
     # return HttpResponse(result.getvalue(), mimetype='application/pdf')
+
+@login_required
+def report_edit_text(request):
+    error_message = None
+    success_message = None
+    success_id = None
+    success_name = None
+
+    profile = request.user.get_profile()
+
+    # ignore requests from users 
+    # who don't have access
+    # if profile.level < 1:
+    #     raise Http404 
+
+    bank = request.user.get_profile().bank
+
+    if request.method == 'POST':
+        # so some posty stuff
+        form = ReportEditTextForm(request.POST, instance=bank)
+        if form.is_valid():
+            # do some processing (like saving it)
+
+            # use commit=False to allow us to
+            # modify the new vendor before saving it
+            form.save()
+            success_message = "Saved successfully!"
+
+        else:
+            # form is not valid, display an error
+           error_message = "There were errors in your submission."
+    else:
+        # create a blank form
+        form = ReportEditTextForm(instance=bank)
+
+    return rr('erm/report_edit_text.html', 
+              { 'form': form,
+                'module': 'report',
+                'error_message': error_message,
+                'success_message': success_message },
+              request)
 
 
