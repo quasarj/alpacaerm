@@ -158,6 +158,8 @@ class Vendor(models.Model):
         verbose_name="Independent Monitoring / Reporting")
 
     # calculated fields
+    #TODO: These are not being calculated. Override the save() method
+    # of this model to calculate these fields on save!
 
     vendorRiskRating = models.FloatField(
         default=0,

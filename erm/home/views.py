@@ -4,6 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from erm.models import BankRisk
+from vendor.models import Vendor
+from exception.models import Exception
+
 
 def rr(template, variables, request):
     """convenience function to shorten render_to_response call"""
@@ -38,6 +41,7 @@ def chart_data(request, chart_id):
     if chart_id == '1':
         params = chart_risks(request)
     elif chart_id == '2':
+        # print "chart_data id = 2, calling chart_vendors()..."
         params = chart_vendors(request)
     elif chart_id == '3':
         params = chart_exceptions(request)
@@ -60,7 +64,7 @@ def chart_risks(request):
 
     data = []
     for i,risk in enumerate(risks):
-        print risk.compositeRisk()
+        print "Risk compositRisk: ", risk.compositeRisk()
         data.append(
             dict(
                 name=risk.name[:15] + '<br/>' + \
@@ -83,13 +87,86 @@ def chart_risks(request):
     )
 
 def chart_vendors(request):
+    global chart_colors
+
+    # print "chart_vendors() executing"
+
+    # user's bank
+    bank = request.user.get_profile().bank
+
+    # get the highest vendors for this bank
+    # TODO: this may need to be inherent risk instead of Vendor Risk?
+    vendors = Vendor.objects.filter(bank=bank).order_by('-vendorRiskRating')[:3]
+    # print "Top 3 vendors:", vendors
+
+    data = []
+    for i,vendor in enumerate(vendors):
+        # print "Vendor rating: ", vendor.vendorRiskRating
+        # print "Vendor name: ", vendor.name
+        # print "Vendor id: ", vendor.id
+        data.append(
+            dict(
+                name=vendor.name[:15] + '<br/>' + \
+                    vendor.name[15:30],
+                value=vendor.vendorRiskRating,
+                link=reverse('vendor_item', args=[vendor.id]),
+                color=chart_colors[i]
+            )
+        )
+
+
+    # Get the minium value from the data
+    # This will be used below to calculate the yAxisMinValue
+    min_value = min([v['value'] for v in data])
+
+    print "Vendor data: "
+    print data
+
+
     return dict(
         caption='Vendors',
-        yaxis='Units',
+        yAxisMinValue=(min_value - .5),
+        yAxisMaxValue=5,
+        data=data
     )
 
 def chart_exceptions(request):
+    global chart_colors
+
+    # print "chart_vendors() executing"
+
+    # user's bank
+    bank = request.user.get_profile().bank
+
+    # get the highest vendors for this bank
+    # TODO: this may need to be inherent risk instead of Vendor Risk?
+    exceptions = Exception.objects.filter(bank=bank).order_by('-compositeRiskScore')[:3]
+
+
+    data = []
+    for i,exception in enumerate(exceptions):
+        # print "Vendor rating: ", vendor.vendorRiskRating
+        # print "Vendor name: ", vendor.name
+        # print "Vendor id: ", vendor.id
+        data.append(
+            dict(
+                name=exception.actionItem[:15] + '<br/>' + \
+                        exception.actionItem[15:30],
+                        value=exception.compositeRiskScore,
+                        link=reverse('exception_item', args=[exception.id]),
+                color=chart_colors[i]
+            )
+        )
+
+
+    # Get the minium value from the data
+    # This will be used below to calculate the yAxisMinValue
+    min_value = min([v['value'] for v in data])
+
+
     return dict(
         caption='Exceptions',
-        yaxis='Units',
+        yAxisMinValue=(min_value - .5),
+        yAxisMaxValue=5,
+        data=data
     )
