@@ -178,6 +178,21 @@ class Vendor(models.Model):
         null=True, blank=True, 
         verbose_name="Last Review Date")
 
+    def save(self):
+        # calculate the calculated fields
+
+        self.priorRiskRating = self.vendorRiskRating
+        self.vendorRiskRating = 4
+        self.inherentRiskRating = 3
+
+
+        #TODO: these aren't really calculated fields, are they?
+        # self.nextReviewDate
+        # self.lastReviewDate
+
+
+        super(Vendor, self).save(*args, **kwargs)
+
 
     def __unicode__(self):
         return "{}: {}".format(self.bank, self.name)
