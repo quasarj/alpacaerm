@@ -178,12 +178,51 @@ class Vendor(models.Model):
         null=True, blank=True, 
         verbose_name="Last Review Date")
 
-    def save(self):
+    def save(self, *args, **kwargs):
         # calculate the calculated fields
 
+
+        #Inherent Risk Rating
+        #TODO: several fields missing here
+        inherent_fields = [
+            self.exposure,
+            self.sensitivity,
+            #self.volume?
+            #self.investment?
+            self.operationalDependence,
+            self.cusomterSupport,
+            #self.intSecurity?
+            self.nondisclosure,
+            self.thirdParty,
+            self.businessResumption,
+            self.hiring,
+            self.networkSecurity,
+        ]
+        # average of only the fields with values > 0
+        field_count = sum([1 for i in inherent_fields if i > 0])
+        if field_count > 0:
+            self.inherentRiskRating = sum(inherent_fields) / field_count
+        else:
+            self.inherentRiskRating = 0
+
+
+        #calMitigations - used in the calc of vendor risk rating
+        mit_fields = [
+            self.financialStability,
+            self.sas70Value,
+        ]
+        field_count = sum([1 for i in mit_fields if i > 0])
+        if field_count > 0:
+            cal_mitigations = sum(mit_fields) / field_count
+        else:
+            cal_mitigations = 0
+
+
+
         self.priorRiskRating = self.vendorRiskRating
-        self.vendorRiskRating = 4
-        self.inherentRiskRating = 3
+        # vendor risk rating
+        self.vendorRiskRating = self.inherentRiskRating * cal_mitigations
+
 
 
         #TODO: these aren't really calculated fields, are they?

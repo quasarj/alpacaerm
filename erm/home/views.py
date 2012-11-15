@@ -104,9 +104,13 @@ def chart_vendors(request):
         # print "Vendor rating: ", vendor.vendorRiskRating
         # print "Vendor name: ", vendor.name
         # print "Vendor id: ", vendor.id
+        #TODO: the rjust below is not the right way to ensure the
+        # charts are all at the same height. There may be a setting
+        # for FusionCharts to give a minimum height.
+
         data.append(
             dict(
-                name=vendor.name[:15] + '<br/>' + \
+                name=vendor.name[:15].rjust(18) + '<br/>' + \
                     vendor.name[15:30],
                 value=vendor.vendorRiskRating,
                 link=reverse('vendor_item', args=[vendor.id]),

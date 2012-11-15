@@ -84,7 +84,9 @@
                 <ul>
                     <li><a href="{% url report %}">View</a></li>
                     <li><a href="{% url report %}">Print</a></li>
+                    {% if user.get_profile.level > 0 %}
                     <li><a href="{% url report_edit_text %}">Edit Text</a></li>
+                    {% endif %}
                 </ul>
             </li>
             <li class="has-sub {% if module == 'config' %}active{% endif %}">
