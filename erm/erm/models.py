@@ -87,8 +87,10 @@ class AbstractRisk(models.Model):
     regulatoryLegalRiskWeight = models.FloatField(default=0)
     humanResourceRisk = models.FloatField(default=0)
     humanResourceRiskWeight = models.FloatField(default=0)
-    # compositeRisk = models.FloatField(default=0)
-    # riskRating = models.FloatField(default=0)
+    compositeRisk = models.FloatField(default=0)
+    riskRating = models.FloatField(default=0)
+    lastCompositeRisk = models.FloatField(default=0)
+    lastRiskRating = models.FloatField(default=0)
     bsaRisk = models.BooleanField()
     regulatoryRisk = models.BooleanField()
     cispRisk = models.BooleanField()
@@ -114,7 +116,7 @@ class AbstractRisk(models.Model):
     # Required
     # calInherentRiskRating = models.FloatField(default=0)
     
-    def compositeRisk(self):
+    def calc_composite_risk(self):
         """calculate the composite risk"""
         # NOTE: This needs to decide which risks to actually
         # use based on the RiskType field!
@@ -157,16 +159,15 @@ class AbstractRisk(models.Model):
 
         return total / weights
 
-    def riskRating(self):
+    def calc_risk_rating(self):
         """calculate the rating of this risk"""
         # TODO: write this
-
 
         calc = (
             self.customers +
             self.impact +
             self.inherentRisk + 
-            self.compositeRisk()
+            self.compositeRisk
         ) / 4.0
 
         calc *= ((
@@ -175,6 +176,17 @@ class AbstractRisk(models.Model):
         ) / (self.controlsWeight + self.policyWeight))
 
         return calc
+
+    def save(self, *args, **kwargs):
+        # calculate the calculated fields
+        self.lastRiskRating = self.riskRating
+        self.riskRating = self.calc_risk_rating()
+
+        self.lastCompositeRisk = self.compositeRisk
+        self.compositeRisk = self.calc_composite_risk()
+
+        super(AbstractRisk, self).save(*args, **kwargs)
+
 
 
 class Risk(AbstractRisk):
@@ -189,60 +201,55 @@ class BankRisk(AbstractRisk):
         return "{}: {}".format(self.bank.name, self.name)
 
 
+
     def trending(self):
         """get the trending status of this risk
         based on the last history item"""
 
-        # dummy implementation at this point
-        hists = self.bankriskhistory_set.all()
-        if len(hists) > 0:
-            last_rating = hists[hists.count() - 1].riskRating()
-            rating = self.riskRating()
-
-            if rating > last_rating:
-                return "High"
-            elif rating < last_rating:
-                return "Low"
+        if self.riskRating > self.lastRiskRating:
+            return "High"
+        elif self.riskRating < self.lastRiskRating:
+            return "Low"
 
         # return flat if it isn't anything else, or if there was an error
         return "Flat"
 
-class BankRiskHistory(AbstractRisk):
-    bankRisk = models.ForeignKey(BankRisk)
-    saved_time = models.DateTimeField()
+# class BankRiskHistory(AbstractRisk):
+#     bankRisk = models.ForeignKey(BankRisk)
+#     saved_time = models.DateTimeField()
 
-    def load(self, bankrisk=None):
-        """load data from a bankrisk"""
+#     def load(self, bankrisk=None):
+#         """load data from a bankrisk"""
 
-        if bankrisk:
-            # attempt to copy the BankRisk data
+#         if bankrisk:
+#             # attempt to copy the BankRisk data
 
-            # ugly hack to copy from one model to another
-            for attr in bankrisk.__dict__:
-                if attr != '_state' and attr != 'id':
-                    setattr(self, attr, getattr(bankrisk, attr))
+#             # ugly hack to copy from one model to another
+#             for attr in bankrisk.__dict__:
+#                 if attr != '_state' and attr != 'id':
+#                     setattr(self, attr, getattr(bankrisk, attr))
 
-            self.bankRisk = bankrisk
-            self.saved_time = timezone.now()
+#             self.bankRisk = bankrisk
+#             self.saved_time = timezone.now()
 
-            # the above trick doesn't work for 
-            # many-to-many relationships, so do them
-            # manually here.
-            # Also, the object must be saved before
-            # m2m relaitonships can be added
-            self.save()
+#             # the above trick doesn't work for 
+#             # many-to-many relationships, so do them
+#             # manually here.
+#             # Also, the object must be saved before
+#             # m2m relaitonships can be added
+#             self.save()
 
-            for rm in bankrisk.riskManagers.all():
-                self.riskManagers.add(rm)
+#             for rm in bankrisk.riskManagers.all():
+#                 self.riskManagers.add(rm)
 
-            for rt in bankrisk.riskTypes.all():
-                self.riskTypes.add(rt)
+#             for rt in bankrisk.riskTypes.all():
+#                 self.riskTypes.add(rt)
 
-            for rs in bankrisk.riskSources.all():
-                self.riskSources.add(rs)
+#             for rs in bankrisk.riskSources.all():
+#                 self.riskSources.add(rs)
 
-    def __unicode__(self):
-        return "{}: {}".format(self.bankRisk.id, self.saved_time)
+#     def __unicode__(self):
+#         return "{}: {}".format(self.bankRisk.id, self.saved_time)
 
 # a RiskProfile is a set of risks that can be assigned to a bank
 # all at once

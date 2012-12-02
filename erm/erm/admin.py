@@ -1,19 +1,37 @@
 from erm.models import *
+import reversion
 
 from django.contrib import admin
 
+
 admin.site.register(Bank)
 admin.site.register(Risk)
-admin.site.register(BankRisk)
+
+
+
+class BankRiskAdmin(reversion.VersionAdmin):
+    pass
+admin.site.register(BankRisk, BankRiskAdmin)
+
+
 admin.site.register(RiskProfile)
-admin.site.register(RiskType)
-admin.site.register(RiskSource)
-admin.site.register(RiskManager)
-admin.site.register(BankRiskHistory)
+
+class RiskTypeAdmin(reversion.VersionAdmin):
+    pass
+admin.site.register(RiskType, RiskTypeAdmin)
+
+
+class RiskSourceAdmin(reversion.VersionAdmin):
+    pass
+admin.site.register(RiskSource, RiskSourceAdmin)
+
+
+class RiskManagerAdmin(reversion.VersionAdmin):
+    pass
+admin.site.register(RiskManager, RiskManagerAdmin)
 
 
 class UserProfileAdmin(admin.ModelAdmin):
     fields = ('bank', 'user', 'level')
-
 admin.site.register(UserProfile, UserProfileAdmin)
 

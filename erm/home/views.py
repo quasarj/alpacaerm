@@ -58,18 +58,16 @@ def chart_risks(request):
     bank = request.user.get_profile().bank
 
     # get the highest risks for this bank
-    # TODO: this should be the compositeRisk value, but it has not yet
-    # been converted to a real database field (to allow order_by)
-    risks = BankRisk.objects.filter(bank=bank).order_by('-customers')[:3]
+    risks = BankRisk.objects.filter(bank=bank).order_by('-compositeRisk')[:3]
 
     data = []
     for i,risk in enumerate(risks):
-        print "Risk compositRisk: ", risk.compositeRisk()
+        # print "Risk compositeRisk: ", risk.compositeRisk
         data.append(
             dict(
                 name=risk.name[:15] + '<br/>' + \
                     risk.name[15:30],
-                value=risk.customers,
+                value=risk.compositeRisk,
                 link=reverse('risk', args=[risk.id]),
                 color=chart_colors[i]
             )

@@ -12,9 +12,7 @@ from django.conf import settings
 from erm.models import *
 from erm.forms import *
 import datetime
-# import os
-# import StringIO
-# from xhtml2pdf import pisa
+
 
 def rr(template, variables, request):
     """convenience function to shorten render_to_response call"""
@@ -51,22 +49,10 @@ def bankrisk_view(request, bankrisk_id):
 
     bankrisk = get_object_or_404(BankRisk, pk=bankrisk_id)
     if request.method == 'POST':
-        # get a history object started in case this checks out
-        # hist.load() now saves immediately, so it must be later
-        # deleted if it is not needed. This was necessary because
-        # of how many-to-many relationships work.
-        # Note: when the form is created below with both the
-        # post data and the instance, it updates the instance
-        # to reflect the post data changes immediately!
-
-        hist = BankRiskHistory()
-        hist.load(bankrisk)
 
         # so some posty stuff
         form = BankRiskForm(request.POST, instance=bankrisk)
         if form.is_valid():
-            # save the history now that we know the update is real 
-            #hist.save() # this is now auto-saved when load is called
 
             # do some processing (like saving it)
             form.save()
@@ -78,8 +64,6 @@ def bankrisk_view(request, bankrisk_id):
             # form is not valid, display an error
             error_message = "There were errors in your submission."
 
-            # delete the now-bogus history object
-            hist.delete()
     else:
         form = BankRiskForm(instance=bankrisk)
 
@@ -105,6 +89,7 @@ def bankrisk_view(request, bankrisk_id):
                 prev_risk = search_results[pos-1]
 
     return render_to_response('bankrisk.html', {
+    # return render_to_pdf('bankrisk.html', {
         'form': form,
         'bankrisk': bankrisk,
         'error_message': error_message,
@@ -406,6 +391,7 @@ def fetch_resources(uri, rel):
     `rel` gives a relative path, but it's not used here.
 
     """
+    print "fetch_resources called"
     if uri.startswith(settings.MEDIA_URL):
         path = os.path.join(settings.MEDIA_ROOT,
                             uri.replace(settings.MEDIA_URL, ""))
@@ -433,6 +419,21 @@ def fetch_resources(uri, rel):
     print "Media fetched: {}".format(path)
     return path
 
+def render_to_pdf(template, variables, context_instance):
+    #imports here to speed things up the rest of the time
+    import cStringIO as StringIO
+    # import ho.pisa as pisa
+    from xhtml2pdf import pisa
+
+    html = render_to_string(template, variables, context_instance=context_instance)
+
+    result = StringIO.StringIO()
+    pdf = pisa.pisaDocument(html, result, link_callback=fetch_resources)
+
+    if pdf.err:
+        raise Http404
+
+    return HttpResponse(result.getvalue(), mimetype='application/pdf')
 
 @login_required
 def report_view(request):
@@ -461,7 +462,7 @@ def report_view(request):
 
         # loop over these to get the count that are high
         for r in sub_risks:
-            if r.riskRating() > 2.5:
+            if r.riskRating > 2.5:
                 high += 1
             else:
                 moderate += 1
@@ -508,7 +509,7 @@ def report_view(request):
             if r.inherentRisk > 2.5:
                 inherent += 1
 
-            if r.compositeRisk() > 2.5:
+            if r.compositeRisk > 2.5:
                 composite += 1
 
             if r.outsourced == True:
@@ -539,7 +540,7 @@ def report_view(request):
 
         # loop over these to get the counts
         for r in sub_risks:
-            if r.riskRating() > 2.5:
+            if r.riskRating > 2.5:
                 high += 1
             else:
                 moderate += 1
@@ -577,7 +578,7 @@ def report_view(request):
 
         # loop over these to get the counts
         for r in sub_risks:
-            if r.riskRating() > 2.5:
+            if r.riskRating > 2.5:
                 high += 1
             else:
                 moderate += 1
@@ -598,7 +599,7 @@ def report_view(request):
         sfour[m.name] = temp
 
     return render_to_response('erm/report.html',
-    # html = render_to_string('erm/report.html',
+    # return render_to_pdf('erm/report.html',
             {
                 "sone":     sone,
                 "stwo":     stwo,
@@ -607,13 +608,6 @@ def report_view(request):
             },
             context_instance=RequestContext(request))
 
-    # result = StringIO.StringIO()
-    # pdf = pisa.pisaDocument(html, result, link_callback=fetch_resources)
-
-    # if pdf.err:
-    #     raise Http404
-
-    # return HttpResponse(result.getvalue(), mimetype='application/pdf')
 
 @login_required
 def report_edit_text(request):
