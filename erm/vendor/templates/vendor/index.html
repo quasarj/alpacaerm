@@ -3,7 +3,8 @@
 {% block title %}Vendor Management{% endblock %}
 
 {% block content %}
-<p>
-    The Vendor Management module has not been created yet.
-</p>
+<ul>
+    <li><a href="{% url vendor_view %}">View All</a></li>
+    <li><a href="{% url vendor_search %}">Search</a></li>
+</ul>
 {% endblock %}

@@ -32,7 +32,7 @@
 
             <li>{{ user.get_profile.bank.name }}</li>
 
-            <li><a href="javascript:window.print();">Print</a> - <a href="">PDF</a></li>
+            <li><a href="javascript:window.print();">Print</a> - <a href="?pdf=1">PDF</a></li>
         </ul>
     </div>
     {% endif %}
@@ -85,7 +85,7 @@
                 <a href='#'><span>Executive Report</span></a>
                 <ul>
                     <li><a href="{% url report %}">View</a></li>
-                    <li><a href="{% url report %}">Print</a></li>
+                    <li><a href="{% url report %}?pdf=1">Print</a></li>
                     {% if user.get_profile.level > 0 %}
                     <li><a href="{% url report_edit_text %}">Edit Text</a></li>
                     {% endif %}

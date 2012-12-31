@@ -6,7 +6,7 @@
 -----------------------------------------------------------------------------*/
 body {
     line-height:1.5;
-    background: url("/static/img/header-home-bg.png") #ffffff repeat-x; 
+    background: #ffffff url("/static/img/header-home-bg.png") repeat-x; 
 }
 
 a, a:visited, a:hover {
@@ -28,6 +28,10 @@ h3 {
     top: 0;
     right: 0;
     width: 300px;
+}
+
+#infobox a {
+    color: white;
 }
 
 #infobox > ul {
@@ -61,7 +65,7 @@ h3 {
     clear: both;
     color: #fff;
     /* background-color: #30200C; */
-    background: url("/static/img/header-home-bg.png") repeat-x; 
+    background: #fff url("/static/img/header-home-bg.png") repeat-x; 
     text-align: center;
     padding-top: 15px;
     font-size: 75%;

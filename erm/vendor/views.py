@@ -5,12 +5,20 @@ from django.contrib.auth.decorators import login_required
 from vendor.models import Vendor, CLASS_CHOICES
 from vendor.forms import VendorForm
 
+from erm.pdf import render_to_pdf
 
 def rr(template, variables, request):
     """convenience function to shorten render_to_response call"""
     return render_to_response(template, 
                               variables, 
                               context_instance=RequestContext(request))
+def rrpdf(template, variables, request):
+    """convenience function to shorten render_to_response call"""
+    return render_to_pdf(template, 
+                              variables, 
+                              context_instance=RequestContext(request))
+
+
 @login_required
 def index(request):
     return rr('vendor/index.html', dict(module='vendor'), request)
@@ -65,7 +73,14 @@ def add(request):
 def view_all(request):
     bank = request.user.get_profile().bank
     vendors = Vendor.objects.filter(bank=bank)
-    return rr('vendor/view.html', 
+
+    
+    if 'pdf' in request.GET:
+        renderer = rrpdf
+    else:
+        renderer = rr
+
+    return renderer('vendor/view.html', 
               dict(module='vendor',
                    vendors=vendors), 
               request)
