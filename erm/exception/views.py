@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from exception.models import Exception, Agency
 from exception.forms import ExceptionForm
 
+from util import render
 import datetime
 
 def rr(template, variables, request):
@@ -87,13 +88,14 @@ def view_item(request, exception_id):
         form = ExceptionForm(instance=ex)
 
 
-    return rr('exception/item.html', 
+    return render('exception/item.html', 
               { 'module': 'exception',
                 'exception': ex,
                 'success_message': success_message,
                 'error_message': error_message,
                 'form': form }, 
-              request)
+              request,
+              'exception/item_pdf.html')
 
 @login_required
 def view_open(request):
@@ -102,10 +104,11 @@ def view_open(request):
     exceptions = Exception.objects.filter(bank=bank, status='open').\
         order_by('targetDate', '-compositeRiskScore')
 
-    return rr('exception/open.html', 
-              { 'module': 'exception',
-                'exceptions': exceptions }, 
-              request)
+    return render('exception/open.html', 
+                  { 'module': 'exception',
+                    'exceptions': exceptions }, 
+                  request,
+                  'exception/open_pdf.html')
 
 @login_required
 def view_closed(request):
@@ -116,10 +119,11 @@ def view_closed(request):
     exceptions = Exception.objects.filter(bank=bank).exclude(status='open').\
         order_by('targetDate')
 
-    return rr('exception/closed.html', 
-              { 'module': 'exception',
-                'exceptions': exceptions }, 
-              request)
+    return render('exception/closed.html', 
+                  { 'module': 'exception',
+                    'exceptions': exceptions }, 
+                  request,
+                  'exception/closed_pdf.html')
 
 
 @login_required

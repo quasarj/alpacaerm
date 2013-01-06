@@ -1,27 +1,15 @@
 from django.shortcuts import render_to_response, get_object_or_404, Http404
-from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 
 from vendor.models import Vendor, CLASS_CHOICES
 from vendor.forms import VendorForm
 
-from erm.pdf import render_to_pdf
-
-def rr(template, variables, request):
-    """convenience function to shorten render_to_response call"""
-    return render_to_response(template, 
-                              variables, 
-                              context_instance=RequestContext(request))
-def rrpdf(template, variables, request):
-    """convenience function to shorten render_to_response call"""
-    return render_to_pdf(template, 
-                              variables, 
-                              context_instance=RequestContext(request))
+from util import render
 
 
 @login_required
 def index(request):
-    return rr('vendor/index.html', dict(module='vendor'), request)
+    return render('vendor/index.html', dict(module='vendor'), request)
 
 @login_required
 def add(request):
@@ -61,7 +49,7 @@ def add(request):
         # create a blank form
         form = VendorForm()
 
-    return rr('vendor/add.html', 
+    return render('vendor/add.html', 
               { 'form': form,
                 'success_id': success_id,
                 'success_name': success_name,
@@ -74,16 +62,11 @@ def view_all(request):
     bank = request.user.get_profile().bank
     vendors = Vendor.objects.filter(bank=bank)
 
-    
-    if 'pdf' in request.GET:
-        renderer = rrpdf
-    else:
-        renderer = rr
-
-    return renderer('vendor/view.html', 
-              dict(module='vendor',
-                   vendors=vendors), 
-              request)
+    return render('vendor/view.html', 
+                  dict(module='vendor',
+                       vendors=vendors), 
+                  request,
+                  template_pdf='vendor/view_pdf.html')
 
 @login_required
 def view_item(request, vendor_id):
@@ -107,22 +90,25 @@ def view_item(request, vendor_id):
         form = VendorForm(instance=vend)
 
 
-    return rr('vendor/item.html', 
-              { 'module': 'vendor',
-                'vendor': vend,
-                'success_message': success_message,
-                'error_message': error_message,
-                'form': form }, 
-              request)
+    return render(
+        'vendor/item.html', 
+        {   'module': 'vendor',
+            'vendor': vend,
+            'success_message': success_message,
+            'error_message': error_message,
+            'form': form }, 
+        request,
+        template_pdf='vendor/item_pdf.html', 
+    )
 
 @login_required
 def search(request, error_message=None):
     # does not handle POST, just generates the search page
     # posts back to one of the three different search methods
 
-    bank = request.user.get_profile().bank
+    # bank = request.user.get_profile().bank
 
-    return rr('vendor/search.html', 
+    return render('vendor/search.html', 
               dict(module='vendor',
                    class_choices=CLASS_CHOICES,
                    error_message=error_message),
@@ -168,7 +154,7 @@ def search_name(request):
 
             # set the search results session var
             request.session['search_results'] = vendors
-            return rr('vendor/search_results.html',
+            return render('vendor/search_results.html',
                       dict(vendors=vendors,
                            method="by Name"),
                       request)
@@ -189,7 +175,7 @@ def search_class(request):
         vendors = Vendor.objects.filter(bank=bank).filter(classification__in=class_ids)
 
         request.session['search_results'] = vendors
-        return rr('vendor/search_results.html',
+        return render('vendor/search_results.html',
                   dict(vendors=vendors,
                        method="by Classification"),
                   request)

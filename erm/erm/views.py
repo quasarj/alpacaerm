@@ -11,13 +11,7 @@ from erm.models import *
 from erm.forms import *
 import datetime
 
-from erm.pdf import render_to_pdf
-
-def rr(template, variables, request):
-    """convenience function to shorten render_to_response call"""
-    return render_to_response(template, 
-                              variables, 
-                              context_instance=RequestContext(request))
+from util import render
 
 @login_required
 def index(request):
@@ -35,10 +29,10 @@ def all_view(request):
 #    if request.session.get('search_results', False):
 #        del request.session['search_results']
     request.session['search_results'] = risks
-    return render_to_response('all.html',
-        { 'risks': risks, },
-        context_instance=RequestContext(request),
-    )
+    return render('erm/all.html',
+                  { 'risks': risks },
+                  request,
+                  'erm/all_pdf.html')
 
 @login_required
 def bankrisk_view(request, bankrisk_id):
@@ -87,16 +81,16 @@ def bankrisk_view(request, bankrisk_id):
             if pos > 0:
                 prev_risk = search_results[pos-1]
 
-    return render_to_response('bankrisk.html', {
-    # return render_to_pdf('bankrisk.html', {
-        'form': form,
-        'bankrisk': bankrisk,
-        'error_message': error_message,
-        'success_message': success_message,
-        'next_risk': next_risk,
-        'prev_risk': prev_risk,
-    }, context_instance=RequestContext(request))
-            
+    return render('erm/bankrisk.html', 
+                  { 'form': form,
+                    'bankrisk': bankrisk,
+                    'error_message': error_message,
+                    'success_message': success_message,
+                    'next_risk': next_risk,
+                    'prev_risk': prev_risk, },
+                  request,
+                  'erm/bankrisk_pdf.html')
+
 
 def logout_view(request):
     logout(request)
@@ -546,18 +540,15 @@ def report_view(request):
 
         sfour[m.name] = temp
 
-    renderer = render_to_response
-    if 'pdf' in request.GET:
-        renderer = render_to_pdf
-
-    return renderer('erm/report.html',
+    return render('erm/report.html',
             {
                 "sone":     sone,
                 "stwo":     stwo,
                 "sthree":   sthree,
                 "sfour":    sfour,
             },
-            context_instance=RequestContext(request))
+            request,
+            'erm/report.html')
 
 
 @login_required
@@ -594,11 +585,11 @@ def report_edit_text(request):
         # create a blank form
         form = ReportEditTextForm(instance=bank)
 
-    return rr('erm/report_edit_text.html', 
-              { 'form': form,
-                'module': 'report',
-                'error_message': error_message,
-                'success_message': success_message },
-              request)
+    return render('erm/report_edit_text.html', 
+                  { 'form': form,
+                    'module': 'report',
+                    'error_message': error_message,
+                    'success_message': success_message },
+                  request)
 
 

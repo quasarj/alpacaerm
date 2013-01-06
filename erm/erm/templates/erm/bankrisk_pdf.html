@@ -1,0 +1,21 @@
+{% extends "base_pdf.html" %}
+{% load pdf_extras %}
+{% block title %}Risk Detail{% endblock %}
+{% block content %}
+
+<h2>{{ bankrisk.name }}</h2>
+    <table class="risktable">
+        {% for v in bankrisk|to_dict %}
+        <tr>
+            <td>
+                {{ v.label }}
+            </td>
+            <td>
+                {{ v.value }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
+

@@ -1,0 +1,23 @@
+{% extends "base_pdf.html" %}
+{% load pdf_extras %}
+{% block title %}Vendor Item Details{% endblock %}
+{% block content %}
+
+<h2>{{ vendor.name }}</h2>
+<p><strong>Vendor Risk Rating: {{ vendor.vendorRiskRating }}</strong></p>
+<p><strong>Inherent Risk Rating: {{ vendor.inherentRiskRating }}</strong></p>
+
+    <table class="risktable">
+        {% for v in vendor|to_dict %}
+        <tr>
+            <td>
+                {{ v.label }}
+            </td>
+            <td>
+                {{ v.value }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

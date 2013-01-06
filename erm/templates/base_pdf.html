@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>This should never be seen.</title>
+    <!-- <link rel="stylesheet" href="/static/css/style.css" /> -->
+
+    {% block style %}{% endblock %}
+</head>
+
+<body>
+    <div>
+        <h1>Alpaca ERM</h1>
+        <p>PDF Report</p>
+        <p>Bank: {{ user.get_profile.bank.name }}</p>
+        <p>User: {{ user.first_name }}</p>
+        <p>Date: {% now "DATE_FORMAT" %}</p>
+        <h3>{% block title %}{% endblock %}</h3>
+        <hr/>
+    </div>
+    <div id="container" class="grid_12">
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div> <!-- content -->
+    </div> <!-- container -->
+    <div id="footer" >
+        <p>Copyright 2012, Alpaca Software</p>
+    </div> <!-- footer -->
+</body>
+</html>

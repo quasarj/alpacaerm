@@ -1,0 +1,22 @@
+{% extends "base_pdf.html" %}
+{% load pdf_extras %}
+{% block title %}Exception Detail Report{% endblock %}
+{% block content %}
+
+<h2>{{ exception.actionItem }}</h2>
+<strong>Composite Risk Score: {{ exception.compositeRiskScore }}</strong>
+
+    <table class="risktable">
+        {% for v in exception|to_dict %}
+        <tr>
+            <td>
+                {{ v.label }}
+            </td>
+            <td>
+                {{ v.value }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
