@@ -46,58 +46,107 @@ class AbstractRisk(models.Model):
 
     name = models.CharField(max_length=200)
 
-    reviewDate = models.DateField(null=True, blank=True)
+    reviewDate = models.DateField(null=True, 
+                                  blank=True, 
+                                  verbose_name="Last Review Date")
 
-    riskTypes = models.ManyToManyField(RiskType, null=True)
-    riskSources = models.ManyToManyField(RiskSource, null=True)
+    riskTypes = models.ManyToManyField(
+            RiskType, 
+            null=True, 
+            verbose_name='Risk Types')
 
-    riskManagers = models.ManyToManyField(RiskManager, null=True)
+
+    riskSources = models.ManyToManyField(RiskSource, null=True,
+            verbose_name='Risk Sources')
+
+    riskManagers = models.ManyToManyField(RiskManager, null=True,
+            verbose_name='Risk Managers')
 
     # fields from the Detail table in Access
-    riskText = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True)
-    location = models.CharField(max_length=200, null=True, blank=True)
-    threat = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True)
-    response = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True)
-    mitigations = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True)
-    comments = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True)
-    customers = models.FloatField(default=0)
-    impact = models.FloatField(default=0)
-    controls = models.FloatField(default=0)
-    controlsWeight = models.FloatField(default=0)
-    policyRate = models.FloatField(default=0)
-    policyWeight = models.FloatField(default=0)
-    inherentRisk = models.FloatField(default=0)
-    vendorRisk = models.FloatField(default=0)
-    vendorRiskWeight = models.FloatField(default=0)
-    marketRisk = models.FloatField(default=0)
-    marketRiskWeight = models.FloatField(default=0)
-    operationalRisk = models.FloatField(default=0)
-    operationalRiskWeight = models.FloatField(default=0)
-    complianceRisk = models.FloatField(default=0)
-    complianceRiskWeight = models.FloatField(default=0)
-    strategicRisk = models.FloatField(default=0)
-    strategicRiskWeight = models.FloatField(default=0)
-    reputationRisk = models.FloatField(default=0)
-    reputationRiskWeight = models.FloatField(default=0)
-    creditRisk = models.FloatField(default=0)
-    creditRiskWeight = models.FloatField(default=0)
-    fiduciaryRisk = models.FloatField(default=0)
-    fiduciaryRiskWeight = models.FloatField(default=0)
-    regulatoryLegalRisk = models.FloatField(default=0)
-    regulatoryLegalRiskWeight = models.FloatField(default=0)
-    humanResourceRisk = models.FloatField(default=0)
-    humanResourceRiskWeight = models.FloatField(default=0)
+    riskText = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True,
+            verbose_name='Systems or Assets at Risk')
+    location = models.CharField(max_length=200, null=True, blank=True,
+            verbose_name= 'Location of Systems or Assets')
+    threat = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True,
+            verbose_name= 'Detail of Source of Threat or Vulnerability')
+    response = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True,
+            verbose_name= 'Detail of Incident Response')
+    mitigations = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True,
+            verbose_name= 'Controls and Other Risk Mitigation Factors')
+    comments = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True,
+            verbose_name='Comments')
+    customers = models.FloatField(default=0,
+            verbose_name= 'Impact to Customer')
+    impact = models.FloatField(default=0,
+            verbose_name= 'Impact to Organization')
+    controls = models.FloatField(default=0,
+            verbose_name= 'Controls Rating')
+    controlsWeight = models.FloatField(default=0,
+            verbose_name= 'Controls Rating Weight')
+    policyRate = models.FloatField(default=0,
+            verbose_name= 'Policy Rating')
+    policyWeight = models.FloatField(default=0,
+            verbose_name= 'Policy Rating Weight')
+    inherentRisk = models.FloatField(default=0,
+            verbose_name= 'Inherent Risk')
+    vendorRisk = models.FloatField(default=0,
+            verbose_name= 'Vendor Risk')
+    vendorRiskWeight = models.FloatField(default=0,
+            verbose_name= 'Vendor Risk Weight')
+    marketRisk = models.FloatField(default=0,
+            verbose_name= 'Market Risk')
+    marketRiskWeight = models.FloatField(default=0,
+            verbose_name= 'Market Risk Weight')
+    operationalRisk = models.FloatField(default=0,
+            verbose_name= 'Operational Risk')
+    operationalRiskWeight = models.FloatField(default=0,
+            verbose_name= 'Operational Risk Weight')
+    complianceRisk = models.FloatField(default=0,
+            verbose_name= 'Compliance Risk')
+    complianceRiskWeight = models.FloatField(default=0,
+            verbose_name= 'Compliance Risk Weight')
+    strategicRisk = models.FloatField(default=0,
+            verbose_name= 'Strategic Risk')
+    strategicRiskWeight = models.FloatField(default=0,
+            verbose_name= 'Strategic Risk Weight')
+    reputationRisk = models.FloatField(default=0,
+            verbose_name= 'Reputational Risk')
+    reputationRiskWeight = models.FloatField(default=0,
+            verbose_name= 'Reputational Risk Weight')
+    creditRisk = models.FloatField(default=0,
+            verbose_name= 'Credit Risk')
+    creditRiskWeight = models.FloatField(default=0,
+            verbose_name= 'Credit Risk Weight')
+    fiduciaryRisk = models.FloatField(default=0,
+            verbose_name= 'Fiduciary Risk')
+    fiduciaryRiskWeight = models.FloatField(default=0,
+            verbose_name= 'Fiduciary Risk Weight')
+    regulatoryLegalRisk = models.FloatField(default=0,
+            verbose_name= 'Regulatory Legal Risk')
+    regulatoryLegalRiskWeight = models.FloatField(default=0,
+            verbose_name= 'Regulatory Legal Risk Weight')
+    humanResourceRisk = models.FloatField(default=0,
+            verbose_name= 'Human Resource Risk')
+    humanResourceRiskWeight = models.FloatField(default=0,
+            verbose_name= 'Human Resource Risk Weight')
     compositeRisk = models.FloatField(default=0)
     riskRating = models.FloatField(default=0)
     lastCompositeRisk = models.FloatField(default=0)
     lastRiskRating = models.FloatField(default=0)
-    bsaRisk = models.BooleanField()
-    regulatoryRisk = models.BooleanField()
-    cispRisk = models.BooleanField()
-    auditRisk = models.BooleanField()
-    complianceRiskb = models.BooleanField()
-    redFlagRisk = models.BooleanField()
-    outsourced = models.BooleanField()
+    bsaRisk = models.BooleanField(
+            verbose_name= 'BSA / AML / OFAC Risk Management')
+    regulatoryRisk = models.BooleanField(
+            verbose_name= 'Regulatory Risk Management')
+    cispRisk = models.BooleanField(
+            verbose_name= 'CISP Risk Management')
+    auditRisk = models.BooleanField(
+            verbose_name= 'Audit Risk Management')
+    complianceRiskb = models.BooleanField(
+            verbose_name= 'Compliance Risk Management')
+    redFlagRisk = models.BooleanField(
+            verbose_name= 'Red Flag Risk Management')
+    outsourced = models.BooleanField(
+            verbose_name= 'Outsourced Service')
     # RiskManagerDet
     # RiskManager2Det
     # RiskManager3Det
@@ -106,7 +155,8 @@ class AbstractRisk(models.Model):
     # Policy2Det
     # Policy3Det
     # Policy4Det
-    frequencyDet = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True)
+    frequencyDet = models.CharField(max_length=BIGTEXT_LEN, null=True, blank=True,
+            verbose_name= 'Frequency')
     # priorRating = models.FloatField(default=0)
     # intpriorrating = models.FloatField(default=0)
     # trend = models.CharField(max_length=2000, null=True, blank=True)
