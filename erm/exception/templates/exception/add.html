@@ -1,26 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Add new Exception{% endblock %}
 
-{% block script %}
-<script type="text/javascript" src="/static/js/jsi18n.js"></script>
-<script type="text/javascript" src="/static/admin/js/core.js"></script>
-<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
-<script type="text/javascript" src="/static/admin/js/jquery.js"></script>
-<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
-<script type="text/javascript" src="/static/admin/js/actions.js"></script>
-<script type="text/javascript" src="/static/admin/js/SelectBox.js"></script>
-<script type="text/javascript" src="/static/admin/js/SelectFilter2.js"></script>
-<script type="text/javascript" src="/static/admin/js/calendar.js"></script>
-<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
-
-<script type="text/javascript" src="/static/js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="/static/js/jquery-ui-1.8.20.custom.min.js"></script>
-<script type="text/javascript" src="/static/formalize/js/jquery.formalize.min.js"></script>
-{% endblock %}
 
 {% block style %}
-<link rel="stylesheet" type="text/css" href="/static/admin/css/widgets.css" />
+<style type="text/css">
+    /*
+    #tr_comments textarea {
+        width: 100px;
+    }
+    */
+    #id_riskTypes, #id_riskSources, #id_riskManagers {
+        width: 450px;
+        height: 200px;
+    }
+    .helptext {
+        display: none;
+    }
+</style>
+
 {% endblock %}
+
 {% block content %}
 
 <script>
@@ -34,6 +33,7 @@
         $("#id_completionDate").datepicker({
             dateFormat: "yy-mm-dd"    
         });
+        $("#id_riskSources").multiselect();
     });
 </script>
 
