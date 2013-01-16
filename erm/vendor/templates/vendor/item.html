@@ -8,6 +8,14 @@
     }
     */
 
+    #manual_form input, #manual_form select {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    #right_side {
+        padding-left: 10px;
+    }
+
 </style>
 
 {% endblock %}
@@ -15,6 +23,7 @@
 
 <script type="text/javascript">
     $(function() { // things to do when the page loads
+
         $("#id_fStatementDate").datepicker({
             dateFormat: "yy-mm-dd"    
         });
@@ -36,6 +45,8 @@
         $("#id_lastReviewDate").datepicker({
             dateFormat: "yy-mm-dd"    
         });
+
+
     });
 </script>
 <h1>Vendor Detail</h1>
@@ -77,7 +88,7 @@ You do not have permission to modify this Vendor.
 
     <!-- risk ratings here -->
     <table><tr>
-        <td id="left_side" style="border: 1px solid black;">
+        <td id="left_side">
         <table>
             <tr id="tr_{{ form.name.html_name }}">
                 <td>
@@ -268,7 +279,7 @@ You do not have permission to modify this Vendor.
         </table>
 
     </td>
-    <td id="right_side" style="border: 1px solid black;">
+    <td id="right_side">
         <p>Vendor Inherent Risk Calculation</p> 
         <table>
 

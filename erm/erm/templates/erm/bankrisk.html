@@ -1,6 +1,21 @@
 {% extends "base.html" %}
 {% block title %}Risk Detail{% endblock %}
 
+{% block style %}
+<style type="text/css">
+    /*
+    #tr_comments textarea {
+        width: 100px;
+    }
+    */
+    #id_riskTypes, #id_riskSources, #id_riskManagers {
+        width: 450px;
+        height: 200px;
+    }
+</style>
+
+{% endblock %}
+
 {% block content %}
 
 <script type="text/javascript">
@@ -92,6 +107,8 @@
 
         updateRisks();
 
+        //$("#id_riskTypes").multiselect();
+        $("select").multiselect();
     });
 </script>
 
