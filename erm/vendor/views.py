@@ -6,6 +6,10 @@ from vendor.forms import VendorForm
 
 from util import render
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 @login_required
 def index(request):
@@ -130,7 +134,7 @@ def search_name(request):
             if term != '':
                 search_terms.append(term)
 
-        print search_terms
+        logger.info(search_terms)
 
         if len(search_terms) < 1:
             error_message = "No search terms entered!"

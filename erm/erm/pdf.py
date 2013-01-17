@@ -5,11 +5,14 @@ from django.template.loader import render_to_string
 from django.http import HttpResponse
 
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 class UnsupportedMediaPathException(Exception):
     pass
 
-# @login_required
+@login_required
 def fetch_resources(uri, rel):
     """
     Callback to allow xhtml2pdf/reportlab to retrieve Images,Stylesheets, etc.
@@ -17,7 +20,7 @@ def fetch_resources(uri, rel):
     `rel` gives a relative path, but it's not used here.
 
     """
-    print "fetch_resources called"
+    logger.info("Entering")
     # if uri.startswith(settings.MEDIA_URL):
     #     path = os.path.join(settings.MEDIA_ROOT,
     #                         uri.replace(settings.MEDIA_URL, ""))
@@ -45,18 +48,18 @@ def fetch_resources(uri, rel):
         path = 'static/css/' + path
 
     if 'jquery' in path:
-        print "Ignoring jquery css.."
+        logger.info("Ignoring jquery css..")
         return ''
 
     if 'MenuStyles' in path:
-        print "Igorning MenuStyles.css.."
+        logger.info("Igorning MenuStyles.css..")
         return ''
 
     if 'formalize' in  path:
-        print "Ignoring formalize.."
+        logger.info("Ignoring formalize..")
         return ''
     
-    print "Media fetched: {}".format(path)
+    logger.info("Media fetched: {}".format(path))
     return path
 
 def render_to_pdf(template, variables, context_instance):

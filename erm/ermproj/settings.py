@@ -148,6 +148,17 @@ AUTH_PROFILE_MODULE = 'erm.UserProfile'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+        'debug': {
+            'format': '====> %(levelname)s log:%(name)s func:%(funcName)s => %(message)s'
+        },
+    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -162,12 +173,18 @@ LOGGING = {
         'console':{
             'level': 'INFO',
             'class': 'logging.StreamHandler',
+            'formatter': 'debug',
         },
     },
     'loggers': {
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
+            'propagate': True,
+        },
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
             'propagate': True,
         },
     }

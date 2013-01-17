@@ -7,6 +7,9 @@ from erm.models import BankRisk
 from vendor.models import Vendor
 from exception.models import Exception
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 def rr(template, variables, request):
     """convenience function to shorten render_to_response call"""
@@ -41,7 +44,7 @@ def chart_data(request, chart_id):
     if chart_id == '1':
         params = chart_risks(request)
     elif chart_id == '2':
-        # print "chart_data id = 2, calling chart_vendors()..."
+        logger.info("chart_data id = 2, calling chart_vendors()...")
         params = chart_vendors(request)
     elif chart_id == '3':
         params = chart_exceptions(request)
@@ -62,7 +65,7 @@ def chart_risks(request):
 
     data = []
     for i,risk in enumerate(risks):
-        # print "Risk compositeRisk: ", risk.compositeRisk
+        logger.info("Risk compositeRisk: {}".format(risk.compositeRisk))
         data.append(
             dict(
                 name=risk.name[:15] + '<br/>' + \
@@ -87,7 +90,7 @@ def chart_risks(request):
 def chart_vendors(request):
     global chart_colors
 
-    # print "chart_vendors() executing"
+    logger.info("chart_vendors() executing")
 
     # user's bank
     bank = request.user.get_profile().bank
@@ -95,7 +98,7 @@ def chart_vendors(request):
     # get the highest vendors for this bank
     # TODO: this may need to be inherent risk instead of Vendor Risk?
     vendors = Vendor.objects.filter(bank=bank).order_by('-vendorRiskRating')[:3]
-    # print "Top 3 vendors:", vendors
+    logger.info("Top 3 vendors: {}".format(vendors))
 
     data = []
     for i,vendor in enumerate(vendors):
@@ -121,8 +124,8 @@ def chart_vendors(request):
     # This will be used below to calculate the yAxisMinValue
     min_value = min([v['value'] for v in data])
 
-    print "Vendor data: "
-    print data
+    logger.info("Vendor data: ")
+    logger.info(data)
 
 
     return dict(
@@ -135,7 +138,7 @@ def chart_vendors(request):
 def chart_exceptions(request):
     global chart_colors
 
-    # print "chart_vendors() executing"
+    logger.info("chart_vendors() executing")
 
     # user's bank
     bank = request.user.get_profile().bank

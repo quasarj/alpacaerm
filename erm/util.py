@@ -23,7 +23,7 @@ def render(template_normal, variables, request, template_pdf=None):
                              variables, 
                              context_instance=RequestContext(request))
 
-    logger.debug("rendering to response")
+    logger.info("rendering to response")
     return render_to_response(template_normal, 
                               variables, 
                               context_instance=RequestContext(request))

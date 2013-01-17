@@ -10,8 +10,11 @@ from django.contrib.auth.decorators import login_required
 from erm.models import *
 from erm.forms import *
 import datetime
+import logging
 
 from util import render
+
+logger = logging.getLogger(__name__)
 
 @login_required
 def index(request):
@@ -289,7 +292,7 @@ def search_byname_view(request):
             name_terms += " " + request.POST['search_type'].upper() + " " + \
                     request.POST['term4']
 
-        print name_terms
+        logger.info(name_terms)
 
         if len(name_terms.strip()) < 1:
             error_message = "No search terms entered!"

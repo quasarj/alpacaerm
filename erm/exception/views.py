@@ -7,7 +7,12 @@ from exception.forms import ExceptionForm
 
 from util import render
 import datetime
+import logging
 
+logger = logging.getLogger(__name__)
+
+
+# TODO: This should be using render() from util
 def rr(template, variables, request):
     """convenience function to shorten render_to_response call"""
     return render_to_response(template, 
@@ -208,7 +213,7 @@ def search_action(request):
             if term != '':
                 search_terms.append(term)
 
-        print search_terms
+        logger.info(search_terms)
 
         if len(search_terms) < 1:
             return search_main(request, "No search terms entered!")
