@@ -15,7 +15,7 @@ def render(template_normal, variables, request, template_pdf=None):
     Render a template, either normally or to pdf, depending
     on wether the ?pdf=1 value was passed on the URL.
     """
-    logger.info("Entering render()")
+    logger.info("entered")
 
     if 'pdf' in request.GET and template_pdf:
         logger.debug("rendering to pdf")

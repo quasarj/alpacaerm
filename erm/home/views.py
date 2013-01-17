@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404, Http404
+from django.shortcuts import get_object_or_404, Http404
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -7,15 +7,11 @@ from erm.models import BankRisk
 from vendor.models import Vendor
 from exception.models import Exception
 
+from util import render
 import logging
 
 logger = logging.getLogger(__name__)
 
-def rr(template, variables, request):
-    """convenience function to shorten render_to_response call"""
-    return render_to_response(template, 
-                              variables, 
-                              context_instance=RequestContext(request))
 
 chart_colors = [
     "AFD8F8",
@@ -35,7 +31,9 @@ chart_colors = [
 
 @login_required
 def index(request):
-    return rr('home/index.html', dict(module='home'), request)
+    return render('home/index.html', 
+                  {'module': 'home'}, 
+                  request)
 
 @login_required
 def chart_data(request, chart_id):
@@ -51,7 +49,9 @@ def chart_data(request, chart_id):
     else:
         raise Http404
 
-    return rr('home/chart_data.xml', params, request)
+    return render('home/chart_data.xml', 
+                  params, 
+                  request)
 
 
 def chart_risks(request):

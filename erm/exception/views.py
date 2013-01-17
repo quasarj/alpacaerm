@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404, Http404
+from django.shortcuts import get_object_or_404, Http404
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 
@@ -11,17 +11,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
-# TODO: This should be using render() from util
-def rr(template, variables, request):
-    """convenience function to shorten render_to_response call"""
-    return render_to_response(template, 
-                              variables, 
-                              context_instance=RequestContext(request))
-
 @login_required
 def index(request):
-    return rr('exception/index.html', { 'module': 'exception' }, request)
+    return render('exception/index.html', 
+                  {'module': 'exception'}, 
+                  request)
 
 @login_required
 def add(request):
@@ -61,13 +55,13 @@ def add(request):
         # create a blank form
         form = ExceptionForm()
 
-    return rr('exception/add.html', 
-              { 'form': form,
-                'success_id': success_id,
-                'success_name': success_name,
-                'error_message': error_message,
-                'success_message': success_message },
-              request)
+    return render('exception/add.html', 
+                  { 'form': form,
+                    'success_id': success_id,
+                    'success_name': success_name,
+                    'error_message': error_message,
+                    'success_message': success_message },
+                  request)
 
 @login_required
 def view_item(request, exception_id):
@@ -138,11 +132,11 @@ def search_main(request, error_message=None):
     # get all the Audit Agencies
     agencies = Agency.objects.filter(bank=bank)
 
-    return rr('exception/search.html', 
-              dict(module='exception',
-                   agencies=agencies,
-                   error_message=error_message), 
-              request)
+    return render('exception/search.html', 
+                  {'module': 'exception',
+                   'agencies': agencies,
+                   'error_message': error_message}, 
+                  request)
 
 
 @login_required
@@ -187,11 +181,10 @@ def search_date(request):
 
             exceptions = exceptions.order_by('targetDate', '-compositeRiskScore')
 
-            return rr('exception/search_results.html',
-                      dict(exceptions=exceptions,
-                           method="by Date"),
-                      request)
-
+            return render('exception/search_results.html',
+                          {'exceptions': exceptions,
+                           'method': "by Date"},
+                          request)
 
     return search_main(request, "Unknown error.")
 
@@ -237,11 +230,11 @@ def search_action(request):
 
             # set the search results session var
             request.session['search_results'] = exceptions
-            return rr('exception/search_results.html',
-                      dict(exceptions=exceptions,
-                           method="by Action Items",
-                           search_again="action"),
-                      request)
+            return render('exception/search_results.html',
+                          {'exceptions': exceptions,
+                            'method': "by Action Items",
+                            'search_again': "action"},
+                          request)
 
     return search_main(request, "Unknown error.")
 
@@ -256,10 +249,10 @@ def search_agency(request):
         exceptions = Exception.objects.filter(bank=bank).filter(auditAgency__id__in=source_ids)
 
         request.session['search_results'] = exceptions
-        return rr('exception/search_results.html',
-                  dict(exceptions=exceptions,
-                       method="by Audit Agency"),
-                  request)
+        return render('exception/search_results.html',
+                      {'exceptions': exceptions,
+                       'method': "by Audit Agency"},
+                      request)
 
 
     return search_main(request, "Unknown error.")

@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, get_object_or_404, Http404
+from django.shortcuts import get_object_or_404, Http404
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -18,11 +18,9 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def index(request):
-    return render_to_response('erm/index.html',
-        { 
-            'module': 'erm',
-        },
-        context_instance=RequestContext(request))
+    return render('erm/index.html',
+                  { 'module': 'erm', },
+                  request)
 
 @login_required
 def all_view(request):
@@ -102,11 +100,9 @@ def logout_view(request):
 
 def login_page(request):
     # display the login page
-    return render_to_response('login.html', 
-            { 
-                'module': 'login',
-            },
-            context_instance=RequestContext(request))
+    return render('login.html', 
+                  { 'module': 'login', },
+                  request)
 
 def login_process(request):
     username = request.POST['username']
@@ -125,9 +121,9 @@ def login_process(request):
     else:
 
         # if the login is incorrect
-        return render_to_response('login.html', {
-            'error_message': "Login incorrect.",
-            }, context_instance=RequestContext(request))
+        return render('login.html', 
+                      { 'error_message': "Login incorrect.", }, 
+                      request)
 
 
 @login_required
@@ -168,23 +164,20 @@ def assign_view(request):
                 for rs in risk.riskSources.all():
                     b.riskSources.add(rs)
 
-            return render_to_response('assign_complete.html')
+            return render('assign_complete.html', None, request)
 
 
     # display the assignment form
     all_profiles = RiskProfile.objects.all()
 
-    return render_to_response('assign.html',
-            {
-                'profiles': all_profiles,
-                'error_message': error_message,
-            },
-            context_instance=RequestContext(request))
+    return render('assign.html',
+                  { 'profiles': all_profiles, 
+                    'error_message': error_message, },
+                  request)
 
 @login_required
 def search_view(request):
-    return render_to_response('search.html',
-            context_instance=RequestContext(request))
+    return render('search.html', None, request)
 
 @login_required
 def search_bysource_view(request):
@@ -196,19 +189,17 @@ def search_bysource_view(request):
         risks = BankRisk.objects.filter(bank=bank).filter(riskSources__id__in=source_ids)
 
         request.session['search_results'] = risks
-        return render_to_response('search_results.html',
-            { 'risks': risks,
-              'method': "by Source" },
-            context_instance=RequestContext(request),
-        )
+        return render('search_results.html',
+                      { 'risks': risks,
+                        'method': "by Source" },
+                      request)
 
     # get all the Types used by this bank
     sources = RiskSource.objects.filter(bankrisk__bank=bank).distinct()
 
-    return render_to_response('search_bysource.html',
-            { 'sources': sources }, 
-            context_instance=RequestContext(request),
-    )   
+    return render('search_bysource.html',
+                  { 'sources': sources }, 
+                  request)
 
 @login_required
 def search_bytype_view(request):
@@ -219,19 +210,17 @@ def search_bytype_view(request):
         type_ids = request.POST.getlist('type')
         risks = BankRisk.objects.filter(bank=bank).filter(riskTypes__id__in=type_ids)
 
-        return render_to_response('search_results.html',
-            { 'risks': risks,
-              'method': "by Type" },
-            context_instance=RequestContext(request),
-        )
+        return request('search_results.html',
+                       { 'risks': risks,
+                         'method': "by Type" },
+                       request)
 
     # get all the Types used by this bank
     types = RiskType.objects.filter(bankrisk__bank=bank).distinct()
 
-    return render_to_response('search_bytype.html',
-            { 'types': types }, 
-            context_instance=RequestContext(request),
-    )   
+    return request('search_bytype.html',
+                   { 'types': types }, 
+                   request)
 
 @login_required
 def search_bydate_view(request):
@@ -245,8 +234,10 @@ def search_bydate_view(request):
     if request.POST:
         try:
 
-            from_d = datetime.datetime.strptime(request.POST['from_date'], date_format).date()
-            to_d = datetime.datetime.strptime(request.POST['to_date'], date_format).date()
+            from_d = datetime.datetime.strptime(request.POST['from_date'], 
+                                                date_format).date()
+            to_d = datetime.datetime.strptime(request.POST['to_date'], 
+                                              date_format).date()
         except ValueError:
             error_message = "Incorrect date format entered!"
 
@@ -258,18 +249,18 @@ def search_bydate_view(request):
                     reviewDate__lte=to_d
             )
 
-            return render_to_response('search_results.html',
-                    { 'risks': risks,
-                      'method': "by Date ({} to {})".format(from_d, to_d) },
-            )
+            return render('search_results.html',
+                          { 'risks': risks,
+                            'method': "by Date ({} to {})".format(from_d, to_d) 
+                          },
+                          request)
 
     # get all the Types used by this bank
     # types = RiskType.objects.filter(bankrisk__bank=bank).distinct()
 
-    return render_to_response('search_bydate.html',
-            { 'error_message': error_message }, 
-            context_instance=RequestContext(request),
-    )   
+    return render('search_bydate.html',
+                  { 'error_message': error_message }, 
+                  request)
 
 @login_required
 def search_byname_view(request):
@@ -320,16 +311,15 @@ def search_byname_view(request):
 
             # set the search results session var
             request.session['search_results'] = risks
-            return render_to_response('search_results.html',
-                    { 'risks': risks,
-                      'method': "by Name",
-                      'search_again': "name", },
-            )
+            return render('search_results.html',
+                          { 'risks': risks,
+                            'method': "by Name",
+                            'search_again': "name", },
+                          request)
 
-    return render_to_response('search_byname.html',
-            { 'error_message': error_message }, 
-            context_instance=RequestContext(request),
-    )   
+    return render('search_byname.html',
+                  { 'error_message': error_message }, 
+                  request)
 
 @login_required
 def add_view(request):
@@ -370,13 +360,13 @@ def add_view(request):
         # create a blank form
         form = BankRiskForm()
 
-    return render_to_response('add_risk.html', {
-        'form': form,
-        'success_id': success_id,
-        'success_name': success_name,
-        'error_message': error_message,
-        'success_message': success_message,
-    }, context_instance=RequestContext(request))
+    return render('add_risk.html', 
+                  { 'form': form,
+                    'success_id': success_id,
+                    'success_name': success_name,
+                    'error_message': error_message,
+                    'success_message': success_message, },
+                  request)
 
 
 
