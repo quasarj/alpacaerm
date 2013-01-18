@@ -110,6 +110,11 @@
         //$("#id_riskTypes").multiselect();
         $("select").multiselect();
     });
+
+
+    function deleteRisk() {
+        document.location.href="{% url erm_delete bankrisk.id %}";
+    }
 </script>
 
 <h3>{{ bankrisk }}</h3>
@@ -135,6 +140,7 @@ You do not have permission to modify this Risk.
 {% if user.get_profile.level > 0 %}
 <form action="/erm/risk/{{ bankrisk.id }}/" method="post">{% csrf_token %}
     <input type="submit" value="Save" />
+    <input type="button" value="Delete this Risk" onClick="deleteRisk();"/>
 {% endif %}
     <table class="risktable">
     {{ form }}

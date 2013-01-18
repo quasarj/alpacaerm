@@ -369,6 +369,10 @@ def add_view(request):
                   request)
 
 
+@login_required
+def delete_view(request, bankrisk_id):
+    raise Http404
+
 
 @login_required
 def report_view(request):

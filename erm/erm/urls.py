@@ -9,6 +9,7 @@ urlpatterns = patterns('erm.views',
     url(r'^risk/(?P<bankrisk_id>\d+)/$', 'bankrisk_view', name='risk'),
     url(r'^assign/$', 'assign_view', name='assign'),
     url(r'^add/$', 'add_view', name='add'),
+    url(r'^delete/(?P<bankrisk_id>\d+)/$', 'delete_view', name='erm_delete'),
     url(r'^all/$', 'all_view', name='all'),
 
     url(r'^search/$', 'search_view', name='search'),
