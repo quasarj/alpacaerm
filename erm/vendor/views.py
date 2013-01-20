@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, Http404
+from django.shortcuts import get_object_or_404, Http404, redirect
 from django.contrib.auth.decorators import login_required
 
 from vendor.models import Vendor, CLASS_CHOICES
@@ -60,6 +60,33 @@ def add(request):
                 'error_message': error_message,
                 'success_message': success_message },
               request)
+
+
+@login_required
+def delete(request, vendor_id):
+
+    bank = request.user.get_profile().bank
+    vend = get_object_or_404(Vendor, pk=vendor_id, bank=bank)
+
+    if request.method == 'POST':
+        logger.info("posting")
+
+        # delete the bankrisk object here
+
+        vend.delete()
+
+
+        # redirect back to.. where? TODO: figure out where :(
+        # for now, just send back to the All list
+        return redirect("vendor_view")
+
+
+    else:
+
+        return render('vendor/delete.html',
+                      {'vendor': vend, },
+                      request)
+
 
 @login_required
 def view_all(request):

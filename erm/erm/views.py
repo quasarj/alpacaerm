@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, Http404
+from django.shortcuts import get_object_or_404, Http404, redirect
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -371,7 +371,27 @@ def add_view(request):
 
 @login_required
 def delete_view(request, bankrisk_id):
-    raise Http404
+
+    bankrisk = get_object_or_404(BankRisk, pk=bankrisk_id)
+
+    if request.method == 'POST':
+        logger.info("posting")
+
+        # delete the bankrisk object here
+
+        bankrisk.delete()
+
+
+        # redirect back to.. where? TODO: figure out where :(
+        # for now, just send back to the All list
+        return redirect("all")
+
+
+    else:
+
+        return render('erm/delete_risk.html',
+                      {'bankrisk': bankrisk, },
+                      request)
 
 
 @login_required

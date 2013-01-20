@@ -13,4 +13,5 @@ urlpatterns = patterns('exception.views',
     url(r'^search/agency/$', 'search_agency', name='exception_search_agency'),
 
     url(r'^item/(?P<exception_id>\d+)/$', 'view_item', name='exception_item'),
+    url(r'^delete/(?P<exception_id>\d+)/$', 'delete', name='exception_delete'),
 )

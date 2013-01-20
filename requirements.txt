@@ -2,5 +2,5 @@ django==1.4.1
 south
 django-extensions
 django-reversion
-#xhtml2pdf
+xhtml2pdf
 #something else

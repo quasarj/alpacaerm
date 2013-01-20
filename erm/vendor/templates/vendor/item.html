@@ -48,6 +48,13 @@
 
 
     });
+
+
+    function deleteVendor() {
+        document.location.href="{% url vendor_delete vendor.id %}";
+    }
+
+
 </script>
 <h1>Vendor Detail</h1>
 <h2>{{ vendor.name }}</h2>
@@ -76,6 +83,7 @@ You do not have permission to modify this Vendor.
 {% if user.get_profile.level > 0 %}
 <form action="#" method="post">{% csrf_token %}
     <input type="submit" value="Save" />
+    <input type="button" value="Delete this Vendor" onClick="deleteVendor();"/>
 {% endif %}
     <!-- <table class="risktable"> -->
     <!-- {# form #} -->

@@ -36,6 +36,10 @@
 
         $("#id_riskSources").multiselect();
     });
+
+    function deleteException() {
+        document.location.href="{% url exception_delete exception.id %}";
+    }
 </script>
 <h1>Exception Detail</h1>
 <h2>{{ exception.actionItem }}</h2>
@@ -63,6 +67,7 @@ You do not have permission to modify this Exception.
 {% if user.get_profile.level > 0 %}
 <form action="#" method="post">{% csrf_token %}
     <input type="submit" value="Save" />
+    <input type="button" value="Delete this Exception" onClick="deleteException();"/>
 {% endif %}
     <table class="risktable">
     {{ form }}

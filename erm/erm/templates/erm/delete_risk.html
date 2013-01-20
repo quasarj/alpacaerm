@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Delete Risk{% endblock %}
+
+{% block style %}
+<style type="text/css">
+</style>
+{% endblock %}
+{% block content %}
+
+<script>
+    $(function() {
+    });
+</script>
+
+<h3>Delete Risk</h3>
+
+{% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
+{% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
+
+{% if success_id %}
+{% endif %}
+
+<form action="" method="post">{% csrf_token %}
+
+    <p>Are you sure you want to delete this risk?</p>
+    <p>{{ bankrisk.name }}</p>
+    <p>
+        Warning: Deleting is permanent! 
+        Please make sure you are certain before clicking Delete.
+    </p>
+    <input type="submit" value="Delete Risk" />
+    <input type="button" value="Cancel" onClick="javascript:history.back();"/>
+</form>
+{% endblock %}

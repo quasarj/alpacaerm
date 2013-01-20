@@ -12,4 +12,5 @@ urlpatterns = patterns('vendor.views',
     url(r'^search_pending/$', 'search_pending', name='vendor_search_pending'),
 
     url(r'^item/(?P<vendor_id>\d+)/$', 'view_item', name='vendor_item'),
+    url(r'^delete/(?P<vendor_id>\d+)/$', 'delete', name='vendor_delete'),
 )

@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, Http404
+from django.shortcuts import get_object_or_404, Http404, redirect
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 
@@ -63,14 +63,42 @@ def add(request):
                     'success_message': success_message },
                   request)
 
+
+def delete(request, exception_id):
+
+    bank = request.user.get_profile().bank
+    ex = get_object_or_404(Exception, pk=exception_id, bank=bank)
+
+    if request.method == 'POST':
+        logger.info("posting")
+
+        # delete the bankrisk object here
+
+        ex.delete()
+
+
+        # redirect back to.. where? TODO: figure out where :(
+        # for now, just send back to the All list
+        return redirect("exception_open")
+
+
+    else:
+
+        return render('exception/delete.html',
+                      {'ex': ex, },
+                      request)
+
+
 @login_required
 def view_item(request, exception_id):
     success_message = None
     error_message = None
 
+    bank = request.user.get_profile().bank
+
     # 0 means create a new one
     if exception_id != 0:
-        ex = get_object_or_404(Exception, pk=exception_id)
+        ex = get_object_or_404(Exception, pk=exception_id, bank=bank)
 
     if request.method == 'POST':
 
