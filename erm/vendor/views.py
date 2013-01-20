@@ -104,7 +104,8 @@ def view_item(request, vendor_id):
     success_message = None
     error_message = None
 
-    vend = get_object_or_404(Vendor, pk=vendor_id)
+    bank = request.user.get_profile().bank
+    vend = get_object_or_404(Vendor, pk=vendor_id, bank=bank)
 
     if request.method == 'POST':
 

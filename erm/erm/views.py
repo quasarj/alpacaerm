@@ -41,7 +41,8 @@ def bankrisk_view(request, bankrisk_id):
     error_message = None
     success_message = None
 
-    bankrisk = get_object_or_404(BankRisk, pk=bankrisk_id)
+    bank = request.user.get_profile().bank
+    bankrisk = get_object_or_404(BankRisk, pk=bankrisk_id, bank=bank)
     if request.method == 'POST':
 
         # so some posty stuff
@@ -372,7 +373,8 @@ def add_view(request):
 @login_required
 def delete_view(request, bankrisk_id):
 
-    bankrisk = get_object_or_404(BankRisk, pk=bankrisk_id)
+    bank = request.user.get_profile().bank
+    bankrisk = get_object_or_404(BankRisk, pk=bankrisk_id, bank=bank)
 
     if request.method == 'POST':
         logger.info("posting")
