@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('config.views',
     url(r'^$', 'index', name="config"),
-    url(r'^user/$', 'index', name="config_user"),
+    url(r'^user/$', 'user', name="config_user"),
     url(r'^erm/$', 'index', name="config_erm"),
     url(r'^dashboard/$', 'index', name="config_dashboard"),
     # url(r'^(?P<poll_id>\d+)/$', 'detail'),
