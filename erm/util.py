@@ -29,6 +29,18 @@ def render(template_normal, variables, request, template_pdf=None):
                               context_instance=RequestContext(request))
 
 
+def no_permission(module, request, message=None):
+    """
+    Just a simple page to notify the user that they
+    lack permissions. To be called from views that require certain
+    permission levels.
+    """
+    return render('home/no_permission.html',
+                  {'module': module,
+                   'message': message},
+                  request)
+
+
 def model_to_dict(instance, fields=None, exclude=None):
     """
     Returns a dict containing the data in the ``instance`` where:
