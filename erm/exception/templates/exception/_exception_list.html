@@ -1,4 +1,14 @@
-<table class = "prettytable">
+<script type="text/javascript">
+    $(function() { // things to do when the page loads
+            $(".tablesorter").tablesorter({
+                widgets: ['zebra'],
+                sortList: [[3,1]]
+            });
+    });
+</script>
+
+<table class = "tablesorter">
+    <thead>
     <tr>
         <th>Action Item</th>
         <th>Audit/Exam Agency</th>
@@ -6,7 +16,9 @@
         <th>Composite Risk Score</th>
         <th>Status</th>
     </tr>
+    </thead>
 
+    <tbody>
     {% for e in exceptions %}
     <tr>
         <td><a href="{% url exception_item e.id %}" />{{ e.actionItem }}</a></td>
@@ -16,4 +28,5 @@
         <td>{{ e.prettyStatus }}</td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>

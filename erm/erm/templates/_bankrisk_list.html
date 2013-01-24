@@ -1,11 +1,23 @@
-<table class = "prettytable">
+<script type="text/javascript">
+    $(function() { // things to do when the page loads
+            $(".tablesorter").tablesorter({
+                widgets: ['zebra'],
+                sortList: [[0,0]]
+            });
+    });
+</script>
+
+<table class = "tablesorter">
+    <thead>
     <tr>
         <th>Name</th>
         <th style="width: 100px;">Last Reviewed Date</th>
         <th>Ownership</th>
         <th>Trending</th>
     </tr>
+    </thead>
 
+    <tbody>
     {% for bankrisk in risks %}
     <tr>
         <td><a href="/erm/risk/{{ bankrisk.id }}" />{{ bankrisk.name }}</a></td>
@@ -18,4 +30,5 @@
         <td>{{ bankrisk.trending }}</td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>

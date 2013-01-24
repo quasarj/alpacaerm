@@ -1,11 +1,23 @@
-<table class = "prettytable">
+<script type="text/javascript">
+    $(function() { // things to do when the page loads
+            $(".tablesorter").tablesorter({
+                widgets: ['zebra'],
+                sortList: [[2,1]]
+            });
+    });
+</script>
+
+<table class = "tablesorter">
+    <thead>
     <tr>
         <th>Vendor Name</th>
         <th style="width: 100px;">Classification</th>
         <th>Vendor Risk Rating</th>
         <th>Next Review Date</th>
     </tr>
+    </thead>
 
+    <tbody>
     {% for v in vendors %}
     <tr>
         <td><a href="{% url vendor_item v.id %}" />{{ v.name }}</a></td>
@@ -14,4 +26,5 @@
         <td>{{ v.nextReviewDate }}</td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
