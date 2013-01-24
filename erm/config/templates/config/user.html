@@ -3,15 +3,67 @@
 {% block title %}User Profile Administration{% endblock %}
 
 {% block content %}
-<p>
-list existing users for this bank, with checkboxes before them, with an action option
-including delete and deactivate
-</p>
 
-<p>
-boxes to enter new user, including full name, username, email address?? and a
-drop down for security level
-</p>
+<script type="text/javascript">
+    $(function() { // things to do when the page loads
+            $(".tablesorter").tablesorter({
+                widgets: ['zebra'],
+                sortList: [[1,0]]
+            });
+    });
+</script>
 
-Make a form for this (not a model form). It should be nice.
+{% if message %}<p class="success">{{ message }}</p>{% endif %}
+
+
+<h3>Exisiting Users</h3>
+<hr />
+
+<form method="post" action="{% url config_user_delete %}">{% csrf_token %}
+    Action:
+    <select name="action">
+    <option value="" selected="selected">--------</option>
+    <option value="delete">Delete selected users</option>
+    <option value="deactivate">Deactivate selected users</option>
+    <option value="activate">Activate selected users</option>
+    </select>
+    <input type="submit" value="Go" />
+    <table class="tablesorter">
+    <thead>
+    <tr>
+        <th>x</th>
+        <th>Username</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Access Level</th>
+        <th>Active</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in all_bank_users %}
+        <tr>
+            <td><input type="checkbox" name="selected_users" value="{{ user.user.id }}"/></td>
+            <td><a href="">{{ user.user.username }}</a></li>
+            <td>{{ user.user.first_name }}</li>
+            <td>{{ user.user.last_name }}</li>
+            <td>{{ user.user.email }}</li>
+            <td>{{ user.get_level }}</li>
+            <td>{{ user.is_active }}</li>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</form>
+
+<h3>Add New User</h3>
+<hr />
+
+<form method="post" action="">{% csrf_token %}
+<table>
+{{ add_user_form }}
+</table>
+<input type="submit" value="Add" />
+</form>
+
 {% endblock %}

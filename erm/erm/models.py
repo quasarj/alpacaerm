@@ -322,5 +322,16 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return "{}: {}".format(self.bank.name, self.user.username)
 
+    def is_active(self):
+        if self.user.is_active:
+            return "Yes"
+        else:
+            return "No"
+
+    def get_level(self):
+        return {0: "Read Only",
+                1: "Update",
+                2: "Admin" }[self.level]
+
 
 
