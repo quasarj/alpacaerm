@@ -5,7 +5,6 @@ from django.contrib import admin
 
 
 admin.site.register(Bank)
-admin.site.register(Risk)
 
 
 
