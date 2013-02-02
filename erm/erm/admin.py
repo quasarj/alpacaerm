@@ -13,8 +13,6 @@ class BankRiskAdmin(reversion.VersionAdmin):
 admin.site.register(BankRisk, BankRiskAdmin)
 
 
-admin.site.register(RiskProfile)
-
 class RiskTypeAdmin(reversion.VersionAdmin):
     pass
 admin.site.register(RiskType, RiskTypeAdmin)

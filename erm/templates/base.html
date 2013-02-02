@@ -60,7 +60,6 @@
                     <li><a href="{% url all %}">View All</a></li>
                     <li><a href="{% url search %}">Search</a></li>
                     {% if user.get_profile.level > 0 %}
-                    <!-- <li><a href="{% url assign %}">Assign Risks from Profile</a></li> -->
                     <li><a href="{% url add %}">Create New</a></li>
                     {% endif %}
                 </ul>

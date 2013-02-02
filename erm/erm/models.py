@@ -257,12 +257,12 @@ class BankRisk(models.Model):
 
 # a RiskProfile is a set of risks that can be assigned to a bank
 # all at once
-class RiskProfile(models.Model):
-    name = models.CharField(max_length=200)
-    risks = models.ManyToManyField(BankRisk)
+# class RiskProfile(models.Model):
+#     name = models.CharField(max_length=200)
+#     risks = models.ManyToManyField(BankRisk)
 
-    def __unicode__(self):
-        return self.name
+#     def __unicode__(self):
+#         return self.name
 
 class UserProfile(models.Model):
     # link to the actual user
