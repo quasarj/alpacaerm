@@ -211,7 +211,7 @@ def search_bytype_view(request):
         type_ids = request.POST.getlist('type')
         risks = BankRisk.objects.filter(bank=bank).filter(riskTypes__id__in=type_ids)
 
-        return request('search_results.html',
+        return render('search_results.html',
                        { 'risks': risks,
                          'method': "by Type" },
                        request)
@@ -219,7 +219,7 @@ def search_bytype_view(request):
     # get all the Types used by this bank
     types = RiskType.objects.filter(bankrisk__bank=bank).distinct()
 
-    return request('search_bytype.html',
+    return render('search_bytype.html',
                    { 'types': types }, 
                    request)
 
