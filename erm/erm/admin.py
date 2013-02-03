@@ -5,7 +5,6 @@ from django.contrib import admin
 
 
 admin.site.register(Bank)
-admin.site.register(Risk)
 
 
 
@@ -13,8 +12,6 @@ class BankRiskAdmin(reversion.VersionAdmin):
     pass
 admin.site.register(BankRisk, BankRiskAdmin)
 
-
-admin.site.register(RiskProfile)
 
 class RiskTypeAdmin(reversion.VersionAdmin):
     pass

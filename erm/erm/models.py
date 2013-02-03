@@ -39,10 +39,9 @@ class RiskManager(models.Model):
         return self.name
 
 
-class AbstractRisk(models.Model):
+class BankRisk(models.Model):
 
-    class Meta:
-        abstract = True
+    bank = models.ForeignKey(Bank)
 
     name = models.CharField(max_length=200)
 
@@ -235,17 +234,8 @@ class AbstractRisk(models.Model):
         self.lastCompositeRisk = self.compositeRisk
         self.compositeRisk = self.calc_composite_risk()
 
-        super(AbstractRisk, self).save(*args, **kwargs)
+        super(BankRisk, self).save(*args, **kwargs)
 
-
-
-class Risk(AbstractRisk):
-
-    def __unicode__(self):
-        return self.name
-
-class BankRisk(AbstractRisk):
-    bank = models.ForeignKey(Bank)
 
     def __unicode__(self):
         return "{}: {}".format(self.bank.name, self.name)
@@ -264,51 +254,15 @@ class BankRisk(AbstractRisk):
         # return flat if it isn't anything else, or if there was an error
         return "Flat"
 
-# class BankRiskHistory(AbstractRisk):
-#     bankRisk = models.ForeignKey(BankRisk)
-#     saved_time = models.DateTimeField()
-
-#     def load(self, bankrisk=None):
-#         """load data from a bankrisk"""
-
-#         if bankrisk:
-#             # attempt to copy the BankRisk data
-
-#             # ugly hack to copy from one model to another
-#             for attr in bankrisk.__dict__:
-#                 if attr != '_state' and attr != 'id':
-#                     setattr(self, attr, getattr(bankrisk, attr))
-
-#             self.bankRisk = bankrisk
-#             self.saved_time = timezone.now()
-
-#             # the above trick doesn't work for 
-#             # many-to-many relationships, so do them
-#             # manually here.
-#             # Also, the object must be saved before
-#             # m2m relaitonships can be added
-#             self.save()
-
-#             for rm in bankrisk.riskManagers.all():
-#                 self.riskManagers.add(rm)
-
-#             for rt in bankrisk.riskTypes.all():
-#                 self.riskTypes.add(rt)
-
-#             for rs in bankrisk.riskSources.all():
-#                 self.riskSources.add(rs)
-
-#     def __unicode__(self):
-#         return "{}: {}".format(self.bankRisk.id, self.saved_time)
 
 # a RiskProfile is a set of risks that can be assigned to a bank
 # all at once
-class RiskProfile(models.Model):
-    name = models.CharField(max_length=200)
-    risks = models.ManyToManyField(Risk)
+# class RiskProfile(models.Model):
+#     name = models.CharField(max_length=200)
+#     risks = models.ManyToManyField(BankRisk)
 
-    def __unicode__(self):
-        return self.name
+#     def __unicode__(self):
+#         return self.name
 
 class UserProfile(models.Model):
     # link to the actual user
