@@ -21,4 +21,8 @@ urlpatterns = patterns('erm.views',
     url(r'^report/$', 'report_view', name='report'),
     url(r'^report_edit_text/$', 'report_edit_text', name='report_edit_text'),
 
+
+    url(r'^banksetup/$', 'banksetup_view', name='erm_banksetup'),
+
+
 )

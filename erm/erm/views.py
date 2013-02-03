@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, Http404, redirect
+from django.shortcuts import get_object_or_404, Http404, redirect, HttpResponse
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -610,5 +610,120 @@ def report_edit_text(request):
                     'error_message': error_message,
                     'success_message': success_message },
                   request)
+
+
+
+@login_required
+def banksetup_view(request):
+    logger.info("entered")
+
+    # ignore requests from users 
+    # that are not staff
+    if not request.user.is_staff:
+        logger.info("User it nost staff! Returning 404.")
+        raise Http404
+
+    bank1 = Bank.objects.get(pk=1)
+
+    if request.POST:
+        
+        if request.POST['bank'] == "":
+            logger.info("No bank selected")
+            return HttpResponse("No bank selected!")
+
+        bank_id = int(request.POST['bank'])
+        bank = Bank.objects.get(pk=bank_id)
+
+        logger.info("Copying into bank: {}".format(bank))
+
+        # copy risks from bank1 to bank
+
+        for risk in BankRisk.objects.filter(bank=bank1):
+            logger.info("Copying risk: {}".format(risk))
+
+            b = BankRisk()
+
+            # ugly hack to clone the Risk to a BankRisk
+            for attr in risk.__dict__:
+                if attr != '_state' and attr != 'id':
+                    setattr(b, attr, getattr(risk, attr))
+
+            # do this after the copy, so we don't pick up the old value!
+            b.bank = bank
+
+            b.save()
+
+            # now add the m2m stuff
+            for rm in risk.riskManagers.all():
+                b.riskManagers.add(rm)
+
+            for rt in risk.riskTypes.all():
+                b.riskTypes.add(rt)
+
+            for rs in risk.riskSources.all():
+                b.riskSources.add(rs)
+
+            # no need to save after m2ms, they are saved immediatly
+
+
+        # copy vendors
+        from vendor.models import Vendor
+
+        for vendor in Vendor.objects.filter(bank=bank1):
+            logger.info("Copying vendor: {}".format(vendor))
+
+            v = Vendor()
+
+            # ugly hack to clone the Risk to a BankRisk
+            for attr in vendor.__dict__:
+                if attr != '_state' and attr != 'id':
+                    setattr(v, attr, getattr(vendor, attr))
+
+            # do this after the copy, so we don't pick up the old value!
+            v.bank = bank
+
+            v.save()
+
+            # vendors have no m2m fields
+
+
+        # copy exceptions
+
+        from exception.models import Exception
+
+        for ex in Exception.objects.filter(bank=bank1):
+            logger.info("Copying exception: {}".format(ex))
+
+            e = Exception()
+
+            # ugly hack to clone the Risk to a BankRisk
+            for attr in ex.__dict__:
+                if attr != '_state' and attr != 'id':
+                    setattr(e, attr, getattr(ex, attr))
+
+            # do this after the copy, so we don't pick up the old value!
+            e.bank = bank
+
+            e.save()
+
+            # now add the m2m stuff
+            for rs in ex.riskSources.all():
+                e.riskSources.add(rs)
+
+        # this does not need to be pretty
+        return HttpResponse("Copy complete.")
+
+
+
+    # all banks except Bank 1
+    all_banks = Bank.objects.exclude(pk=1)
+
+
+    return render('erm/banksetup.html',
+                  { 'module': 'erm', 
+                    'all_banks': all_banks, 
+                    'bank1': bank1, },
+                  request)
+
 
 

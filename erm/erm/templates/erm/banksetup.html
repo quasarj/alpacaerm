@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Bank Setup / Copy{% endblock %}
+
+{% block style %}
+<style type="text/css">
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h1>Bank Setup / Copy </h1>
+
+
+<p>This screen will copy all Risks, Vendors and Exceptions 
+from {{ bank1 }} to the selected bank.</p>
+
+<p><strong>NOTE:</strong> This may take a long time! Do not click Copy more than once,
+even if the page takes a long time to load!</p>
+
+
+<form action="" method="post">{% csrf_token %}
+<p>
+Bank:
+<select name="bank">
+    <option value="" selected="selected">-----</option>
+{% for bank in all_banks %}
+    <option value="{{ bank.id }}">{{ bank }}</option>
+{% endfor %}
+</select>
+</p>
+
+<input type="submit" value="Copy"/>
+</form>
+
+{% endblock %}
