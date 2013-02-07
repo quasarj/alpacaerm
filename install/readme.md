@@ -122,7 +122,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     "/home/alpacaerm/alpacaerm/erm/templates",
 )
-
+```
 
 ### Configure logger
 This section is not written yet.
