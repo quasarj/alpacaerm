@@ -29,14 +29,23 @@ Don't forget it, you'll need it later.
 ## Add User
 
 ; set password to whatever you want, don't forget it
+```
 adduser alpacaerm
+```
 
 ; add the user to the sudo group
+```
 usermod -a -G sudo alpacaerm
+```
 
-; confirm with groups
+Confirm with groups
+```
+groups alpacaerm
+```
+Make sure it lists the sudo group.
 
-; now reconnect with the new user
+
+Now reconnect with the new user
 
 
 
