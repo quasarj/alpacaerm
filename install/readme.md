@@ -8,15 +8,15 @@ versions. They will not work on other systems without some modification.
 
 ## Install Packages
 
-mysql-server
-git
-build-essential
-apache2
-libapache2-mod-wsgi
+* mysql-server
+* git
+* build-essential
+* apache2
+* libapache2-mod-wsgi
 
-python-dev
-python-mysqldb
-python-pip
+* python-dev
+* python-mysqldb
+* python-pip
 
 ```
 sudo apt-get update
@@ -25,7 +25,6 @@ sudo apt-get install mysql-server git build-essential apache2 libapache2-mod-wsg
 
 Set the mysql root password when it asks for it.
 Don't forget it, you'll need it later.
-
 
 ## Add User
 
@@ -41,90 +40,118 @@ usermod -a -G sudo alpacaerm
 
 
 
-check out the repo
-------------------
+## Check out the repo
+```
 git clone http://github.com/quasarj/alpacaerm
+```
 
-
-pip install deps
-----------------
+## pip install deps
+```
 cd alpacaerm
 sudo pip install -r requirements.txt
+```
 
 
-; test it if desired,
+## test it if desired
+```
 cd erm
-./manage runserver
+./manage runserver 0.0.0.0:8000
+```
 
+Navigate to the server's hostname:8000 to test if it's working.
+Press control+c to terminate the test server.
 
+## Configure some stuff
 
-configure some stuff
---------------------
-
-;configure the mysql database
+### Configure the mysql database
 ; password as you configured earlier
+Connect to mysql as root. When prompted, enter the password you set ealier
+for mysql root.
+```
 mysql -u root -p
+```
 
-
-; create database and users
+Create database and users
+```
 create database alpacaerm;
 create user 'alpacaerm'@'localhost' identified by 'mypassword';
 grant all on alpacaerm.* to 'alpacaerm'@'localhost';
 exit
+```
 
+### Export data from the sqlite database
+If you wish to migrate the data from the test database into this
+deployment, you must complete this setp.
 
-export data from the sqlite database
-; this must be done in several steps, to help with issues with loading
+```
 ./manage.py dumpdata contenttypes > types.json
 ./manage.py dumpdata auth > auth.json
 ./manage.py dumpdata erm vendor exception > base.json
+```
 
 
+### Switch settings file to new db
+In the install directory there is an example settings.py file.
+This file contains all the settings needed if you follow these 
+instructions exactly. 
 
-## switch settings file to new db
-; set database settings (per earlier config)
+Copy it into place, even if you used different settings.
 ```
 cp ../install/settings.py ermproj/
 ```
 
+#### Custom files settings
+If you used different usernames or passwords
+or paths, you will need to edit the settings.py file and 
+update it with those settings at this time.
 
-### Custom files settings
-If you put your files somewhere else, set these.
-;set STATIC_ROOT
+If you used different usernames or passwords, set those at the top of the file.
+
+If you put your files somewhere else, modify STATIC_ROOT and MEDIA_ROOT.
+Note: These are already in the file, find them and change them.
+```
 STATIC_ROOT = '/home/alpacaerm/alpacaerm/staticfiles/'
-
-; set MEDIA_ROOT
 MEDIA_ROOT = '/home/alpacaerm/alpacaerm/mediafiles/'
+```
 
-; set the template path
-/home/alpacaerm/alpacaerm/erm/templates
+Also set the template path correctly.
+```
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    "/home/alpacaerm/alpacaerm/erm/templates",
+)
 
 
+### Configure logger
+This section is not written yet.
 
-; configure logger
-; to come later
-
-; run collectstatic! -----------
+### Collect static files
+```
 ./manage.py collectstatic
+```
 
+### Sync and migrate database
+Make sure you say NO to the question about adding a super user.
 
-;run syncdb and migrations ------------------
-; make sure you say NO to the question about adding a super user
 ```
 ./manage.py syncdb
 ./manage.py migrate
 ```
 
 
-import data into the mysql database
-; this must be done in several steps
-; first, clear the tables auth_permission and django_content_type
+### Import data into the mysql database
+If you are migrating the data from the test database, you now need to
+import it into the new mysql database.
+
+First, clear the tables auth_permission and django_content_type.
 ```
 echo "delete from auth_permission;" | mysql -u alpacaerm -pmypassword alpacaerm
 echo "delete from django_content_type;" | mysql -u alpacaerm -pmypassword  alpacaerm
 ```
 
-; then load the data!
+Then load the data.
 ```
 ./manage.py loaddata types.json
 ./manage.py loaddata auth.json
