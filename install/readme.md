@@ -13,7 +13,7 @@ These are the basic prerequisites to install the system on any server:
 * Development headers for Python, for compiling some python modules (like PIL)
 * PIP, the Python package manager
 * Apache 2
-* mod_wsgi (must be compiled against python 2.7)_
+* mod_wsgi (must be compiled against python 2.7)
 * MySQL (or another database server supported by django)
 
 
@@ -26,7 +26,6 @@ These packages are required:
 * build-essential
 * apache2
 * libapache2-mod-wsgi
-
 * python-dev
 * python-mysqldb
 * python-pip
