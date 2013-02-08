@@ -15,6 +15,7 @@ These are the basic prerequisites to install the system on any server:
 * Apache 2
 * mod_wsgi (must be compiled against python 2.7)
 * MySQL (or another database server supported by django)
+* git
 
 
 ## Install Packages
