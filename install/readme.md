@@ -83,7 +83,7 @@ cd erm
 Navigate to the server's hostname:8000 to test if it's working.
 Press control+c to terminate the test server.
 
-## Configure some stuff
+## Configure everything
 
 ### Configure the mysql database
 Connect to mysql as root. When prompted, enter the password you set ealier
