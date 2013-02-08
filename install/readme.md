@@ -2,11 +2,24 @@ Install instructions.
 
 ## Prerequisites
 These instructions are written specifically for Ubuntu Server 12.10.
-They should work without modification on 12.04, and maybe on older Ubuntu
-versions. They will not work on other systems without some modification.
+They have also been tested on Ubuntu Server 12.04, and may work on earlier
+versions of Ubuntu Server. They will not work on other systems without 
+some modification.
+
+
+These are the basic prerequisites to install the system on any server:
+
+* Python 2.7
+* Development headers for Python, for compiling some python modules (like PIL)
+* PIP, the Python package manager
+* Apache 2
+* mod_wsgi (must be compiled against python 2.7)_
+* MySQL (or another database server supported by django)
 
 
 ## Install Packages
+
+These packages are required:
 
 * mysql-server
 * git
@@ -18,6 +31,7 @@ versions. They will not work on other systems without some modification.
 * python-mysqldb
 * python-pip
 
+Install them with:
 ```
 sudo apt-get update
 sudo apt-get install mysql-server git build-essential apache2 libapache2-mod-wsgi python-dev python-mysqldb python-pip
