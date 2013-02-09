@@ -49,6 +49,11 @@ class BankRisk(models.Model):
                                   blank=True, 
                                   verbose_name="Last Review Date")
 
+    assignee = models.CharField(null=True,
+                                blank=True,
+                                max_length=200, 
+                                verbose_name="Assigned To")
+
     riskTypes = models.ManyToManyField(
             RiskType, 
             null=True, 
