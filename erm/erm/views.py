@@ -639,6 +639,17 @@ def banksetup_view(request):
 
         logger.info("Copying into bank: {}".format(bank))
 
+        # copy the Bank Text
+        bank.report_risk_ass_ratings_message = bank1.report_risk_ass_ratings_message
+        bank.report_risk_scoring_by_source_message = bank1.report_risk_scoring_by_source_message
+        bank.report_vendor_ass_message = bank1.report_vendor_ass_message
+        bank.report_dist_by_type_message = bank1.report_dist_by_type_message
+        bank.report_class_by_bu_message = bank1.report_class_by_bu_message
+        bank.report_action_items_summary_message = bank1.report_action_items_summary_message
+        bank.report_summary_conclusions_message = bank1.report_summary_conclusions_message
+        bank.report_footer_message = bank1.report_footer_message
+        bank.save()
+
         # copy risks from bank1 to bank
 
         for risk in BankRisk.objects.filter(bank=bank1):
