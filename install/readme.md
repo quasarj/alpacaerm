@@ -77,7 +77,7 @@ sudo pip install -r requirements.txt
 ## Test, if desired
 ```
 cd erm
-./manage runserver 0.0.0.0:8000
+./manage.py runserver 0.0.0.0:8000
 ```
 
 Navigate to the server's hostname:8000 to test if it's working.
