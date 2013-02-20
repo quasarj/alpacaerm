@@ -13,6 +13,7 @@ import datetime
 import logging
 
 from util import render
+import erm.report as report
 
 logger = logging.getLogger(__name__)
 
@@ -401,6 +402,74 @@ def delete_view(request, bankrisk_id):
 
 @login_required
 def report_view(request):
+
+    bank = request.user.get_profile().bank
+
+    sone = get_risk_assessment_summary(bank.id)
+    stwo = None
+    sthree = None
+    sfour = None
+
+    return render('erm/report.html',
+            {
+                "sone":     sone,
+                "stwo":     stwo,
+                "sthree":   sthree,
+                "sfour":    sfour,
+            },
+            request,
+            'erm/report.html')
+
+
+# these functions should be moved to erm.report when finished
+def get_risk_assessment_summary(bank_id):
+    from django.db import connection
+    cursor = connection.cursor()
+
+    cursor.execute("""
+select
+a.name as name,
+sum(a.high) as high,
+sum(a.moderate) as moderate,
+sum(a.trend_high) as trend_high,
+sum(a.trend_low) as trend_low,
+sum(a.trend_flat) as trend_flat,
+count(*) as count
+from (
+        select
+        rs.name,
+        br.riskRating > 2.5 as high,
+        br.riskRating < 2.5 as moderate,
+        br.riskRating,
+        br.lastRiskRating,
+        br.riskRating > br.lastRiskRating as trend_high,
+        br.riskRating < br.lastRiskRating as trend_low,
+        br.riskRating = br.lastRiskRating as trend_flat
+
+        from erm_risksource rs
+        join erm_bankrisk_riskSources brs on brs.risksource_id = rs.id
+        join erm_bankrisk br on brs.bankrisk_id = br.id
+        
+        where br.bank_id = %s
+) a
+
+group by a.name
+order by a.name
+
+    """, [bank_id])
+
+    desc = cursor.description
+    ret = [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
+
+    logger.info(ret)
+    return ret
+
+
+
+def report_view_old(request):
     """
     generate the executive report
     """

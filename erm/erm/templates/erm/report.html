@@ -30,15 +30,15 @@
                 <th>Moderate</th>
                 <th>Decreasing</th>
             </tr>
-            {% for line,data in sone.items %}
+            {% for data in sone %}
             {% if data.count > 0 %}
             <tr>
-                <td>{{ line }}</td>
+                <td>{{ data.name }}</td>
                 <td>{{ data.count }}</td>
                 <td>{{ data.high|nozero }}</td>
-                <td>{{ data.increasing|nozero }}</td>
+                <td>{{ data.trend_high|nozero }}</td>
                 <td>{{ data.moderate|nozero }}</td>
-                <td>{{ data.decreasing|nozero }}</td>
+                <td>{{ data.trend_low|nozero }}</td>
             </tr>
             {% endif %}
             {% endfor %}
