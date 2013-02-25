@@ -137,6 +137,10 @@ You do not have permission to modify this Risk.
 {% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
 {% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
 
+<p>Composite Risk Score: {{ bankrisk.compositeRisk|floatformat:2 }}</p>
+<p>Risk Rating: {{ bankrisk.riskRating|floatformat:2 }}</p>
+
+
 {% if user.get_profile.level > 0 %}
 <form action="/erm/risk/{{ bankrisk.id }}/" method="post">{% csrf_token %}
     <input type="submit" value="Save" />

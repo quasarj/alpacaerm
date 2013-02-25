@@ -2,6 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 BIGTEXT_LEN=5000
 
@@ -170,71 +174,80 @@ class BankRisk(models.Model):
     # Required
     # calInherentRiskRating = models.FloatField(default=0)
     
-    def calc_composite_risk(self):
-        """calculate the composite risk"""
-        # NOTE: This needs to decide which risks to actually
-        # use based on the RiskType field!
+    def calc_inherent_risk(self):
+        """calculate the inherent risk"""
+        number_of_risks = self.riskTypes.count()
 
-        # risks to use from original calc (legacy app)
+        # all of this is the inherent risk?
+        fiduciary = self.fiduciaryRisk * self.fiduciaryRiskWeight
+        credit = self.creditRisk * self.creditRiskWeight
+        reputation = self.reputationRisk * self.reputationRiskWeight
+        compliance = self.complianceRisk * self.complianceRiskWeight
+        operational = self.operationalRisk * self.operationalRiskWeight
+
         vendor = self.vendorRisk * self.vendorRiskWeight
         market = self.marketRisk * self.marketRiskWeight
-        operational = self.operationalRisk * self.operationalRiskWeight
-        compliance = self.complianceRisk * self.complianceRiskWeight
         strategic = self.strategicRisk * self.strategicRiskWeight
-        reputation = self.reputationRisk * self.reputationRiskWeight
-        credit = self.creditRisk * self.creditRiskWeight
-        fiduciary = self.fiduciaryRisk * self.fiduciaryRiskWeight
         regulatory = self.regulatoryLegalRisk * self.regulatoryLegalRiskWeight
         humanResource = self.humanResourceRisk * self.humanResourceRiskWeight
 
-        total = (   vendor +
-                    market +
-                    operational +
-                    compliance +
-                    strategic +
-                    reputation +
-                    credit +
-                    fiduciary +
-                    regulatory +
-                    humanResource   )
+        # these three are missing?
+        # Liquidity
+        # auditRisk
+        # Interest
 
-        weights = (
-            self.vendorRiskWeight +
-            self.marketRiskWeight +
-            self.operationalRiskWeight +
-            self.complianceRiskWeight +
-            self.strategicRiskWeight +
-            self.reputationRiskWeight +
-            self.creditRiskWeight +
-            self.fiduciaryRiskWeight +
-            self.regulatoryLegalRiskWeight +
-            self.humanResourceRiskWeight
-        )
+        # mapping of calculated risk to RiskType name
+        # TODO: combine this with the list above
+        risk_mapping = {
+            'Credit Risk': credit,
+            'Market Risk': market,
+            'Liquidity Risk': 0,
+            'Operational Risk': operational,
+            'Regulatory / Legal Risk': regulatory,
+            'Reputational Risk': reputation,
+            'Human Resource Risk': humanResource,
+            'Audit / Exam Finding': 0,
+            'Strategic Risk': strategic,
+            'Interest Rate Risk': 0,
+            'Compliance Risk': compliance,
+            'Fiduciary Risk': fiduciary,
+            'Vendor Risk': vendor,
+        }
 
-        return total / weights
+        # add up the values from the selected risk types only
+        total = 0
+        for t in self.riskTypes.all():
+            logger.info("Using risk type: {}".format(t.name))
+            total += risk_mapping[t.name]
 
-    def calc_risk_rating(self):
-        """calculate the rating of this risk"""
-        # TODO: write this
+        
+        inherent_risk = total / number_of_risks
+        logger.info("Inherent risk: {}".format(inherent_risk))
 
-        calc = (
-            self.customers +
-            self.impact +
-            self.inherentRisk + 
-            self.compositeRisk
-        ) / 4.0
+        return inherent_risk
 
-        calc *= ((
+
+    def calc_composite_risk(self):
+        """calculate the composite risk"""
+
+        impact_average = (self.customers + self.impact) / 2
+        logger.info("Impact average: {}".format(impact_average))
+
+        control_factor_avg = (
             (self.controls * self.controlsWeight) +
             (self.policyRate * self.policyWeight)
-        ) / (self.controlsWeight + self.policyWeight))
+        ) / 2
+        logger.info("Control factor average: {}".format(control_factor_avg))
 
-        return calc
+        composite_score = (self.inherentRisk + impact_average) * control_factor_avg
+        logger.info("Composite score: {}".format(composite_score))
+
+        return composite_score
 
     def save(self, *args, **kwargs):
         # calculate the calculated fields
-        self.lastRiskRating = self.riskRating
-        self.riskRating = self.calc_risk_rating()
+
+        self.inherentRisk = self.calc_inherent_risk()
 
         self.lastCompositeRisk = self.compositeRisk
         self.compositeRisk = self.calc_composite_risk()
@@ -251,9 +264,9 @@ class BankRisk(models.Model):
         """get the trending status of this risk
         based on the last history item"""
 
-        if self.riskRating > self.lastRiskRating:
+        if self.compositeRisk > self.lastCompositeRisk:
             return "High"
-        elif self.riskRating < self.lastRiskRating:
+        elif self.compositeRisk < self.lastCompositeRisk:
             return "Low"
 
         # return flat if it isn't anything else, or if there was an error
