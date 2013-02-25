@@ -137,8 +137,26 @@ You do not have permission to modify this Risk.
 {% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
 {% if success_message %}<p class="success">{{ success_message }}</p>{% endif %}
 
-<p>Composite Risk Score: {{ bankrisk.compositeRisk|floatformat:2 }}</p>
-<p>Risk Rating: {{ bankrisk.riskRating|floatformat:2 }}</p>
+<table class="prettytable">
+    <tr>
+        <td>Composite Risk Score:</td>
+        <td>{{ bankrisk.compositeRisk|floatformat:2 }}</td>
+    </tr>
+    <tr>
+
+        <td>Inherent Risk:</td>
+        <td>{{ bankrisk.inherentRisk|floatformat:2 }}</td>
+    </tr>
+    <tr>
+        <td>Trend:</td>
+        <td>{{ bankrisk.trending }}</td>
+    </tr>
+    <tr></tr>
+    <tr>
+        <td>Last Composite Risk Score:</td>
+        <td>{{ bankrisk.lastCompositeRisk|floatformat:2 }}</td>
+    </tr>
+</table>
 
 
 {% if user.get_profile.level > 0 %}

@@ -54,6 +54,7 @@ def bankrisk_view(request, bankrisk_id):
 
             # do some processing (like saving it)
             form.save()
+            bankrisk.update_calc_fields()
 #            return HttpResponseRedirect(
 #                reverse('erm.views.bankrisk_view',
 #                        kwargs={'bankrisk_id': bankrisk_id}))

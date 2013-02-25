@@ -36,10 +36,15 @@ class BankRiskForm(ModelForm):
 
     class Meta:
         model = BankRisk
-        exclude = ('bank', 'risk', 'compositeRisk', 
-                                   'lastCompositeRisk', 
-                                   'riskRating', 
-                                   'lastRiskRating')
+        exclude = (
+            'bank', 
+            'risk', 
+            'compositeRisk', 
+            'lastCompositeRisk', 
+            'riskRating', 
+            'lastRiskRating',
+            'inherentRisk',
+        )
         widgets = {
                 # large text inputs
                 'name': forms.TextInput(attrs={'size': 60}),

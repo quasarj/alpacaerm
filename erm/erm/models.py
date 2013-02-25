@@ -217,7 +217,8 @@ class BankRisk(models.Model):
         # add up the values from the selected risk types only
         total = 0
         for t in self.riskTypes.all():
-            logger.info("Using risk type: {}".format(t.name))
+            logger.info("Using risk type: {}, value: {}".format(
+                t.name, risk_mapping[t.name]))
             total += risk_mapping[t.name]
 
         
@@ -244,20 +245,33 @@ class BankRisk(models.Model):
 
         return composite_score
 
-    def save(self, *args, **kwargs):
-        # calculate the calculated fields
+    def update_calc_fields(self):
+        """Update the calculated fields.
+        
+        This cannot be done inside the save() method
+        because the ManyToMany field changes have not 
+        yet been saved. This causes calc_inherent_risk()
+        to use the old set of riskTypes, which causes the
+        calculation to be invalid. I do not like this
+        workaround.. there may be a better way to fix this.
+
+        With this setup, you must first save the model, then
+        call update_calc_fields(). This also causes a second
+        save event, which may cause issues for django-revisions.
+
+        TODO: figure out a better way to do this.
+        """
 
         self.inherentRisk = self.calc_inherent_risk()
 
         self.lastCompositeRisk = self.compositeRisk
         self.compositeRisk = self.calc_composite_risk()
 
-        super(BankRisk, self).save(*args, **kwargs)
+        self.save()
 
 
     def __unicode__(self):
         return "{}: {}".format(self.bank.name, self.name)
-
 
 
     def trending(self):
