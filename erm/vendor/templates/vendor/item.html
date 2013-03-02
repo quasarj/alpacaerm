@@ -16,6 +16,12 @@
         padding-left: 10px;
     }
 
+    p.section {
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+
 </style>
 
 {% endblock %}
@@ -296,7 +302,7 @@ You do not have permission to modify this Vendor.
 
     </td>
     <td id="right_side">
-        <p>Vendor Inherent Risk Calculation</p> 
+        <p class="section">Vendor Inherent Risk Calculation</p>
         <table>
 
             <tr id="tr_{{ form.exposure.html_name }}">
@@ -396,7 +402,7 @@ You do not have permission to modify this Vendor.
             </tr>
 
             <tr>
-                <td span="2"><p>Controls and Mitigations</p></td>
+                <td span="2"><p class="section">Controls and Mitigations</p></td>
             </tr>
 
             <tr id="tr_{{ form.financialStability.html_name }}">
