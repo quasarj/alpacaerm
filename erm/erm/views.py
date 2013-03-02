@@ -407,9 +407,24 @@ def report_view(request):
     bank = request.user.get_profile().bank
 
     sone = get_risk_assessment_summary(bank.id)
-    stwo = None
-    sthree = None
-    sfour = None
+    stwo = get_risk_scoring_by_source(bank.id)
+    sthree = get_distribution_by_type(bank.id)
+    sfour = get_risk_class_by_bu(bank.id)
+
+    #average composite score for this bank:
+    risks = BankRisk.objects.filter(bank=bank) 
+    total = 0
+    for r in risks:
+        total += r.compositeRisk
+
+    composite_average = total / len(risks)
+
+    composite_average_text = "moderate"
+    if composite_average >= 3.38:
+        composite_average_text = "high"
+    elif composite_average <= 1.88:
+        composite_average_text = "low"
+    
 
     return render('erm/report.html',
             {
@@ -417,12 +432,15 @@ def report_view(request):
                 "stwo":     stwo,
                 "sthree":   sthree,
                 "sfour":    sfour,
+                "composite_average": composite_average,
+                "composite_average_text": composite_average_text,
             },
             request,
             'erm/report.html')
 
 
 # these functions should be moved to erm.report when finished
+# also factor out the common code
 def get_risk_assessment_summary(bank_id):
     from django.db import connection
     cursor = connection.cursor()
@@ -439,13 +457,12 @@ count(*) as count
 from (
         select
         rs.name,
-        br.riskRating > 2.5 as high,
-        br.riskRating < 2.5 as moderate,
-        br.riskRating,
-        br.lastRiskRating,
-        br.riskRating > br.lastRiskRating as trend_high,
-        br.riskRating < br.lastRiskRating as trend_low,
-        br.riskRating = br.lastRiskRating as trend_flat
+        br.compositeRisk > 2.5 as high,
+        br.compositeRisk <= 2.5 as moderate,
+        br.compositeRisk,
+        br.compositeRisk > br.lastCompositeRisk as trend_high,
+        br.compositeRisk < br.lastCompositeRisk as trend_low,
+        br.compositeRisk = br.lastCompositeRisk as trend_flat
 
         from erm_risksource rs
         join erm_bankrisk_riskSources brs on brs.risksource_id = rs.id
@@ -469,6 +486,134 @@ order by a.name
     return ret
 
 
+def get_risk_scoring_by_source(bank_id):
+    from django.db import connection
+    cursor = connection.cursor()
+
+    cursor.execute("""
+select
+a.name as name,
+sum(a.customer) as customer,
+sum(a.organization) as organization,
+sum(a.inherent) as inherent,
+sum(a.composite) as composite,
+sum(a.outsourced) as outsourced
+from (
+        select
+        rs.name,
+        br.customers > 2.5 as customer,
+        br.impact > 2.5 as organization,
+        br.inherentRisk > 2.5 as inherent,
+        br.compositeRisk > 2.5 as composite,
+        br.outsourced
+
+        from erm_risksource rs
+        join erm_bankrisk_riskSources brs on brs.risksource_id = rs.id
+        join erm_bankrisk br on brs.bankrisk_id = br.id
+        
+        where br.bank_id = %s
+) a
+
+group by a.name
+order by a.name
+    """, [bank_id])
+
+    desc = cursor.description
+    ret = [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
+
+    logger.info(ret)
+    return ret
+
+def get_distribution_by_type(bank_id):
+    from django.db import connection
+    cursor = connection.cursor()
+
+    cursor.execute("""
+select
+a.name as name,
+count(a.id) as count,
+sum(a.high) as high,
+sum(a.moderate) as moderate,
+sum(a.trend_high) as trend_high,
+sum(a.trend_low) as trend_low,
+sum(a.trend_flat) as trend_flat
+from (
+        select
+        rt.name,
+        br.id,
+        br.compositeRisk > 2.5 as high,
+        br.compositeRisk <= 2.5 as moderate,
+        br.compositeRisk > br.lastCompositeRisk as trend_high,
+        br.compositeRisk < br.lastCompositeRisk as trend_low,
+        br.compositeRisk = br.lastCompositeRisk as trend_flat
+
+        from erm_risktype rt
+        join erm_bankrisk_riskTypes brt on brt.risktype_id = rt.id
+        join erm_bankrisk br on brt.bankrisk_id = br.id
+        
+        where br.bank_id = %s
+) a
+
+group by a.name
+order by a.name
+
+    """, [bank_id])
+
+    desc = cursor.description
+    ret = [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
+
+    logger.info(ret)
+    return ret
+
+
+
+def get_risk_class_by_bu(bank_id):
+    from django.db import connection
+    cursor = connection.cursor()
+
+    cursor.execute("""
+select
+a.name as name,
+count(*) as count,
+sum(a.high) as high,
+sum(a.moderate) as moderate,
+sum(a.trend_high) as trend_high,
+sum(a.trend_low) as trend_low,
+sum(a.trend_flat) as trend_flat
+from (
+        select
+        rm.name,
+        br.compositeRisk > 2.5 as high,
+        br.compositeRisk <= 2.5 as moderate,
+        br.compositeRisk > br.lastCompositeRisk as trend_high,
+        br.compositeRisk < br.lastCompositeRisk as trend_low,
+        br.compositeRisk = br.lastCompositeRisk as trend_flat
+
+        from erm_riskmanager rm
+        join erm_bankrisk_riskManagers brm on brm.riskmanager_id = rm.id
+        join erm_bankrisk br on br.id = brm.bankrisk_id
+        
+        where br.bank_id = %s
+) a
+
+group by a.name
+order by a.name
+    """, [bank_id])
+
+    desc = cursor.description
+    ret = [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
+
+    logger.info(ret)
+    return ret
 
 def report_view_old(request):
     """
