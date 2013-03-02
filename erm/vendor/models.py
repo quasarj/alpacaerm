@@ -187,16 +187,17 @@ class Vendor(models.Model):
         inherent_fields = [
             self.exposure,
             self.sensitivity,
-            #self.volume?
-            #self.investment?
+            self.infoVolume,
+            self.productInvestment,
             self.operationalDependence,
             self.cusomterSupport,
-            #self.intSecurity?
+            self.productSecurity,
             self.nondisclosure,
-            self.thirdParty,
+            self.thirdPartyRelationship,
             self.businessResumption,
             self.hiring,
             self.networkSecurity,
+            self.independentMonitoring,
         ]
         # average of only the fields with values > 0
         field_count = sum([1 for i in inherent_fields if i > 0])

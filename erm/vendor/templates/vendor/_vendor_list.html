@@ -22,7 +22,7 @@
     <tr>
         <td><a href="{% url vendor_item v.id %}" />{{ v.name }}</a></td>
         <td>{{ v.get_classification_display }}</td>
-        <td>{{ v.vendorRiskRating }}</td>
+        <td>{{ v.vendorRiskRating|floatformat:2 }}</td>
         <td>{{ v.nextReviewDate }}</td>
     </tr>
     {% endfor %}
