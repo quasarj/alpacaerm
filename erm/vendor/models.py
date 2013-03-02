@@ -225,14 +225,22 @@ class Vendor(models.Model):
         self.vendorRiskRating = self.inherentRiskRating * cal_mitigations
 
 
-
         #TODO: these aren't really calculated fields, are they?
         # self.nextReviewDate
         # self.lastReviewDate
 
-
         super(Vendor, self).save(*args, **kwargs)
 
+    def trending(self):
+        """get the trending status of this vendor"""
+
+        if self.vendorRiskRating > self.priorRiskRating:
+            return "High"
+        elif self.vendorRiskRating < self.priorRiskRating:
+            return "Low"
+
+        # return flat if it isn't anything else, or if there was an error
+        return "Flat"
 
     def __unicode__(self):
         return "{}: {}".format(self.bank, self.name)

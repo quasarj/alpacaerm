@@ -73,6 +73,10 @@
         <td>Inherent Risk:</td>
         <td>{{ vendor.inherentRiskRating|floatformat:2 }}</td>
     </tr>
+    <tr>
+        <td>Trending:</td>
+        <td>{{ vendor.trending }}</td>
+    </tr>
 </table>
 {% if user.get_profile.level <= 0 %}
 <p>
