@@ -88,8 +88,8 @@
             <li class='has-sub {% if module == 'report' %}active{% endif %}'>
                 <a href='#'><span>Executive Report</span></a>
                 <ul>
-                    <li><a href="{% url report %}">View</a></li>
-                    <li><a href="{% url report %}?pdf=1">Print</a></li>
+                    <li><a href="{% url report %}" target="_new">View</a></li>
+                    <li><a href="{% url report %}?pdf=1" target="_new">Print</a></li>
                     {% if user.get_profile.level > 0 %}
                     <li><a href="{% url report_edit_text %}">Edit Text</a></li>
                     {% endif %}
