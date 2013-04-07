@@ -236,7 +236,7 @@ class BankRisk(models.Model):
 
         control_factor_avg = (
             (self.controls * self.controlsWeight) +
-            (self.policyRate * self.policyWeight)
+            ((self.policyRate * self.policyWeight) / 2)
         ) / 2
         logger.info("Control factor average: {}".format(control_factor_avg))
 
