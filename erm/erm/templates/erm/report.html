@@ -142,9 +142,69 @@
         <div class="message">
             <strong>
                 Weighted Composite Risk Rating for the bank is:
-                {{ composite_average|floatformat:2 }}, or 
-                {{ composite_average_text }}.
+                {{ composite_average|floatformat:2 }}.
             </strong>
+
+            <div>
+                <p>Institution Composite Risk Rating Explanation Table</p>
+                <table>
+                    <tr>
+                        <th>Institution Composite Risk Rating</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>5 or Higher</td>
+                        <td>
+                            Highest Composite Weighted Risk Score for the Institution. 
+                            Assets, systems, data or reputation is at immediate risk. 
+                            These risks require the highest level of risk management 
+                            practices and should be of the greatest supervisory concern. 
+                            These areas create the greatest risks to bank systems, data, 
+                            reputation and assets.  Many of these risks either have no 
+                            compensating controls implemented or adequate controls do not 
+                            exist.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>
+                            High Composite Weighted Risk Score exists for the Institution.  
+                            Assets, systems, data or reputation is at risk. Close supervisory 
+                            attention is required for this area. Compensating controls or 
+                            risk mitigation steps must be configured and be closely monitored.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>
+                            Moderate Composite Weighted Risk Score for the Institution.  
+                            Assets, data, systems, or reputation is at some level of risk.  
+                            Compensating controls or mitigations are necessary to provide a 
+                            layer of protection for the assets or systems.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>
+                            Low to Medium Risk Composite Weighted Risk Score for the 
+                            Institution.  Assets, systems, data or reputation could be at 
+                            slight risk.  Most risk areas have been addressed with 
+                            compensating controls or mitigations.  Adequate layers of 
+                            protection for the assets or systems have been implemented.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Low Composite Weighted Risk Score for the Institution.  Assets, 
+                            systems, data or reputation could be at slight risk, but the 
+                            risk is either so small as to be statistically improbable or 
+                            management may consider the cost to fix, mitigate, or institute 
+                            compensating controls may not be commensurate with the loss 
+                            possibility.
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
         </div>
     <div id="footer"></div>
