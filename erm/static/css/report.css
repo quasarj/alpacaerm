@@ -64,6 +64,16 @@ td {
 .message {
 }
 
+/* explanation rating table */
+th.explanation_table {
+    width: 220px;
+}
 
+.explanation_table td {
+    text-align: left;
+}
 
-
+td.et_rate {
+    text-align: center;
+    padding: 10px;
+}

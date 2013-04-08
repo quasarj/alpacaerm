@@ -140,20 +140,20 @@
         </div>
 
         <div class="message">
-            <strong>
+            <p><strong>
                 Weighted Composite Risk Rating for the bank is:
                 {{ composite_average|floatformat:2 }}.
-            </strong>
+            </strong></p>
 
             <div>
-                <p>Institution Composite Risk Rating Explanation Table</p>
-                <table>
+                <p>Institution Composite Risk Rating Explanation Table:</p>
+                <table class="explanation_table">
                     <tr>
-                        <th>Institution Composite Risk Rating</th>
+                        <th class="explanation_table">Institution Composite Risk Rating</th>
                         <th>Description</th>
                     </tr>
                     <tr>
-                        <td>5 or Higher</td>
+                        <td class="et_rate">5 or Higher</td>
                         <td>
                             Highest Composite Weighted Risk Score for the Institution. 
                             Assets, systems, data or reputation is at immediate risk. 
@@ -166,7 +166,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>4</td>
+                        <td class="et_rate">4</td>
                         <td>
                             High Composite Weighted Risk Score exists for the Institution.  
                             Assets, systems, data or reputation is at risk. Close supervisory 
@@ -175,7 +175,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>3</td>
+                        <td class="et_rate">3</td>
                         <td>
                             Moderate Composite Weighted Risk Score for the Institution.  
                             Assets, data, systems, or reputation is at some level of risk.  
@@ -184,7 +184,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>2</td>
+                        <td class="et_rate">2</td>
                         <td>
                             Low to Medium Risk Composite Weighted Risk Score for the 
                             Institution.  Assets, systems, data or reputation could be at 
@@ -194,7 +194,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>1</td>
+                        <td class="et_rate">1</td>
                         <td>Low Composite Weighted Risk Score for the Institution.  Assets, 
                             systems, data or reputation could be at slight risk, but the 
                             risk is either so small as to be statistically improbable or 
