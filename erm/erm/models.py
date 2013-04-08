@@ -87,14 +87,6 @@ class BankRisk(models.Model):
             verbose_name= 'Impact to Customer')
     impact = models.FloatField(default=0,
             verbose_name= 'Impact to Organization')
-    controls = models.FloatField(default=0,
-            verbose_name= 'Controls Rating')
-    controlsWeight = models.FloatField(default=0,
-            verbose_name= 'Controls Rating Weight')
-    policyRate = models.FloatField(default=0,
-            verbose_name= 'Policy Rating')
-    policyWeight = models.FloatField(default=0,
-            verbose_name= 'Policy Rating Weight')
     inherentRisk = models.FloatField(default=0,
             verbose_name= 'Inherent Risk')
     vendorRisk = models.FloatField(default=0,
@@ -137,6 +129,14 @@ class BankRisk(models.Model):
             verbose_name= 'Human Resource Risk')
     humanResourceRiskWeight = models.FloatField(default=0,
             verbose_name= 'Human Resource Risk Weight')
+    controls = models.FloatField(default=0,
+            verbose_name= 'Controls Rating')
+    controlsWeight = models.FloatField(default=0,
+            verbose_name= 'Controls Rating Weight')
+    policyRate = models.FloatField(default=0,
+            verbose_name= 'Policy Rating')
+    policyWeight = models.FloatField(default=0,
+            verbose_name= 'Policy Rating Weight')
     compositeRisk = models.FloatField(default=0)
     riskRating = models.FloatField(default=0)
     lastCompositeRisk = models.FloatField(default=0)
