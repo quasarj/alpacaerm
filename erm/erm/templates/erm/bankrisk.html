@@ -12,6 +12,38 @@
         width: 450px;
         height: 200px;
     }
+
+    #risk-legend{
+        position: absolute;
+        width: 400px;
+        height: 270px;
+        line-height: 20px;
+        padding: 10px;
+        font-size: 12px;
+        text-align: center;
+        /*color: rgb(113, 157, 171);*/
+        color: 000;
+        background: rgb(200, 200, 200);
+        border: 4px solid rgb(255, 255, 255);
+        border-radius: 5px;
+        text-shadow: rgba(0, 0, 0, 0.0980392) 1px 1px 1px;
+        box-shadow: rgba(0, 0, 0, 0.0980392) 1px 1px 2px 0px;
+        opacity: 100%;
+        z-index: 1000;
+    }
+    #risk-legend table, 
+    #risk-legend th, 
+    #risk-legend td {
+        border: 1px solid #555555;
+    }
+    #risk-legend th, 
+    #risk-legend td {
+        padding: 5px;
+    }
+    #risk-legend th {
+        font-weight: bold;
+    }
+
 </style>
 
 {% endblock %}
@@ -109,6 +141,20 @@
 
         //$("#id_riskTypes").multiselect();
         $("select").multiselect();
+
+        $('#risk-legend').hide();
+
+        $('.risk_risk').focus(function(e){
+            $('#risk-legend').css({
+                'top': $(this).offset().top, 
+                'left': $(this).outerWidth(true) + $(this).offset().left + 10});
+            $('#risk-legend').fadeIn(100);
+            
+        });
+        $('.risk_risk').blur(function(e){
+            $('#risk-legend').hide();
+        });
+
     });
 
 
@@ -116,7 +162,41 @@
         document.location.href="{% url erm_delete bankrisk.id %}";
     }
 </script>
-
+<div id="risk-legend">
+    <table>
+        <tr>
+            <th style="width: 40px;">Value</th>
+            <th style="width: 60px;">Level</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Very High</td>
+            <td>The risk could cause substantial or catastrophic damage
+                to the bank.</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>High</td>
+            <td>The risk could cause significant damage to the bank.</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Medium</td>
+            <td>The risk could cause some damage to the bank.</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Low</td>
+            <td>The risk could cause manageable or minor damage to the bank.</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Very Low</td>
+            <td>The risk could cause minimal damage to the bank.</td>
+        </tr>
+    </table>
+</div>
 <h3>{{ bankrisk }}</h3>
 {% if user.get_profile.level <= 0 %}
 <p>

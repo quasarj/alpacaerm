@@ -30,6 +30,7 @@ class ReportEditTextForm(ModelForm):
 CHECKBOX_ATTRS = {'class': 'risk_checkbox'}
 RISK_ATTRS = {'class': 'risk_risk', 'size': 4}
 WEIGHT_ATTRS = {'class': 'risk_weight', 'size': 4}
+CONTROLS_ATTRS = {'class': 'risk_controls', 'size': 4}
 
 class BankRiskForm(ModelForm):
     # threat = forms.CharField(label='Test Threat Text')
@@ -61,9 +62,9 @@ class BankRiskForm(ModelForm):
                 # weights
                 'customers': forms.TextInput(attrs=RISK_ATTRS),
                 'impact': forms.TextInput(attrs=RISK_ATTRS),
-                'controls': forms.TextInput(attrs=RISK_ATTRS),
+                'controls': forms.TextInput(attrs=CONTROLS_ATTRS),
                 'controlsWeight': forms.TextInput(attrs=WEIGHT_ATTRS),
-                'policyRate': forms.TextInput(attrs=RISK_ATTRS),
+                'policyRate': forms.TextInput(attrs=CONTROLS_ATTRS),
                 'policyWeight': forms.TextInput(attrs=WEIGHT_ATTRS),
                 'inherentRisk': forms.TextInput(attrs=RISK_ATTRS),
                 'vendorRisk': forms.TextInput(attrs=RISK_ATTRS),
