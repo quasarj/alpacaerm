@@ -17,7 +17,7 @@
         display: none;
         position: absolute;
         width: 400px;
-        height: 270px;
+        height: 290px;
         line-height: 20px;
         padding: 10px;
         font-size: 12px;
@@ -32,16 +32,53 @@
         opacity: 100%;
         z-index: 1000;
     }
+
+    #control-legend{
+        display: none;
+        position: absolute;
+        width: 330px;
+        height: 180px;
+        line-height: 20px;
+        padding: 10px;
+        font-size: 12px;
+        text-align: center;
+        /*color: rgb(113, 157, 171);*/
+        color: 000;
+        background: rgb(200, 200, 200);
+        border: 4px solid rgb(255, 255, 255);
+        border-radius: 5px;
+        text-shadow: rgba(0, 0, 0, 0.0980392) 1px 1px 1px;
+        box-shadow: rgba(0, 0, 0, 0.0980392) 1px 1px 2px 0px;
+        opacity: 100%;
+        z-index: 1000;
+    }
+
+    #control-legend span,
+    #risk-legend span {
+        font-weight: bold;
+    }
+
     #risk-legend table, 
     #risk-legend th, 
-    #risk-legend td {
+    #risk-legend td,
+    #control-legend table, 
+    #control-legend th, 
+    #control-legend td 
+    {
         border: 1px solid #555555;
     }
+
     #risk-legend th, 
-    #risk-legend td {
+    #risk-legend td,
+    #control-legend th, 
+    #control-legend td 
+    {
         padding: 5px;
     }
-    #risk-legend th {
+
+    #risk-legend th,
+    #control-legend th 
+    {
         font-weight: bold;
     }
 </style>
@@ -56,7 +93,6 @@
         });
         $("select").multiselect();
 
-        $('#risk-legend').hide();
 
         $('.risk_risk').focus(function(e){
             $('#risk-legend').css({
@@ -69,9 +105,22 @@
             $('#risk-legend').hide();
         });
 
+
+        $('.risk_controls').focus(function(e){
+            $('#control-legend').css({
+                'top': $(this).offset().top, 
+                'left': $(this).outerWidth(true) + $(this).offset().left + 10});
+            $('#control-legend').fadeIn(100);
+            
+        });
+        $('.risk_controls').blur(function(e){
+            $('#control-legend').hide();
+        });
+
     });
 </script>
 <div id="risk-legend">
+    <span>Impact</span>
     <table>
         <tr>
             <th style="width: 40px;">Value</th>
@@ -103,6 +152,32 @@
             <td>1</td>
             <td>Very Low</td>
             <td>The risk could cause minimal damage to the bank.</td>
+        </tr>
+    </table>
+</div>
+<div id="control-legend">
+    <span>Control Factors</span>
+    <table>
+        <tr>
+            <th style="width: 40px;">Value</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>No significant controls have been implemented.</td>
+        </tr>
+
+        <tr>
+            <td>0.75</td>
+            <td>Some controls have been implemented.</td>
+        </tr>
+        <tr>
+            <td>0.5</td>
+            <td>Significant controls have been implemented.</td>
+        </tr>
+        <tr>
+            <td>0.25</td>
+            <td>Appropriate controls have been implemented.</td>
         </tr>
     </table>
 </div>
