@@ -13,9 +13,8 @@
         height: 200px;
     }
 
-    #risk-legend{
-        display: none;
-        position: absolute;
+    #risk-legend,
+    #risk-legend-bottom {
         width: 400px;
         height: 290px;
         line-height: 20px;
@@ -32,10 +31,15 @@
         opacity: 100%;
         z-index: 1000;
     }
-
-    #control-legend{
+    #risk-legend,
+    #control-legend
+    {
         display: none;
         position: absolute;
+    }
+
+    #control-legend,
+    #control-legend-bottom {
         width: 330px;
         height: 180px;
         line-height: 20px;
@@ -54,7 +58,9 @@
     }
 
     #control-legend span,
-    #risk-legend span {
+    #risk-legend span,
+    #control-legend-bottom span,
+    #risk-legend-bottom span {
         font-weight: bold;
     }
 
@@ -63,7 +69,13 @@
     #risk-legend td,
     #control-legend table, 
     #control-legend th, 
-    #control-legend td 
+    #control-legend td,
+    #risk-legend-bottom table, 
+    #risk-legend-bottom th, 
+    #risk-legend-bottom td,
+    #control-legend-bottom table, 
+    #control-legend-bottom th, 
+    #control-legend-bottom td 
     {
         border: 1px solid #555555;
     }
@@ -71,13 +83,19 @@
     #risk-legend th, 
     #risk-legend td,
     #control-legend th, 
-    #control-legend td 
+    #control-legend td,
+    #risk-legend-bottom th, 
+    #risk-legend-bottom td,
+    #control-legend-bottom th, 
+    #control-legend-bottom td 
     {
         padding: 5px;
     }
 
     #risk-legend th,
-    #control-legend th 
+    #control-legend th,
+    #risk-legend-bottom th,
+    #control-legend-bottom th 
     {
         font-weight: bold;
     }
@@ -210,66 +228,10 @@
     }
 </script>
 <div id="risk-legend">
-    <span>Impact</span>
-    <table>
-        <tr>
-            <th style="width: 40px;">Value</th>
-            <th style="width: 60px;">Level</th>
-            <th>Description</th>
-        </tr>
-        <tr>
-            <td>5</td>
-            <td>Very High</td>
-            <td>The risk could cause substantial or catastrophic damage
-                to the bank.</td>
-        </tr>
-        <tr>
-            <td>4</td>
-            <td>High</td>
-            <td>The risk could cause significant damage to the bank.</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Medium</td>
-            <td>The risk could cause some damage to the bank.</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Low</td>
-            <td>The risk could cause manageable or minor damage to the bank.</td>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>Very Low</td>
-            <td>The risk could cause minimal damage to the bank.</td>
-        </tr>
-    </table>
+    {% include "erm/_bankrisk_risk_legend.html" %}
 </div>
 <div id="control-legend">
-    <span>Control Factors</span>
-    <table>
-        <tr>
-            <th style="width: 40px;">Value</th>
-            <th>Description</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>No significant controls have been implemented.</td>
-        </tr>
-
-        <tr>
-            <td>0.75</td>
-            <td>Some controls have been implemented.</td>
-        </tr>
-        <tr>
-            <td>0.5</td>
-            <td>Significant controls have been implemented.</td>
-        </tr>
-        <tr>
-            <td>0.25</td>
-            <td>Appropriate controls have been implemented.</td>
-        </tr>
-    </table>
+    {% include "erm/_bankrisk_control_legend.html" %}
 </div>
 <h3>{{ bankrisk }}</h3>
 {% if user.get_profile.level <= 0 %}
@@ -326,4 +288,11 @@ You do not have permission to modify this Risk.
     <input type="submit" value="Save" />
 </form>
 {% endif %}
+<h4>Legends</h4>
+<div id="risk-legend-bottom">
+    {% include "erm/_bankrisk_risk_legend.html" %}
+</div>
+<div id="control-legend-bottom">
+    {% include "erm/_bankrisk_control_legend.html" %}
+</div>
 {% endblock %}
