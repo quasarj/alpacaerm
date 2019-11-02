@@ -1,4 +1,4 @@
-django==1.4.1
+django==1.11.23
 south
 django-extensions
 django-reversion
